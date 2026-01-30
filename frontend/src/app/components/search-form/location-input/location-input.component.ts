@@ -49,7 +49,7 @@ export class LocationInputComponent implements OnInit, OnDestroy {
     // Initialize query from value
     const currentValue = this.value();
     if (currentValue) {
-      this.query.set(formatAirportDisplay(currentValue));
+      this.query.set(currentValue.code);
     }
   }
 
@@ -109,7 +109,7 @@ export class LocationInputComponent implements OnInit, OnDestroy {
   }
 
   selectAirport(airport: Airport): void {
-    this.query.set(formatAirportDisplay(airport));
+    this.query.set(airport.code);
     this.valueChange.emit(airport);
     this.isOpen.set(false);
     this.highlightedIndex.set(-1);
