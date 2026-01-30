@@ -29,6 +29,7 @@ export class AirportService {
   }
 
   // Search airports by query (min 2 characters)
+  // Prioritizes: exact code match > city starts with > city contains > name contains
   search(query: string): Observable<Airport[]> {
     if (!query || query.length < 2) {
       return of([]);
@@ -37,12 +38,37 @@ export class AirportService {
     const normalizedQuery = query.toLowerCase().trim();
 
     return this.loadAirports().pipe(
-      map(airports => airports.filter(airport =>
-        airport.city.toLowerCase().includes(normalizedQuery) ||
-        airport.name.toLowerCase().includes(normalizedQuery) ||
-        airport.code.toLowerCase().includes(normalizedQuery) ||
-        airport.country.toLowerCase().includes(normalizedQuery)
-      )),
+      map(airports => {
+        // Filter matching airports
+        const matches = airports.filter(airport =>
+          airport.city.toLowerCase().includes(normalizedQuery) ||
+          airport.code.toLowerCase().includes(normalizedQuery) ||
+          airport.country.toLowerCase().includes(normalizedQuery)
+        );
+
+        // Sort by relevance
+        return matches.sort((a, b) => {
+          const aCode = a.code.toLowerCase();
+          const aCity = a.city.toLowerCase();
+          const bCode = b.code.toLowerCase();
+          const bCity = b.city.toLowerCase();
+
+          // Exact code match first
+          if (aCode === normalizedQuery && bCode !== normalizedQuery) return -1;
+          if (bCode === normalizedQuery && aCode !== normalizedQuery) return 1;
+
+          // Code starts with query
+          if (aCode.startsWith(normalizedQuery) && !bCode.startsWith(normalizedQuery)) return -1;
+          if (bCode.startsWith(normalizedQuery) && !aCode.startsWith(normalizedQuery)) return 1;
+
+          // City starts with query
+          if (aCity.startsWith(normalizedQuery) && !bCity.startsWith(normalizedQuery)) return -1;
+          if (bCity.startsWith(normalizedQuery) && !aCity.startsWith(normalizedQuery)) return 1;
+
+          // Alphabetical by city
+          return aCity.localeCompare(bCity);
+        });
+      }),
       map(results => results.slice(0, 10)) // Limit to 10 results
     );
   }
