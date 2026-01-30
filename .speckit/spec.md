@@ -1,115 +1,236 @@
-# Feature Specification: [FEATURE NAME]
+# Flight Booking Application - Master Specification
 
-**Feature Branch**: `[###-feature-name]`  
-**Created**: [DATE]  
-**Status**: Draft  
-**Input**: User description: "$ARGUMENTS"
+> **Course:** Tecnologie e Applicazioni Web (CT0142) - 2024/2025
+> **University:** Ca' Foscari University Venice
+> **Design:** [Tripma Figma](https://www.figma.com/community/file/911320742349428744)
 
-## User Scenarios & Testing *(mandatory)*
+## Project Summary
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
+A flight booking SPA with REST API backend. Users can search flights, book tickets, select seats, and add extras. Airlines manage routes and view statistics. Admins manage users.
 
-### User Story 1 - [Brief Title] (Priority: P1)
+## Tech Stack
 
-[Describe this user journey in plain language]
+| Layer | Technology |
+|-------|------------|
+| Frontend | Angular 17+ (SPA) |
+| Backend | Node.js + Express.js + TypeScript |
+| Database | MongoDB |
+| Real-time | WebSocket (Socket.io) |
+| Container | Docker (3 containers) |
 
-**Why this priority**: [Explain the value and why it has this priority level]
+## User Roles
 
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
+| Role | Registration | Capabilities |
+|------|--------------|--------------|
+| Anonymous | - | Search flights only |
+| Passenger | Self-register | Book flights, select seats, manage bookings |
+| Airline | Admin invitation | Manage routes, flights, view statistics |
+| Admin | Programmatic (first run) | Invite airlines, delete users |
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+## Frontend Specs (001-099)
 
-[Describe this user journey in plain language]
+### Public Pages
+| Spec ID | Page | Description | Priority |
+|---------|------|-------------|----------|
+| 001 | Landing Page | Hero, search form, featured destinations | P0 |
+| 002 | Flight Search | Search form with date pickers, passengers | P0 |
+| 003 | Search Results | Flight list, filters, sorting | P0 |
+| 004 | Flight Details | Flight info, price breakdown | P0 |
+| 005 | Seat Selection | Seat map, real-time availability | P0 |
+| 006 | Passenger Info | Passenger details form | P0 |
+| 007 | Payment | Payment form, order summary | P0 |
+| 008 | Booking Confirmation | Confirmation, ticket details | P0 |
 
-**Why this priority**: [Explain the value and why it has this priority level]
+### Authentication
+| Spec ID | Page | Description | Priority |
+|---------|------|-------------|----------|
+| 009 | Login | Email/password login | P0 |
+| 010 | Register | Passenger registration | P0 |
+| 011 | Password Change | First login for airlines | P1 |
 
-**Independent Test**: [Describe how this can be tested independently]
+### Passenger Dashboard
+| Spec ID | Page | Description | Priority |
+|---------|------|-------------|----------|
+| 020 | My Bookings | List of bookings | P1 |
+| 021 | Booking Details | Single booking view | P1 |
+| 022 | Profile | Edit profile | P2 |
 
-**Acceptance Scenarios**:
+### Airline Dashboard
+| Spec ID | Page | Description | Priority |
+|---------|------|-------------|----------|
+| 030 | Airline Dashboard | Overview, stats summary | P1 |
+| 031 | Routes Management | CRUD routes | P1 |
+| 032 | Aircraft Management | CRUD aircrafts | P1 |
+| 033 | Flights Management | CRUD flights, set prices | P1 |
+| 034 | Statistics | Revenue, passengers, popular routes | P1 |
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+### Admin Panel
+| Spec ID | Page | Description | Priority |
+|---------|------|-------------|----------|
+| 040 | Admin Dashboard | User management | P1 |
+| 041 | Invite Airline | Send invitation | P1 |
+
+### Shared Components
+| Spec ID | Component | Description | Priority |
+|---------|-----------|-------------|----------|
+| 050 | Header/Nav | Navigation, user menu | P0 |
+| 051 | Footer | Links, info | P2 |
+| 052 | Flight Card | Reusable flight display | P0 |
+| 053 | Seat Map | Interactive seat grid | P0 |
 
 ---
 
-### User Story 3 - [Brief Title] (Priority: P3)
+## Backend Specs (101-199)
 
-[Describe this user journey in plain language]
+### Authentication API
+| Spec ID | Endpoints | Description | Priority |
+|---------|-----------|-------------|----------|
+| 101 | Auth API | Login, register, JWT, password change | P0 |
 
-**Why this priority**: [Explain the value and why it has this priority level]
+### Flight API
+| Spec ID | Endpoints | Description | Priority |
+|---------|-----------|-------------|----------|
+| 102 | Flights Search | Search with stops, filters | P0 |
+| 103 | Flights CRUD | Create, update, delete flights | P1 |
 
-**Independent Test**: [Describe how this can be tested independently]
+### Booking API
+| Spec ID | Endpoints | Description | Priority |
+|---------|-----------|-------------|----------|
+| 104 | Bookings | Create booking, seat selection | P0 |
+| 105 | Payments | Process payment | P0 |
 
-**Acceptance Scenarios**:
+### Airline API
+| Spec ID | Endpoints | Description | Priority |
+|---------|-----------|-------------|----------|
+| 106 | Routes | CRUD routes | P1 |
+| 107 | Aircraft | CRUD aircraft | P1 |
+| 108 | Statistics | Revenue, passengers, routes | P1 |
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+### Admin API
+| Spec ID | Endpoints | Description | Priority |
+|---------|-----------|-------------|----------|
+| 109 | Users | List, delete users | P1 |
+| 110 | Invitations | Invite airlines | P1 |
+
+### Real-time
+| Spec ID | Feature | Description | Priority |
+|---------|---------|-------------|----------|
+| 120 | WebSocket | Seat availability updates | P0 |
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+## Data Models
 
-### Edge Cases
+### User
+```typescript
+interface User {
+  _id: ObjectId;
+  email: string;
+  password: string; // hashed
+  role: 'admin' | 'airline' | 'passenger';
+  firstName: string;
+  lastName: string;
+  mustChangePassword: boolean; // for airlines
+  createdAt: Date;
+}
+```
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
+### Flight
+```typescript
+interface Flight {
+  _id: ObjectId;
+  airlineId: ObjectId;
+  routeId: ObjectId;
+  aircraftId: ObjectId;
+  departureTime: Date;
+  arrivalTime: Date;
+  prices: {
+    economy: number;
+    business: number;
+    firstClass: number;
+  };
+  status: 'scheduled' | 'cancelled';
+}
+```
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+### Route
+```typescript
+interface Route {
+  _id: ObjectId;
+  airlineId: ObjectId;
+  departureCity: string;
+  departureAirport: string; // IATA code
+  arrivalCity: string;
+  arrivalAirport: string;
+}
+```
 
-## Requirements *(mandatory)*
+### Booking
+```typescript
+interface Booking {
+  _id: ObjectId;
+  userId: ObjectId;
+  flights: BookedFlight[];
+  totalPrice: number;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  createdAt: Date;
+}
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
+interface BookedFlight {
+  flightId: ObjectId;
+  passengers: BookedPassenger[];
+}
 
-### Functional Requirements
+interface BookedPassenger {
+  firstName: string;
+  lastName: string;
+  seatNumber: string;
+  ticketClass: 'economy' | 'business' | 'firstClass';
+  extras: string[]; // 'extraBaggage', 'extraLegroom'
+}
+```
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+---
 
-*Example of marking unclear requirements:*
+## Implementation Order
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+### Phase 1: Core Booking Flow (P0)
+1. SPEC-050: Header/Nav
+2. SPEC-001: Landing Page
+3. SPEC-002: Flight Search
+4. SPEC-003: Search Results
+5. SPEC-052: Flight Card
+6. SPEC-004: Flight Details
+7. SPEC-053: Seat Map
+8. SPEC-005: Seat Selection
+9. SPEC-006: Passenger Info
+10. SPEC-007: Payment
+11. SPEC-008: Booking Confirmation
+12. SPEC-009: Login
+13. SPEC-010: Register
 
-### Key Entities *(include if feature involves data)*
+### Phase 2: Backend APIs (P0)
+14. SPEC-101: Auth API
+15. SPEC-102: Flights Search API
+16. SPEC-104: Bookings API
+17. SPEC-105: Payments API
+18. SPEC-120: WebSocket
 
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
+### Phase 3: Dashboards (P1)
+19. SPEC-020-022: Passenger Dashboard
+20. SPEC-030-034: Airline Dashboard
+21. SPEC-040-041: Admin Panel
+22. SPEC-103, 106-110: Remaining APIs
 
-## Success Criteria *(mandatory)*
+---
 
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
+## Constraints
 
-### Measurable Outcomes
-
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- Each spec: **max 400 lines of code**
+- Frontend implements with **mock data** first
+- Backend API connects after frontend is ready
+- All UI must match **Figma design**
+- **Real-time** seat updates via WebSocket
+- **Docker** required for deployment
