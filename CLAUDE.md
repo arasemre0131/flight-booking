@@ -9,186 +9,151 @@ A flight booking web application for the "Tecnologie e Applicazioni Web" course 
 - **Frontend:** Angular 17+ (SPA)
 - **Containerization:** Docker (3 separate containers)
 
-## User Roles
-1. **Admin** - Created programmatically on first backend run
-2. **Airline** - Invited by admin, must change password on first login
-3. **Passenger** - Can self-register
-
 ## Design Reference
 - **Figma:** Tripma Flight Booking Web App
 - https://www.figma.com/community/file/911320742349428744
-- Figma assets stored in: `frontend/design/`
+- Assets: `frontend/design/images/`
+- Mapping: `frontend/design/IMAGE-MAPPING.md`
 
 ---
 
-## 🔴 SPEC-DRIVEN WORKFLOW (MUST READ FIRST)
+## 🔴 SPECKIT WORKFLOW (MUST READ FIRST)
 
-### Development Order
-1. **Frontend First** - All UI specs are created and implemented before backend
-2. **Backend Second** - API specs are derived from frontend needs
-3. **Each spec → max 400 lines of code**
+### When `/speckit.specify` is called:
 
-### Spec Structure
+1. **ALWAYS** read the spec file from `.speckit/specs/frontend/` first
+2. **LOOK** at the "Files to Create" table - these are EXACT files to generate
+3. **CHECK** dependencies - implement required specs first
+4. **USE** mock data from `src/app/mock-data/` (not real API)
+5. **FOLLOW** the Figma design exactly
+6. **MAX 400 lines** total per spec
+
+### When `/speckit.clarify` is called:
+
+1. Read the current spec file
+2. Ask questions about unclear parts
+3. Update spec file with answers
+
+### When `/speckit.implement` is called:
+
+1. Read the spec file completely
+2. Create ALL files listed in "Files to Create" table
+3. Use Angular CLI conventions
+4. Import mock data, not real API calls
+5. Match Figma design pixel-perfect
+
+---
+
+## Current Specs (Implementation Order)
+
+| Order | Spec ID | Name | Status | Lines |
+|-------|---------|------|--------|-------|
+| 1 | SPEC-001A | Header + Footer | ⬜ Pending | ~100 |
+| 2 | SPEC-001B | Search Form Components | ⬜ Pending | ~200 |
+| 3 | SPEC-001C | Landing Page Content | ⬜ Pending | ~250 |
+| 4 | SPEC-002A | Search Results - Flights | ⬜ Pending | ~200 |
+| 5 | SPEC-002B | Search Results - Sidebar | ⬜ Pending | ~200 |
+
+### Dependency Graph
 ```
-.speckit/specs/
-├── frontend/
-│   ├── 001-landing-page.md
-│   ├── 002-flight-search.md
-│   ├── 003-search-results.md
-│   ├── 004-flight-details.md
-│   ├── 005-seat-selection.md
-│   ├── 006-passenger-info.md
-│   ├── 007-payment.md
-│   ├── 008-booking-confirmation.md
-│   ├── 009-auth-login.md
-│   ├── 010-auth-register.md
-│   ├── 011-passenger-dashboard.md
-│   ├── 012-airline-dashboard.md
-│   ├── 013-airline-routes.md
-│   ├── 014-airline-flights.md
-│   ├── 015-airline-statistics.md
-│   ├── 016-admin-panel.md
-│   └── ...
-└── backend/
-    ├── 101-auth-api.md
-    ├── 102-flights-api.md
-    ├── 103-bookings-api.md
-    ├── 104-airlines-api.md
-    ├── 105-admin-api.md
-    └── ...
-```
-
-### Spec File Format
-Each spec MUST include:
-```markdown
-# SPEC-XXX: [Feature Name]
-
-## Overview
-Brief description of what this spec implements.
-
-## Dependencies
-- Requires: SPEC-XXX (if any)
-- Required by: SPEC-XXX (if any)
-- Backend API: SPEC-1XX (for frontend specs)
-
-## Files to Create/Modify
-| File Path | Purpose | Lines (est.) |
-|-----------|---------|--------------|
-| src/app/components/xxx/xxx.component.ts | Component logic | ~80 |
-| src/app/components/xxx/xxx.component.html | Template | ~60 |
-| src/app/components/xxx/xxx.component.scss | Styles | ~40 |
-
-## User Stories
-- As a [user], I want to [action] so that [benefit]
-
-## UI Elements (from Figma)
-- List of UI components and their behaviors
-
-## API Calls (for frontend specs)
-| Action | Method | Endpoint | Request | Response |
-|--------|--------|----------|---------|----------|
-
-## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-```
-
-### When Starting a New Spec
-1. **READ** the spec file completely
-2. **RUN** `/speckit.clarify` if anything is unclear
-3. **IMPLEMENT** only what's in the spec
-4. **MAX 400 lines** per spec - split if larger
-
-### Commands
-```bash
-# Create/update spec
-/speckit.specify
-
-# Ask clarifying questions
-/speckit.clarify
-
-# Generate implementation plan
-/speckit.plan
-
-# Generate task list
-/speckit.tasks
-
-# Execute implementation
-/speckit.implement
+SPEC-001A (Header/Footer)
+    ↓
+SPEC-001B (Search Form)
+    ↓
+SPEC-001C (Landing Content) ←──┐
+    ↓                          │
+SPEC-002A (Flight Results) ────┘
+    ↓
+SPEC-002B (Sidebar/Hotels)
 ```
 
 ---
 
 ## Project Structure
+
 ```
-flight-booking/
-├── .speckit/
-│   ├── spec.md              # Main project spec
-│   ├── plan.md              # Implementation plan
-│   ├── tasks.md             # Task tracking
-│   └── specs/
-│       ├── frontend/        # Frontend page specs (001-099)
-│       └── backend/         # Backend API specs (101-199)
-├── frontend/
-│   ├── design/              # Figma exports
-│   └── src/
-│       └── app/
-│           ├── components/
-│           ├── services/
-│           ├── models/
-│           └── pages/
-├── backend/
-│   └── src/
-│       ├── routes/
-│       ├── controllers/
-│       ├── models/
-│       ├── middleware/
-│       └── services/
-├── docker-compose.yml
-└── README.txt
+frontend/
+├── design/
+│   ├── images/
+│   │   ├── landing/        # 10 images
+│   │   └── search-results/ # 6 images
+│   └── IMAGE-MAPPING.md
+└── src/
+    └── app/
+        ├── pages/
+        │   ├── landing/
+        │   └── search-results/
+        ├── shared/
+        │   ├── header/
+        │   ├── footer/
+        │   ├── search-form/
+        │   ├── airport-autocomplete/
+        │   ├── date-picker/
+        │   └── passenger-selector/
+        ├── components/
+        │   ├── destination-card/
+        │   ├── flight-card/
+        │   ├── hotel-card/
+        │   └── ...
+        ├── mock-data/
+        │   ├── airports.ts
+        │   ├── flights.ts
+        │   ├── airlines.ts
+        │   └── destinations.ts
+        └── models/
+            ├── airport.model.ts
+            ├── flight.model.ts
+            └── ...
 ```
 
 ---
 
-## Core Features
+## Spec Files Location
 
-### Flight Search (Anonymous)
-- Search flights between two cities
-- Up to 1 intermediate stop allowed
-- Minimum 2 hours transfer time
-- Sort by: price, duration, stops
-
-### Booking Flow (Authenticated)
-1. Select flight → 2. Choose seats → 3. Add extras → 4. Payment → 5. Confirmation
-
-### Airline Features
-- Manage routes, aircrafts, flights
-- Set ticket prices (economy/business/first)
-- View statistics (passengers, revenue, popular routes)
-
-### Admin Features
-- Invite airlines (temporary password)
-- Delete users
-
-### Real-time Features
-- WebSocket for seat availability updates
+```
+.speckit/specs/frontend/
+├── 000-spec-plan.md      # Overview
+├── 001A-header-footer.md
+├── 001B-search-form.md
+├── 001C-landing-content.md
+├── 002A-search-flights.md
+└── 002B-search-sidebar.md
+```
 
 ---
 
-## Important Notes
-- All specs are in English
-- Backend must preload test data on first run
-- Real-time seat availability required (WebSocket)
-- First login for airlines requires password change
+## Mock Data Strategy
 
-## Docker Commands
+All frontend specs use mock data. Backend integration comes later.
+
+```typescript
+// Example usage in component
+import { AIRPORTS } from '@app/mock-data/airports';
+import { MOCK_FLIGHTS } from '@app/mock-data/flights';
+```
+
+---
+
+## Angular CLI Commands
+
 ```bash
-# Start all services
-docker-compose up
+# Generate component
+ng generate component shared/header --standalone
 
-# Start backend only
-cd backend && npm run dev
+# Generate service
+ng generate service services/flight
 
-# Start frontend only
-cd frontend && ng serve
+# Start dev server
+ng serve
 ```
+
+---
+
+## Important Rules
+
+1. **NO real API calls** in frontend specs - use mock data
+2. **Each spec < 400 lines** - split if larger
+3. **Follow Figma exactly** - check `frontend/design/`
+4. **Standalone components** - Angular 17+ style
+5. **SCSS for styles** - not CSS
+6. **English only** - all code and comments
