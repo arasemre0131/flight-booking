@@ -177,3 +177,10 @@ ng serve
 4. **Standalone components** - Angular 17+ style
 5. **SCSS for styles** - not CSS
 6. **English only** - all code and comments
+
+## Active Technologies
+- TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router (002-search-form)
+- N/A (frontend-only, search criteria passed via URL/state) (002-search-form)
+
+## Recent Changes
+- 002-search-form: Added TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router

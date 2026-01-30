@@ -5,6 +5,13 @@
 **Status**: Draft
 **Input**: User description: "Flight search form component for landing page with origin, destination, dates, and passenger selection"
 
+## Clarifications
+
+### Session 2025-01-30
+
+- Q: Should passenger types include infants (lap) separate from children? → A: No, only Adults + Children categories (no infant distinction)
+- Q: When should autocomplete suggestions appear for airport/city fields? → A: After 2 characters typed
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Search for Round-Trip Flights (Priority: P1)
@@ -87,11 +94,11 @@ As a traveler, I want to quickly swap my origin and destination so I can easily 
 
 - **FR-001**: System MUST display a flight search form on the landing page
 - **FR-002**: System MUST provide trip type selection (round-trip / one-way)
-- **FR-003**: System MUST provide origin airport/city input with autocomplete
-- **FR-004**: System MUST provide destination airport/city input with autocomplete
+- **FR-003**: System MUST provide origin airport/city input with autocomplete (triggers after 2 characters)
+- **FR-004**: System MUST provide destination airport/city input with autocomplete (triggers after 2 characters)
 - **FR-005**: System MUST provide departure date picker that only allows future dates
 - **FR-006**: System MUST provide return date picker when round-trip is selected
-- **FR-007**: System MUST provide passenger selector for adults (default: 1) and children (default: 0)
+- **FR-007**: System MUST provide passenger selector for adults (default: 1, age 12+) and children (default: 0, age 2-11). No infant category.
 - **FR-008**: System MUST provide a swap button to exchange origin and destination
 - **FR-009**: System MUST validate that all required fields are filled before search
 - **FR-010**: System MUST validate that origin and destination are different
