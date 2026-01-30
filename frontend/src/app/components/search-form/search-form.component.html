@@ -43,15 +43,15 @@
       }
     </div>
 
-    <div class="search-action">
-      <app-passenger-selector
-        [value]="passengers()"
-        (valueChange)="onPassengersChange($event)" />
+    <app-passenger-selector
+      [value]="passengers()"
+      (valueChange)="onPassengersChange($event)" />
+  </div>
 
-      <button type="button" class="search-btn" (click)="onSubmit()">
-        Search
-      </button>
-    </div>
+  <div class="search-row">
+    <button type="button" class="search-btn" (click)="onSubmit()">
+      Search
+    </button>
   </div>
 
   @if (submitted() && (errors().origin || errors().destination || errors().sameLocation || errors().departureDate || errors().returnDate)) {
