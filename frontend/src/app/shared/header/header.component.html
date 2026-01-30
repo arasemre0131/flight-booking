@@ -1,0 +1,59 @@
+<header class="header">
+  <!-- Logo -->
+  <a routerLink="/" class="logo">Tripma</a>
+
+  <!-- Desktop Navigation -->
+  <nav class="nav-links">
+    @for (link of navLinks; track link.route) {
+      <a [routerLink]="link.route" routerLinkActive="active">{{ link.label }}</a>
+    }
+  </nav>
+
+  <!-- Auth Buttons -->
+  <div class="auth-section">
+    @if (isLoggedIn$ | async) {
+      <!-- Logged In State -->
+      <a routerLink="/my-trips" class="my-trips-link">My trips</a>
+      @if (currentUser$ | async; as user) {
+        <span class="user-avatar">👤 {{ user.displayName }}</span>
+      }
+    } @else {
+      <!-- Logged Out State -->
+      <button class="sign-in-btn" (click)="openSignIn()">Sign in</button>
+      <button class="sign-up-btn" (click)="openSignUp()">Sign up</button>
+    }
+  </div>
+
+  <!-- Mobile Hamburger Menu -->
+  <button
+    class="hamburger-btn"
+    (click)="toggleMobileMenu()"
+    [class.open]="mobileMenuOpen()"
+    aria-label="Toggle menu">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+</header>
+
+<!-- Mobile Menu Overlay -->
+@if (mobileMenuOpen()) {
+  <div class="mobile-menu-overlay" (click)="closeMobileMenu()">
+    <nav class="mobile-menu" (click)="$event.stopPropagation()">
+      @for (link of navLinks; track link.route) {
+        <a [routerLink]="link.route" (click)="closeMobileMenu()">{{ link.label }}</a>
+      }
+      <div class="mobile-auth">
+        @if (isLoggedIn$ | async) {
+          <a routerLink="/my-trips" (click)="closeMobileMenu()">My trips</a>
+          @if (currentUser$ | async; as user) {
+            <span class="user-info">👤 {{ user.displayName }}</span>
+          }
+        } @else {
+          <button class="sign-in-btn" (click)="openSignIn(); closeMobileMenu()">Sign in</button>
+          <button class="sign-up-btn" (click)="openSignUp(); closeMobileMenu()">Sign up</button>
+        }
+      </div>
+    </nav>
+  </div>
+}

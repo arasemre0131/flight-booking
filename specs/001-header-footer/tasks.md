@@ -44,8 +44,8 @@ Phase 6 (Polish)
 
 **Goal**: Prepare project structure and global styles
 
-- [ ] T001 Create shared directory structure at `frontend/src/app/shared/`
-- [ ] T002 Add global SCSS variables (colors, breakpoints) in `frontend/src/styles.scss`
+- [x] T001 Create shared directory structure at `frontend/src/app/shared/`
+- [x] T002 Add global SCSS variables (colors, breakpoints) in `frontend/src/styles.scss`
 
 ---
 
@@ -53,9 +53,9 @@ Phase 6 (Polish)
 
 **Goal**: Create shared interfaces and services needed by all components
 
-- [ ] T003 Create NavigationLink and FooterColumn interfaces in `frontend/src/app/models/navigation.model.ts`
-- [ ] T004 Create User and AuthState interfaces in `frontend/src/app/models/user.model.ts`
-- [ ] T005 Create AuthService stub with BehaviorSubject in `frontend/src/app/services/auth.service.ts`
+- [x] T003 Create NavigationLink and FooterColumn interfaces in `frontend/src/app/models/navigation.model.ts`
+- [x] T004 Create User and AuthState interfaces in `frontend/src/app/models/user.model.ts`
+- [x] T005 Create AuthService stub with BehaviorSubject in `frontend/src/app/services/auth.service.ts`
 
 ---
 
@@ -69,10 +69,10 @@ Phase 6 (Polish)
 
 ### Tasks
 
-- [ ] T006 [P] [US1] Create HeaderComponent class in `frontend/src/app/shared/header/header.component.ts`
-- [ ] T007 [P] [US1] Create header template with logo and nav links in `frontend/src/app/shared/header/header.component.html`
-- [ ] T008 [US2] Add auth buttons (Sign in/Sign up) and logged-in state (My trips/Avatar) to header template
-- [ ] T009 [US1] Add header styles with sticky positioning in `frontend/src/app/shared/header/header.component.scss`
+- [x] T006 [P] [US1] Create HeaderComponent class in `frontend/src/app/shared/header/header.component.ts`
+- [x] T007 [P] [US1] Create header template with logo and nav links in `frontend/src/app/shared/header/header.component.html`
+- [x] T008 [US2] Add auth buttons (Sign in/Sign up) and logged-in state (My trips/Avatar) to header template
+- [x] T009 [US1] Add header styles with sticky positioning in `frontend/src/app/shared/header/header.component.scss`
 
 ---
 
@@ -84,9 +84,9 @@ Phase 6 (Polish)
 
 ### Tasks
 
-- [ ] T010 [P] [US3] Create FooterComponent class in `frontend/src/app/shared/footer/footer.component.ts`
-- [ ] T011 [P] [US3] Create footer template with 4-column layout in `frontend/src/app/shared/footer/footer.component.html`
-- [ ] T012 [US3] Add footer styles with column layout in `frontend/src/app/shared/footer/footer.component.scss`
+- [x] T010 [P] [US3] Create FooterComponent class in `frontend/src/app/shared/footer/footer.component.ts`
+- [x] T011 [P] [US3] Create footer template with 4-column layout in `frontend/src/app/shared/footer/footer.component.html`
+- [x] T012 [US3] Add footer styles with column layout in `frontend/src/app/shared/footer/footer.component.scss`
 
 ---
 
@@ -98,9 +98,9 @@ Phase 6 (Polish)
 
 ### Tasks
 
-- [ ] T013 [US4] Add hamburger menu icon and mobile menu toggle to header template
-- [ ] T014 [US4] Add mobile menu state (open/closed signal) to HeaderComponent
-- [ ] T015 [US4] Add responsive styles for header (hamburger, mobile menu) and footer (stacked columns) in respective SCSS files
+- [x] T013 [US4] Add hamburger menu icon and mobile menu toggle to header template
+- [x] T014 [US4] Add mobile menu state (open/closed signal) to HeaderComponent
+- [x] T015 [US4] Add responsive styles for header (hamburger, mobile menu) and footer (stacked columns) in respective SCSS files
 
 ---
 
@@ -108,9 +108,9 @@ Phase 6 (Polish)
 
 **Goal**: Integrate components into app and verify consistency
 
-- [ ] T016 Import HeaderComponent and FooterComponent in `frontend/src/app/app.ts`
-- [ ] T017 Add header and footer to app template in `frontend/src/app/app.html`
-- [ ] T018 Verify header/footer display on all routes, test hover states and mobile menu
+- [x] T016 Import HeaderComponent and FooterComponent in `frontend/src/app/app.ts`
+- [x] T017 Add header and footer to app template in `frontend/src/app/app.html`
+- [x] T018 Verify header/footer display on all routes, test hover states and mobile menu
 
 ---
 

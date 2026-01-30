@@ -1,0 +1,213 @@
+// Header Component Styles
+
+$primary: #605DEC;
+$primary-hover: #4B48D9;
+$text-gray: #6E7491;
+$text-dark: #27273F;
+$bg-white: #FFFFFF;
+$mobile: 768px;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 104px;
+  background: $bg-white;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+
+  @media (max-width: $mobile) {
+    padding: 16px 20px;
+  }
+}
+
+// Logo
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: $primary;
+  text-decoration: none;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+// Desktop Navigation
+.nav-links {
+  display: flex;
+  gap: 32px;
+
+  @media (max-width: $mobile) {
+    display: none;
+  }
+
+  a {
+    color: $text-gray;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.15s ease;
+
+    &:hover,
+    &.active {
+      color: $primary;
+    }
+  }
+}
+
+// Auth Section
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  @media (max-width: $mobile) {
+    display: none;
+  }
+}
+
+.my-trips-link {
+  color: $text-gray;
+  font-size: 14px;
+  font-weight: 600;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+.user-avatar {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-dark;
+}
+
+.sign-in-btn {
+  color: $text-gray;
+  font-size: 14px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+.sign-up-btn {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: $primary;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: $primary-hover;
+  }
+}
+
+// Hamburger Menu Button
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  @media (max-width: $mobile) {
+    display: flex;
+  }
+
+  .hamburger-line {
+    width: 24px;
+    height: 2px;
+    background: $text-dark;
+    transition: all 0.3s ease;
+  }
+
+  &.open {
+    .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+  }
+}
+
+// Mobile Menu Overlay
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+
+  @media (max-width: $mobile) {
+    display: block;
+  }
+}
+
+.mobile-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 280px;
+  background: $bg-white;
+  padding: 24px;
+  box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 0 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  a {
+    color: $text-gray;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 0;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+.mobile-auth {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+  .sign-in-btn,
+  .sign-up-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .user-info {
+    color: $text-dark;
+    font-weight: 600;
+  }
+}
