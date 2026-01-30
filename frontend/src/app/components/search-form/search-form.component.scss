@@ -79,7 +79,6 @@ $mobile: 768px;
 
 .search-btn {
   flex-shrink: 0;
-  margin-left: auto;
   padding: 12px 32px;
   font-size: 16px;
   font-weight: 600;
@@ -96,7 +95,6 @@ $mobile: 768px;
 
   @media (max-width: $mobile) {
     width: 100%;
-    margin-left: 0;
     margin-top: 8px;
   }
 }
