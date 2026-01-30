@@ -19,13 +19,15 @@
 | US1 - Flight Deals | P1 | T005-T007 | Load page, verify 3 flight deal cards with images/prices |
 | US2 - Featured Destination | P2 | T008-T009 | Scroll to featured section, verify Kenya card |
 | US3 - Places to Stay | P2 | T010-T011 | Scroll to places section, verify 3 cards |
-| US4 - Testimonials | P3 | T012-T014 | Scroll to testimonials, verify 3 review cards with ratings |
+| US4 - Testimonials | P3 | T012-T013 | Scroll to testimonials, verify 3 review cards with ratings |
 
 ---
 
 ## Phase 1: Setup
 
 > Foundation: Create data models and mock data shared by all user stories.
+>
+> **Note**: FR-001 (hero headline) and FR-002 (search form in hero) are already implemented from the 002-search-form dependency.
 
 - [ ] T001 [P] Create TypeScript interfaces in `frontend/src/app/models/landing.model.ts`
 - [ ] T002 [P] Create mock data arrays in `frontend/src/app/mock-data/landing.data.ts`
