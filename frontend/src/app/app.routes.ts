@@ -7,8 +7,7 @@ export const routes: Routes = [
   },
   {
     path: 'search',
-    loadComponent: () => import('./pages/landing/landing.component').then(m => m.LandingComponent)
-    // TODO: Replace with actual search results component when implemented
+    loadComponent: () => import('./pages/search-results/search-results').then(m => m.SearchResults)
   },
   {
     path: '**',

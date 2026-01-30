@@ -1,0 +1,41 @@
+<div class="flight-card" [class.selected]="selected()" (click)="onSelect()">
+  <div class="flight-main">
+    <div class="airline-section">
+      <div class="airline-logo">
+        @if (logoError()) {
+          <div class="airline-fallback">{{ flight().airline.code }}</div>
+        } @else {
+          <img
+            [src]="'assets/images/airlines/' + flight().airline.code.toLowerCase() + '.svg'"
+            [alt]="flight().airline.name"
+            (error)="onLogoError()" />
+        }
+      </div>
+      <div class="flight-duration">
+        <span class="duration">{{ flight().duration }}</span>
+        <span class="airline-name">{{ flight().airline.name }}</span>
+      </div>
+    </div>
+
+    <div class="times-section">
+      <span class="time">{{ flight().departureTime }}</span>
+      <span class="route-line">–</span>
+      <span class="time">{{ flight().arrivalTime }}</span>
+    </div>
+
+    <div class="stops-section">
+      <span class="stops">{{ stopsDisplay() }}</span>
+      @if (flight().layovers && flight().layovers!.length > 0) {
+        <div class="layovers">
+          @for (layover of flight().layovers; track layover.airport) {
+            <span class="layover">{{ layover.duration }} in {{ layover.airport }}</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="price-section">
+      <span class="price">${{ flight().price }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="search-results-page">
+  <!-- Compact Search Bar (Phase 4: US2) -->
+  <section class="search-bar-section">
+    <div class="container">
+      <app-search-form [compact]="true" />
+    </div>
+  </section>
+
+  <!-- Filter Bar (Phase 5: US3) -->
+  <section class="filter-section">
+    <div class="container">
+      <app-filter-bar
+        [filters]="filters()"
+        (filterChange)="onFilterChange($event)" />
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="results-section">
+    <div class="container">
+      <div class="results-content">
+        <!-- Flight List -->
+        <div class="flight-list">
+          <h2 class="results-title">Choose a departing flight</h2>
+
+          @if (displayedFlights().length === 0) {
+            <div class="empty-state">
+              @if (hasActiveFilters()) {
+                <p>No flights match your filters</p>
+                <button class="clear-filters-btn" (click)="clearFilters()">Clear all filters</button>
+              } @else {
+                <p>No flights found</p>
+                <p class="empty-hint">Try adjusting your search criteria</p>
+              }
+            </div>
+          } @else {
+            <div class="flight-cards">
+              @for (flight of displayedFlights(); track flight.id) {
+                <app-flight-card
+                  [flight]="flight"
+                  [selected]="selectedFlightId() === flight.id"
+                  (select)="onFlightSelect($event)" />
+              }
+            </div>
+
+            @if (!showAllFlights() && filteredFlights().length > 6) {
+              <button class="show-all-btn" (click)="toggleShowAll()">
+                Show all {{ filteredFlights().length }} flights
+              </button>
+            }
+          }
+        </div>
+
+        <!-- Sidebar Placeholder -->
+        <aside class="sidebar">
+          <div class="sidebar-placeholder">
+            <p>Sidebar content</p>
+            <p class="placeholder-note">Coming in SPEC-002B</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</div>

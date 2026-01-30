@@ -27,10 +27,10 @@
 
 > Foundation: Create data models, mock data, and update search criteria parsing.
 
-- [ ] T001 [P] Create Flight and Airline TypeScript interfaces in `frontend/src/app/models/flight.model.ts`
-- [ ] T002 [P] Create Filter TypeScript interfaces in `frontend/src/app/models/filter.model.ts`
-- [ ] T003 [P] Create airlines mock data array in `frontend/src/app/mock-data/airlines.data.ts`
-- [ ] T004 Add `fromQueryParams` function to `frontend/src/app/models/search-criteria.model.ts`
+- [x] T001 [P] Create Flight and Airline TypeScript interfaces in `frontend/src/app/models/flight.model.ts`
+- [x] T002 [P] Create Filter TypeScript interfaces in `frontend/src/app/models/filter.model.ts`
+- [x] T003 [P] Create airlines mock data array in `frontend/src/app/mock-data/airlines.data.ts`
+- [x] T004 Add `fromQueryParams` function to `frontend/src/app/models/search-criteria.model.ts`
 
 ---
 
@@ -38,10 +38,10 @@
 
 > Blocking: Flight card component needed by US1, US4. Search form compact mode needed by US2.
 
-- [ ] T005 Generate flight-card component with `npx ng generate component components/flight-card --standalone`
-- [ ] T006 [P] Implement flight-card component template in `frontend/src/app/components/flight-card/flight-card.component.html`
-- [ ] T007 [P] Implement flight-card component styles (hover, selected states) in `frontend/src/app/components/flight-card/flight-card.component.scss`
-- [ ] T008 Implement flight-card component logic (inputs: flight, selected; output: select event) in `frontend/src/app/components/flight-card/flight-card.component.ts`
+- [x] T005 Generate flight-card component with `npx ng generate component components/flight-card --standalone`
+- [x] T006 [P] Implement flight-card component template in `frontend/src/app/components/flight-card/flight-card.component.html`
+- [x] T007 [P] Implement flight-card component styles (hover, selected states) in `frontend/src/app/components/flight-card/flight-card.component.scss`
+- [x] T008 Implement flight-card component logic (inputs: flight, selected; output: select event) in `frontend/src/app/components/flight-card/flight-card.component.ts`
 
 ---
 
@@ -51,12 +51,12 @@
 >
 > **Independent Test**: Navigate to `http://localhost:4200/search?origin=SFO&destination=NRT&departureDate=2025-03-15&adults=1`, verify 6 flight cards display with correct info, click "Show all" to see all 10.
 
-- [ ] T009 [US1] Create mock flights data array (10 flights) in `frontend/src/app/mock-data/flights.data.ts`
-- [ ] T010 [US1] Generate search-results page with `npx ng generate component pages/search-results --standalone`
-- [ ] T011 [US1] Implement search-results page HTML with flight list section in `frontend/src/app/pages/search-results/search-results.component.html`
-- [ ] T012 [US1] Implement search-results page styles (two-column layout, responsive) in `frontend/src/app/pages/search-results/search-results.component.scss`
-- [ ] T013 [US1] Implement search-results page logic (load flights, show 6 default, show all toggle) in `frontend/src/app/pages/search-results/search-results.component.ts`
-- [ ] T014 [US1] Add `/search` route to `frontend/src/app/app.routes.ts`
+- [x] T009 [US1] Create mock flights data array (10 flights) in `frontend/src/app/mock-data/flights.data.ts`
+- [x] T010 [US1] Generate search-results page with `npx ng generate component pages/search-results --standalone`
+- [x] T011 [US1] Implement search-results page HTML with flight list section in `frontend/src/app/pages/search-results/search-results.component.html`
+- [x] T012 [US1] Implement search-results page styles (two-column layout, responsive) in `frontend/src/app/pages/search-results/search-results.component.scss`
+- [x] T013 [US1] Implement search-results page logic (load flights, show 6 default, show all toggle) in `frontend/src/app/pages/search-results/search-results.component.ts`
+- [x] T014 [US1] Add `/search` route to `frontend/src/app/app.routes.ts`
 
 ---
 
@@ -66,9 +66,9 @@
 >
 > **Independent Test**: Navigate to results page, verify search form shows SFO→NRT, modify destination, click search, verify URL updates.
 
-- [ ] T015 [US2] Add `compact` input signal to search-form component in `frontend/src/app/components/search-form/search-form.component.ts`
-- [ ] T016 [US2] Add compact mode styles (horizontal layout) to `frontend/src/app/components/search-form/search-form.component.scss`
-- [ ] T017 [US2] Update search-results page to include compact search form with pre-filled values from URL in `frontend/src/app/pages/search-results/search-results.component.ts`
+- [x] T015 [US2] Add `compact` input signal to search-form component in `frontend/src/app/components/search-form/search-form.component.ts`
+- [x] T016 [US2] Add compact mode styles (horizontal layout) to `frontend/src/app/components/search-form/search-form.component.scss`
+- [x] T017 [US2] Update search-results page to include compact search form with pre-filled values from URL in `frontend/src/app/pages/search-results/search-results.component.ts`
 
 ---
 
@@ -78,11 +78,11 @@
 >
 > **Independent Test**: Navigate to results page, click "Stops" dropdown, select "Nonstop only", verify only nonstop flights display, clear filter, verify all flights return.
 
-- [ ] T018 [US3] Generate filter-bar component with `npx ng generate component components/filter-bar --standalone`
-- [ ] T019 [US3] Implement filter-bar component template with dropdown buttons in `frontend/src/app/components/filter-bar/filter-bar.component.html`
-- [ ] T020 [US3] Implement filter-bar component styles (dropdown states, active border) in `frontend/src/app/components/filter-bar/filter-bar.component.scss`
-- [ ] T021 [US3] Implement filter-bar component logic (filter state, events) in `frontend/src/app/components/filter-bar/filter-bar.component.ts`
-- [ ] T022 [US3] Integrate filter-bar into search-results page with filtering logic in `frontend/src/app/pages/search-results/search-results.component.ts`
+- [x] T018 [US3] Generate filter-bar component with `npx ng generate component components/filter-bar --standalone`
+- [x] T019 [US3] Implement filter-bar component template with dropdown buttons in `frontend/src/app/components/filter-bar/filter-bar.component.html`
+- [x] T020 [US3] Implement filter-bar component styles (dropdown states, active border) in `frontend/src/app/components/filter-bar/filter-bar.component.scss`
+- [x] T021 [US3] Implement filter-bar component logic (filter state, events) in `frontend/src/app/components/filter-bar/filter-bar.component.ts`
+- [x] T022 [US3] Integrate filter-bar into search-results page with filtering logic in `frontend/src/app/pages/search-results/search-results.component.ts`
 
 ---
 
@@ -94,8 +94,8 @@
 >
 > **Scope Note**: US4 Acceptance Scenario 3 ("selected flight retained when proceeding") is out of scope - booking flow (next step) is a future feature. This phase implements visual selection only.
 
-- [ ] T023 [US4] Add selection state management to search-results page in `frontend/src/app/pages/search-results/search-results.component.ts`
-- [ ] T024 [US4] Update flight-card to emit selection and display selected state in `frontend/src/app/components/flight-card/flight-card.component.ts`
+- [x] T023 [US4] Add selection state management to search-results page in `frontend/src/app/pages/search-results/search-results.component.ts`
+- [x] T024 [US4] Update flight-card to emit selection and display selected state in `frontend/src/app/components/flight-card/flight-card.component.ts`
 
 ---
 
@@ -103,8 +103,8 @@
 
 > Final verification, edge cases, and responsive testing.
 
-- [ ] T025 Add "No flights found" and "No flights match filters" empty states in `frontend/src/app/pages/search-results/search-results.component.html`
-- [ ] T026 Verify responsive layout (two-column → single-column at 768px) across all sections
+- [x] T025 Add "No flights found" and "No flights match filters" empty states in `frontend/src/app/pages/search-results/search-results.component.html`
+- [x] T026 Verify responsive layout (two-column → single-column at 768px) across all sections
 
 ---
 

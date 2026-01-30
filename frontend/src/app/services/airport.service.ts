@@ -75,8 +75,13 @@ export class AirportService {
     );
   }
 
-  // Get all airports
+  // Get all airports (async)
   getAll(): Observable<Airport[]> {
     return this.loadAirports();
+  }
+
+  // Get all airports (sync - returns cached data or empty)
+  getAllAirports(): Airport[] {
+    return this.airports;
   }
 }

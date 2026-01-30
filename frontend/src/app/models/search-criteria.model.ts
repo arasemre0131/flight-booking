@@ -80,3 +80,40 @@ export function toQueryParams(criteria: SearchCriteria): Record<string, string> 
 
   return params;
 }
+
+// Parse URL query params into search criteria
+export function fromQueryParams(
+  params: Record<string, string>,
+  airports: Airport[]
+): Partial<SearchCriteria> {
+  const criteria: Partial<SearchCriteria> = {};
+
+  if (params['tripType']) {
+    criteria.tripType = params['tripType'] as TripType;
+  }
+
+  if (params['origin']) {
+    criteria.origin = airports.find(a => a.code === params['origin']) || null;
+  }
+
+  if (params['destination']) {
+    criteria.destination = airports.find(a => a.code === params['destination']) || null;
+  }
+
+  if (params['departureDate']) {
+    criteria.departureDate = new Date(params['departureDate']);
+  }
+
+  if (params['returnDate']) {
+    criteria.returnDate = new Date(params['returnDate']);
+  }
+
+  if (params['adults'] || params['children']) {
+    criteria.passengers = {
+      adults: parseInt(params['adults'] || '1', 10),
+      children: parseInt(params['children'] || '0', 10)
+    };
+  }
+
+  return criteria;
+}

@@ -1,16 +1,18 @@
-import { Component, signal, computed, inject } from '@angular/core';
+import { Component, signal, computed, inject, input, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TripTypeSelectorComponent } from './trip-type-selector/trip-type-selector.component';
 import { LocationInputComponent } from './location-input/location-input.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { PassengerSelectorComponent } from './passenger-selector/passenger-selector.component';
 import { Airport } from '../../models/airport.model';
+import { AirportService } from '../../services/airport.service';
 import {
   TripType,
   PassengerCount,
   SearchCriteria,
   toQueryParams,
+  fromQueryParams,
   formatPassengers
 } from '../../models/search-criteria.model';
 
@@ -33,10 +35,18 @@ interface ValidationErrors {
     PassengerSelectorComponent
   ],
   templateUrl: './search-form.component.html',
-  styleUrl: './search-form.component.scss'
+  styleUrl: './search-form.component.scss',
+  host: {
+    '[class.compact-search]': 'compact()'
+  }
 })
-export class SearchFormComponent {
+export class SearchFormComponent implements OnInit {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private airportService = inject(AirportService);
+
+  // Input for compact mode on search results page
+  compact = input<boolean>(false);
 
   // Form state
   tripType = signal<TripType>('round-trip');
@@ -53,6 +63,39 @@ export class SearchFormComponent {
   // Computed values
   isRoundTrip = computed(() => this.tripType() === 'round-trip');
   passengersDisplay = computed(() => formatPassengers(this.passengers()));
+
+  ngOnInit(): void {
+    // In compact mode, pre-fill from URL query params
+    if (this.compact()) {
+      this.route.queryParams.subscribe(params => {
+        this.prefillFromParams(params);
+      });
+    }
+  }
+
+  private prefillFromParams(params: Record<string, string>): void {
+    const airports = this.airportService.getAllAirports();
+    const criteria = fromQueryParams(params, airports);
+
+    if (criteria.tripType) {
+      this.tripType.set(criteria.tripType);
+    }
+    if (criteria.origin) {
+      this.origin.set(criteria.origin);
+    }
+    if (criteria.destination) {
+      this.destination.set(criteria.destination);
+    }
+    if (criteria.departureDate) {
+      this.departureDate.set(criteria.departureDate);
+    }
+    if (criteria.returnDate) {
+      this.returnDate.set(criteria.returnDate);
+    }
+    if (criteria.passengers) {
+      this.passengers.set(criteria.passengers);
+    }
+  }
 
   // Build search criteria
   private getSearchCriteria(): SearchCriteria {
