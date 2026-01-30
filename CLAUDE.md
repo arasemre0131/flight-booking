@@ -184,5 +184,7 @@ ng serve
 - CSS Grid for responsive layouts
 
 ## Recent Changes
+- 005-search-sidebar: Planning artifacts created (plan.md, research.md, data-model.md, quickstart.md)
+- 004-search-results: Implemented search results page with flight list, filters, compact search form
 - 003-landing-content: Planning artifacts created (plan.md, research.md, data-model.md, quickstart.md)
 - 002-search-form: Implemented flight search form with location autocomplete, date pickers, passenger selector
