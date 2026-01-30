@@ -29,8 +29,8 @@
 >
 > **Note**: FR-001 (hero headline) and FR-002 (search form in hero) are already implemented from the 002-search-form dependency.
 
-- [ ] T001 [P] Create TypeScript interfaces in `frontend/src/app/models/landing.model.ts`
-- [ ] T002 [P] Create mock data arrays in `frontend/src/app/mock-data/landing.data.ts`
+- [x] T001 [P] Create TypeScript interfaces in `frontend/src/app/models/landing.model.ts`
+- [x] T002 [P] Create mock data arrays in `frontend/src/app/mock-data/landing.data.ts`
 
 ---
 
@@ -38,8 +38,8 @@
 
 > Blocking: Reusable card components needed by multiple user stories.
 
-- [ ] T003 [P] Generate and implement destination-card component in `frontend/src/app/components/destination-card/`
-- [ ] T004 [P] Generate and implement testimonial-card component in `frontend/src/app/components/testimonial-card/`
+- [x] T003 [P] Generate and implement destination-card component in `frontend/src/app/components/destination-card/`
+- [x] T004 [P] Generate and implement testimonial-card component in `frontend/src/app/components/testimonial-card/`
 
 ---
 
@@ -49,9 +49,9 @@
 >
 > **Independent Test**: Navigate to http://localhost:4200, scroll below hero, verify 3 destination cards display with correct content and hover effects.
 
-- [ ] T005 [US1] Import mock data and destination-card component in `frontend/src/app/pages/landing/landing.component.ts`
-- [ ] T006 [US1] Add Flight Deals section HTML with 3 destination-cards in `frontend/src/app/pages/landing/landing.component.html`
-- [ ] T007 [US1] Add Flight Deals section styles (title, card grid) in `frontend/src/app/pages/landing/landing.component.scss`
+- [x] T005 [US1] Import mock data and destination-card component in `frontend/src/app/pages/landing/landing.component.ts`
+- [x] T006 [US1] Add Flight Deals section HTML with 3 destination-cards in `frontend/src/app/pages/landing/landing.component.html`
+- [x] T007 [US1] Add Flight Deals section styles (title, card grid) in `frontend/src/app/pages/landing/landing.component.scss`
 
 ---
 
@@ -61,8 +61,8 @@
 >
 > **Independent Test**: Scroll past Flight Deals, verify full-width Kenya card displays with image, "Nairobi, Kenya", description, and $1,248 price.
 
-- [ ] T008 [US2] Add Featured Destination section HTML in `frontend/src/app/pages/landing/landing.component.html`
-- [ ] T009 [US2] Add Featured Destination styles (full-width layout, text overlay) in `frontend/src/app/pages/landing/landing.component.scss`
+- [x] T008 [US2] Add Featured Destination section HTML in `frontend/src/app/pages/landing/landing.component.html`
+- [x] T009 [US2] Add Featured Destination styles (full-width layout, text overlay) in `frontend/src/app/pages/landing/landing.component.scss`
 
 ---
 
@@ -72,8 +72,8 @@
 >
 > **Independent Test**: Scroll to Places section, verify 3 cards display with images and titles, hover effects work.
 
-- [ ] T010 [US3] Add Places to Stay section HTML with 3 destination-cards in `frontend/src/app/pages/landing/landing.component.html`
-- [ ] T011 [US3] Add Places to Stay section styles in `frontend/src/app/pages/landing/landing.component.scss`
+- [x] T010 [US3] Add Places to Stay section HTML with 3 destination-cards in `frontend/src/app/pages/landing/landing.component.html`
+- [x] T011 [US3] Add Places to Stay section styles in `frontend/src/app/pages/landing/landing.component.scss`
 
 ---
 
@@ -83,8 +83,8 @@
 >
 > **Independent Test**: Scroll to Testimonials section, verify 3 cards display with avatars, names, 5 filled stars, and review text.
 
-- [ ] T012 [US4] Add Testimonials section HTML with 3 testimonial-cards in `frontend/src/app/pages/landing/landing.component.html`
-- [ ] T013 [US4] Add Testimonials section styles in `frontend/src/app/pages/landing/landing.component.scss`
+- [x] T012 [US4] Add Testimonials section HTML with 3 testimonial-cards in `frontend/src/app/pages/landing/landing.component.html`
+- [x] T013 [US4] Add Testimonials section styles in `frontend/src/app/pages/landing/landing.component.scss`
 
 ---
 
@@ -92,8 +92,8 @@
 
 > Final verification and responsive testing.
 
-- [ ] T014 Add section title highlight styles (.highlight class for purple text) in `frontend/src/app/pages/landing/landing.component.scss`
-- [ ] T015 Verify responsive layout (3-column → 1-column at 768px) across all sections
+- [x] T014 Add section title highlight styles (.highlight class for purple text) in `frontend/src/app/pages/landing/landing.component.scss`
+- [x] T015 Verify responsive layout (3-column → 1-column at 768px) across all sections
 
 ---
 

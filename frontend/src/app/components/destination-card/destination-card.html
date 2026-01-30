@@ -1,0 +1,11 @@
+<div class="destination-card">
+  <div class="image-container">
+    <img [src]="image()" [alt]="title() + ', ' + subtitle()" loading="lazy" />
+  </div>
+  <div class="content">
+    <h3 class="title">{{ title() }}, {{ subtitle() }}</h3>
+    @if (price() !== null) {
+      <p class="price">${{ price() }} · {{ tripType() }}</p>
+    }
+  </div>
+</div>
