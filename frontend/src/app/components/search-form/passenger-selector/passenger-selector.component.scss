@@ -8,11 +8,9 @@ $mobile: 768px;
 :host {
   flex-shrink: 0;
   min-width: 120px;
-  margin-left: auto;
 
   @media (max-width: $mobile) {
     width: 100%;
-    margin-left: 0;
   }
 }
 
