@@ -122,6 +122,8 @@ For fastest time-to-demo, implement in this order:
 
 This delivers a working sidebar with hotel cards that validates the integration pattern.
 
+> **Note**: "MVP Complete" means component code is ready. T016-T017 (Integration) are still required for visual verification in the browser.
+
 ### Full Implementation
 
 Continue with:
@@ -214,6 +216,16 @@ export const MOCK_DESTINATIONS: RelatedDestination[] = [
     flightPrice: 589
   }
 ];
+```
+
+### T007: Hotel Card Styles Note
+
+**CSS Fallback**: Add a background-color fallback to the hotel image container so if an image fails to load, users see a neutral gray background instead of a broken image icon.
+
+```scss
+.hotel-image {
+  background-color: #E9E8FC; // Light purple fallback
+}
 ```
 
 ### T008: Hotel Card Component Logic
