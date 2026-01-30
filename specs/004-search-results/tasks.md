@@ -7,7 +7,7 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Tasks | 21 |
+| Total Tasks | 26 |
 | User Stories | 4 |
 | Parallel Opportunities | 8 tasks |
 | Estimated Lines | ~550 |
@@ -16,10 +16,10 @@
 
 | Story | Priority | Tasks | Independent Test |
 |-------|----------|-------|------------------|
-| US1 - View Search Results | P1 | T005-T010 | Navigate to `/search?origin=SFO&destination=NRT`, verify 6 flight cards display with airline, duration, times, stops, price |
-| US2 - Modify Search from Results | P1 | T011-T013 | On results page, verify compact search bar shows pre-filled criteria, modify and re-search |
-| US3 - Filter Flight Results | P2 | T014-T017 | Click filter dropdowns, apply "Nonstop only" filter, verify only nonstop flights display |
-| US4 - Select a Flight | P1 | T018-T019 | Hover over flight card (light purple bg), click to select (purple left border) |
+| US1 - View Search Results | P1 | T009-T014 | Navigate to `/search?origin=SFO&destination=NRT`, verify 6 flight cards display with airline, duration, times, stops, price |
+| US2 - Modify Search from Results | P1 | T015-T017 | On results page, verify compact search bar shows pre-filled criteria, modify and re-search |
+| US3 - Filter Flight Results | P2 | T018-T022 | Click filter dropdowns, apply "Nonstop only" filter, verify only nonstop flights display |
+| US4 - Select a Flight | P1 | T023-T024 | Hover over flight card (light purple bg), click to select (purple left border) |
 
 ---
 
@@ -91,6 +91,8 @@
 > **Goal**: Flight cards have hover effect and selected state with visual indicator.
 >
 > **Independent Test**: Hover over flight card (light purple background appears), click card (purple left border appears), click another card (selection moves).
+>
+> **Scope Note**: US4 Acceptance Scenario 3 ("selected flight retained when proceeding") is out of scope - booking flow (next step) is a future feature. This phase implements visual selection only.
 
 - [ ] T023 [US4] Add selection state management to search-results page in `frontend/src/app/pages/search-results/search-results.component.ts`
 - [ ] T024 [US4] Update flight-card to emit selection and display selected state in `frontend/src/app/components/flight-card/flight-card.component.ts`
