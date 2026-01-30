@@ -45,9 +45,9 @@ Phase 6 (Polish)
 
 **Goal**: Prepare component directories and routing
 
-- [x] T001 Create components directory structure at `frontend/src/app/components/search-form/`
-- [x] T002 Create pages directory structure at `frontend/src/app/pages/landing/`
-- [x] T003 Add mock airport data file at `frontend/src/assets/data/airports.json`
+- [ ] T001 Create components directory structure at `frontend/src/app/components/search-form/`
+- [ ] T002 Create pages directory structure at `frontend/src/app/pages/landing/`
+- [ ] T003 Add mock airport data file at `frontend/src/assets/data/airports.json`
 
 ---
 
@@ -55,10 +55,10 @@ Phase 6 (Polish)
 
 **Goal**: Create shared models and services needed by all components
 
-- [x] T004 [P] Create Airport interface in `frontend/src/app/models/airport.model.ts`
-- [x] T005 [P] Create SearchCriteria, TripType, PassengerCount interfaces in `frontend/src/app/models/search-criteria.model.ts`
-- [x] T006 Create AirportService with search method in `frontend/src/app/services/airport.service.ts`
-- [x] T007 Add search route to app routes in `frontend/src/app/app.routes.ts`
+- [ ] T004 [P] Create Airport interface in `frontend/src/app/models/airport.model.ts`
+- [ ] T005 [P] Create SearchCriteria, TripType, PassengerCount interfaces in `frontend/src/app/models/search-criteria.model.ts`
+- [ ] T006 Create AirportService with search method in `frontend/src/app/services/airport.service.ts`
+- [ ] T007 Add search route to app routes in `frontend/src/app/app.routes.ts`
 
 ---
 
@@ -74,13 +74,13 @@ Phase 6 (Polish)
 
 ### Tasks
 
-- [x] T008 [P] [US1] Create TripTypeSelectorComponent in `frontend/src/app/components/search-form/trip-type-selector/`
-- [x] T009 [P] [US1] Create LocationInputComponent with autocomplete in `frontend/src/app/components/search-form/location-input/`
-- [x] T010 [P] [US1] Create DatePickerComponent in `frontend/src/app/components/search-form/date-picker/`
-- [x] T011 [US1+US2] Create main SearchFormComponent composing child components in `frontend/src/app/components/search-form/`
-- [x] T012 [US1+US2] Add form validation (required fields, origin != destination, date validation) to SearchFormComponent
-- [x] T013 [US1+US2] Implement search navigation with query params in SearchFormComponent
-- [x] T014 [US1+US2] Create LandingComponent and integrate SearchFormComponent in `frontend/src/app/pages/landing/`
+- [ ] T008 [P] [US1] Create TripTypeSelectorComponent in `frontend/src/app/components/search-form/trip-type-selector/`
+- [ ] T009 [P] [US1] Create LocationInputComponent with autocomplete in `frontend/src/app/components/search-form/location-input/`
+- [ ] T010 [P] [US1] Create DatePickerComponent in `frontend/src/app/components/search-form/date-picker/`
+- [ ] T011 [US1+US2] Create main SearchFormComponent composing child components in `frontend/src/app/components/search-form/`
+- [ ] T012 [US1+US2] Add form validation (required fields, origin != destination, date validation) to SearchFormComponent
+- [ ] T013 [US1+US2] Implement search navigation with query params in SearchFormComponent
+- [ ] T014 [US1+US2] Create LandingComponent and integrate SearchFormComponent in `frontend/src/app/pages/landing/`
 
 **Checkpoint**: Round-trip and one-way search should work. Test by filling form and clicking Search.
 
@@ -96,9 +96,9 @@ Phase 6 (Polish)
 
 ### Tasks
 
-- [x] T015 [P] [US3] Create PassengerSelectorComponent in `frontend/src/app/components/search-form/passenger-selector/`
-- [x] T016 [US3] Add passenger selector styles with dropdown and counter buttons
-- [x] T017 [US3] Integrate PassengerSelectorComponent into SearchFormComponent
+- [ ] T015 [P] [US3] Create PassengerSelectorComponent in `frontend/src/app/components/search-form/passenger-selector/`
+- [ ] T016 [US3] Add passenger selector styles with dropdown and counter buttons
+- [ ] T017 [US3] Integrate PassengerSelectorComponent into SearchFormComponent
 
 **Checkpoint**: Passenger selection should work. Test by clicking passenger field and adjusting counts.
 
@@ -114,8 +114,8 @@ Phase 6 (Polish)
 
 ### Tasks
 
-- [x] T018 [US4] Add swap button between origin and destination in SearchFormComponent template
-- [x] T019 [US4] Implement swap logic in SearchFormComponent
+- [ ] T018 [US4] Add swap button between origin and destination in SearchFormComponent template
+- [ ] T019 [US4] Implement swap logic in SearchFormComponent
 
 **Checkpoint**: Swap button should exchange origin and destination values.
 
@@ -125,11 +125,11 @@ Phase 6 (Polish)
 
 **Goal**: Responsive styles, validation polish, final integration
 
-- [x] T020 Add responsive styles for mobile (<768px) in SearchFormComponent and child components
-- [x] T021 Add validation error messages display in SearchFormComponent template
-- [x] T022 Add loading state for autocomplete in LocationInputComponent
-- [x] T023 Update app.html to use LandingComponent as default route
-- [x] T024 Verify search form display on all viewport sizes, test form submission
+- [ ] T020 Add responsive styles for mobile (<768px) in SearchFormComponent and child components
+- [ ] T021 Add validation error messages display in SearchFormComponent template
+- [ ] T022 Add loading state for autocomplete in LocationInputComponent
+- [ ] T023 Update app.html to use LandingComponent as default route
+- [ ] T024 Verify search form display on all viewport sizes, test form submission
 
 ---
 
