@@ -179,8 +179,10 @@ ng serve
 6. **English only** - all code and comments
 
 ## Active Technologies
-- TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router (002-search-form)
-- N/A (frontend-only, search criteria passed via URL/state) (002-search-form)
+- TypeScript 5.x with Angular 17+ (standalone components), RxJS, Angular Router
+- SCSS for component styling
+- CSS Grid for responsive layouts
 
 ## Recent Changes
-- 002-search-form: Added TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router
+- 003-landing-content: Planning artifacts created (plan.md, research.md, data-model.md, quickstart.md)
+- 002-search-form: Implemented flight search form with location autocomplete, date pickers, passenger selector
