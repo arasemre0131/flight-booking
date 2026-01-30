@@ -1,0 +1,74 @@
+<div class="search-form">
+  <app-trip-type-selector
+    [value]="tripType()"
+    (valueChange)="onTripTypeChange($event)" />
+
+  <div class="form-row">
+    <div class="location-fields">
+      <app-location-input
+        label="From"
+        placeholder="Where from?"
+        [value]="origin()"
+        (valueChange)="onOriginChange($event)"
+        [class.has-error]="hasError('origin') || hasError('sameLocation')" />
+
+      <button type="button" class="swap-btn" (click)="swapLocations()" aria-label="Swap origin and destination">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M7 16L3 12M3 12L7 8M3 12H21M17 8L21 12M21 12L17 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <app-location-input
+        label="To"
+        placeholder="Where to?"
+        [value]="destination()"
+        (valueChange)="onDestinationChange($event)"
+        [class.has-error]="hasError('destination') || hasError('sameLocation')" />
+    </div>
+
+    <div class="date-fields">
+      <app-date-picker
+        label="Depart"
+        [value]="departureDate()"
+        (valueChange)="onDepartureDateChange($event)"
+        [class.has-error]="hasError('departureDate')" />
+
+      @if (isRoundTrip()) {
+        <app-date-picker
+          label="Return"
+          [value]="returnDate()"
+          [minDate]="departureDate()"
+          (valueChange)="onReturnDateChange($event)"
+          [class.has-error]="hasError('returnDate')" />
+      }
+    </div>
+
+    <app-passenger-selector
+      [value]="passengers()"
+      (valueChange)="onPassengersChange($event)" />
+
+    <button type="button" class="search-btn" (click)="onSubmit()">
+      Search
+    </button>
+  </div>
+
+  @if (submitted() && (errors().origin || errors().destination || errors().sameLocation || errors().departureDate || errors().returnDate)) {
+    <div class="error-messages">
+      @if (errors().sameLocation) {
+        <span class="error">{{ errors().sameLocation }}</span>
+      }
+      @if (errors().origin) {
+        <span class="error">{{ errors().origin }}</span>
+      }
+      @if (errors().destination) {
+        <span class="error">{{ errors().destination }}</span>
+      }
+      @if (errors().departureDate) {
+        <span class="error">{{ errors().departureDate }}</span>
+      }
+      @if (errors().returnDate) {
+        <span class="error">{{ errors().returnDate }}</span>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,42 @@
+$primary: #605DEC;
+$text-dark: #27273F;
+$bg-light: #F6F6FE;
+$container-max-width: 1280px;
+$mobile: 768px;
+
+.hero {
+  background: $bg-light;
+  padding: 80px 0 120px;
+  min-height: 500px;
+
+  @media (max-width: $mobile) {
+    padding: 40px 0 60px;
+  }
+}
+
+.container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 104px;
+
+  @media (max-width: $mobile) {
+    padding: 0 16px;
+  }
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-title {
+  font-size: 64px;
+  font-weight: 700;
+  color: $primary;
+  line-height: 1.1;
+  margin-bottom: 40px;
+
+  @media (max-width: $mobile) {
+    font-size: 36px;
+    margin-bottom: 24px;
+  }
+}

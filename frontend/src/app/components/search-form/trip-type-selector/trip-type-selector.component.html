@@ -1,0 +1,20 @@
+<div class="trip-type-selector">
+  <button
+    type="button"
+    class="trip-type-btn"
+    [class.active]="value() === 'round-trip'"
+    (click)="select('round-trip')"
+    aria-label="Select round trip">
+    <span class="radio-indicator"></span>
+    Round trip
+  </button>
+  <button
+    type="button"
+    class="trip-type-btn"
+    [class.active]="value() === 'one-way'"
+    (click)="select('one-way')"
+    aria-label="Select one way">
+    <span class="radio-indicator"></span>
+    One way
+  </button>
+</div>

@@ -1,0 +1,83 @@
+<div class="passenger-selector" (focusout)="onBlur()">
+  <label class="label">Passengers</label>
+  <button
+    type="button"
+    class="trigger"
+    (click)="toggle()"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="true">
+    <span class="value">{{ displayValue() }}</span>
+    <svg class="chevron" [class.open]="isOpen()" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  @if (isOpen()) {
+    <div class="dropdown" role="dialog" aria-label="Select passengers">
+      <div class="passenger-row">
+        <div class="passenger-info">
+          <span class="passenger-type">Adults</span>
+          <span class="passenger-desc">Age 12+</span>
+        </div>
+        <div class="counter">
+          <button
+            type="button"
+            class="counter-btn"
+            [disabled]="!canDecreaseAdults()"
+            (click)="decreaseAdults()"
+            aria-label="Decrease adults">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <span class="counter-value">{{ value().adults }}</span>
+          <button
+            type="button"
+            class="counter-btn"
+            [disabled]="!canIncreaseAdults()"
+            (click)="increaseAdults()"
+            aria-label="Increase adults">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="passenger-row">
+        <div class="passenger-info">
+          <span class="passenger-type">Children</span>
+          <span class="passenger-desc">Age 2-11</span>
+        </div>
+        <div class="counter">
+          <button
+            type="button"
+            class="counter-btn"
+            [disabled]="!canDecreaseChildren()"
+            (click)="decreaseChildren()"
+            aria-label="Decrease children">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <span class="counter-value">{{ value().children }}</span>
+          <button
+            type="button"
+            class="counter-btn"
+            [disabled]="!canIncreaseChildren()"
+            (click)="increaseChildren()"
+            aria-label="Increase children">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 3V13M3 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="dropdown-footer">
+        <span class="total">Total: {{ totalPassengers() }} passenger{{ totalPassengers() > 1 ? 's' : '' }}</span>
+        <button type="button" class="done-btn" (click)="close()">Done</button>
+      </div>
+    </div>
+  }
+</div>

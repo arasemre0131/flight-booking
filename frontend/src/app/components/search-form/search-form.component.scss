@@ -1,0 +1,117 @@
+$primary: #605DEC;
+$primary-hover: #4B48D9;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+$border-color: #CBD4E6;
+$bg-white: #FFFFFF;
+$error-color: #E53935;
+$mobile: 768px;
+
+.search-form {
+  background: $bg-white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.form-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.location-fields {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex: 2;
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+  }
+}
+
+.swap-btn {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: $primary;
+  background: #F5F5FF;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: 4px;
+
+  &:hover {
+    background: $primary;
+    color: $bg-white;
+  }
+
+  @media (max-width: $mobile) {
+    align-self: center;
+    transform: rotate(90deg);
+    margin: 8px 0;
+  }
+}
+
+.date-fields {
+  display: flex;
+  gap: 16px;
+  flex: 1.5;
+
+  @media (max-width: $mobile) {
+    width: 100%;
+  }
+}
+
+.search-btn {
+  flex-shrink: 0;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: $bg-white;
+  background: $primary;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: $primary-hover;
+  }
+
+  @media (max-width: $mobile) {
+    width: 100%;
+    margin-top: 16px;
+  }
+}
+
+.error-messages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid $border-color;
+}
+
+.error {
+  font-size: 13px;
+  color: $error-color;
+}
+
+:host ::ng-deep {
+  .has-error {
+    .input {
+      border-color: $error-color;
+    }
+  }
+}
