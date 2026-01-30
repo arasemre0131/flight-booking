@@ -3,19 +3,22 @@ import { ActivatedRoute } from '@angular/router';
 import { SearchFormComponent } from '../../components/search-form/search-form.component';
 import { FlightCard } from '../../components/flight-card/flight-card';
 import { FilterBar } from '../../components/filter-bar/filter-bar';
+import { SidebarContent } from '../../components/sidebar-content/sidebar-content';
 import { Flight } from '../../models/flight.model';
 import { FilterState, DEFAULT_FILTER_STATE } from '../../models/filter.model';
 import { MOCK_FLIGHTS } from '../../mock-data/flights.data';
+import { AirportService } from '../../services/airport.service';
 
 @Component({
   selector: 'app-search-results',
   standalone: true,
-  imports: [SearchFormComponent, FlightCard, FilterBar],
+  imports: [SearchFormComponent, FlightCard, FilterBar, SidebarContent],
   templateUrl: './search-results.html',
   styleUrl: './search-results.scss'
 })
 export class SearchResults implements OnInit {
   private route = inject(ActivatedRoute);
+  private airportService = inject(AirportService);
 
   // All flights from mock data
   private allFlights = signal<Flight[]>(MOCK_FLIGHTS);
@@ -26,6 +29,9 @@ export class SearchResults implements OnInit {
   // UI state
   showAllFlights = signal(false);
   selectedFlightId = signal<string | null>(null);
+
+  // Destination city for sidebar
+  destinationCity = signal<string>('your destination');
 
   // Filtered flights based on current filters
   filteredFlights = computed(() => {
@@ -73,10 +79,19 @@ export class SearchResults implements OnInit {
   });
 
   ngOnInit(): void {
-    // Read URL params for search criteria (pre-fill handled by search form)
+    // Read URL params for search criteria
     this.route.queryParams.subscribe(params => {
-      // Future: could filter flights based on origin/destination
       console.log('Search params:', params);
+
+      // Extract destination city from airport code
+      const destinationCode = params['destination'];
+      if (destinationCode) {
+        this.airportService.getByCode(destinationCode).subscribe(airport => {
+          if (airport) {
+            this.destinationCity.set(airport.city);
+          }
+        });
+      }
     });
   }
 

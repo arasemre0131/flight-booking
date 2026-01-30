@@ -1,0 +1,32 @@
+$primary: #605DEC;
+$text-dark: #27273F;
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.section-title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-dark;
+}
+
+// Hotels Section
+.hotels-section {
+  .hotel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+// Destinations Section
+.destinations-section {
+  .destination-list {
+    display: flex;
+    gap: 12px;
+  }
+}
