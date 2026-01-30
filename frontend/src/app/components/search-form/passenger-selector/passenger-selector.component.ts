@@ -1,4 +1,4 @@
-import { Component, input, output, signal, computed } from '@angular/core';
+import { Component, input, output, signal, computed, ElementRef, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   PassengerCount,
@@ -19,6 +19,8 @@ import {
   styleUrl: './passenger-selector.component.scss'
 })
 export class PassengerSelectorComponent {
+  private elementRef = inject(ElementRef);
+
   value = input<PassengerCount>({ adults: 1, children: 0 });
   valueChange = output<PassengerCount>();
 
@@ -39,19 +41,19 @@ export class PassengerSelectorComponent {
     this.totalPassengers() < MAX_PASSENGERS
   );
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.close();
+    }
+  }
+
   toggle(): void {
     this.isOpen.update(open => !open);
   }
 
   close(): void {
     this.isOpen.set(false);
-  }
-
-  onBlur(): void {
-    // Delay to allow click on buttons
-    setTimeout(() => {
-      this.close();
-    }, 200);
   }
 
   decreaseAdults(): void {
