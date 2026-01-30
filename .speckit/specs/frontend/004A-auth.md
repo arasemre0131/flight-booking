@@ -1,13 +1,13 @@
-# SPEC-004A: Authentication (Login/Register)
+# SPEC-004A: Authentication (Login/Register Modal)
 
-> **Status:** ⬜ Pending | **Lines:** ~150 | **Priority:** P0
+> **Status:** ⬜ Pending | **Lines:** ~200 | **Priority:** P0
 
 ## Overview
-Login and registration forms for passengers. Required before booking flow.
+Login and registration modals for passengers. Triggered from header buttons. Any login works (mock auth).
 
 ## Dependencies
-- **Requires:** SPEC-001A (Header/Footer)
-- **Required by:** SPEC-003A (Passenger Info)
+- **Requires:** SPEC-001A (Header)
+- **Required by:** SPEC-003A (Passenger Info - requires login)
 
 ---
 
@@ -15,158 +15,154 @@ Login and registration forms for passengers. Required before booking flow.
 
 | # | File Path | Purpose | Lines |
 |---|-----------|---------|-------|
-| 1 | `src/app/pages/auth/login/login.component.ts` | Login logic | ~40 |
-| 2 | `src/app/pages/auth/login/login.component.html` | Login template | ~35 |
-| 3 | `src/app/pages/auth/login/login.component.scss` | Login styles | ~25 |
-| 4 | `src/app/pages/auth/register/register.component.ts` | Register logic | ~45 |
-| 5 | `src/app/pages/auth/register/register.component.html` | Register template | ~40 |
-| 6 | `src/app/pages/auth/register/register.component.scss` | Register styles | ~25 |
-| 7 | `src/app/services/auth.service.ts` | Auth service | ~50 |
-| 8 | `src/app/models/user.model.ts` | User interface | ~20 |
+| 1 | `src/app/shared/auth-modal/auth-modal.component.ts` | Modal logic | ~60 |
+| 2 | `src/app/shared/auth-modal/auth-modal.component.html` | Modal template | ~70 |
+| 3 | `src/app/shared/auth-modal/auth-modal.component.scss` | Modal styles | ~40 |
+| 4 | `src/app/services/auth.service.ts` | Auth service | ~50 |
+| 5 | `src/app/models/user.model.ts` | User interface | ~20 |
 
-**Total: ~280 lines**
+**Total: ~240 lines**
 
 ---
 
-## Login Page
+## Design Reference
 
-### Visual Reference
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                              HEADER                                      │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│                         Sign in to Tripma                               │
-│                                                                         │
-│                  ┌─────────────────────────────────┐                    │
-│                  │ Email address                   │                    │
-│                  └─────────────────────────────────┘                    │
-│                  ┌─────────────────────────────────┐                    │
-│                  │ Password                    👁  │                    │
-│                  └─────────────────────────────────┘                    │
-│                                                                         │
-│                  ☐ Remember me                                          │
-│                                                                         │
-│                  ┌─────────────────────────────────┐                    │
-│                  │          Sign in               │                    │
-│                  └─────────────────────────────────┘                    │
-│                                                                         │
-│                  Forgot password?                                       │
-│                                                                         │
-│                  ──────────── or ────────────                          │
-│                                                                         │
-│                  [ G  Sign in with Google        ]                      │
-│                  [ 🍎 Sign in with Apple         ]                      │
-│                  [ f  Sign in with Facebook      ]                      │
-│                                                                         │
-│                  Don't have an account? Sign up                         │
-│                                                                         │
-├─────────────────────────────────────────────────────────────────────────┤
-│                              FOOTER                                      │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-### Form Fields
-| Field | Type | Validation |
-|-------|------|------------|
-| Email | email | Required, valid email |
-| Password | password | Required, min 8 chars |
-| Remember me | checkbox | - |
-
-### Links
-- "Forgot password?" → Password reset (future)
-- "Sign up" → Register page
+- Image: `assets/images/auth/signup-modal.png`
+- Style: Centered modal with backdrop
 
 ---
 
-## Register Page
+## Sign Up Modal
+
+### Visual Reference (from Figma)
+```
+┌─────────────────────────────────────────────────────┐
+│                                                   ✕ │
+│  Sign up for Tripma                                 │
+│                                                     │
+│  Tripma is totally free to use. Sign up using your  │
+│  email address or phone number below to get started.│
+│                                                     │
+│  ┌───────────────────────────────────────────────┐  │
+│  │ Email or phone number                         │  │
+│  └───────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────┐  │
+│  │ Password                                      │  │
+│  └───────────────────────────────────────────────┘  │
+│                                                     │
+│  ☐ I agree to the terms and conditions              │
+│  ☐ Send me the latest deal alerts                   │
+│                                                     │
+│  ┌───────────────────────────────────────────────┐  │
+│  │            Create account                     │  │
+│  └───────────────────────────────────────────────┘  │
+│                                                     │
+│  ────────────────── or ──────────────────           │
+│                                                     │
+│  ┌───────────────────────────────────────────────┐  │
+│  │  G    Continue with Google                    │  │
+│  └───────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────┐  │
+│  │  🍎   Continue with Apple                     │  │
+│  └───────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────┐  │
+│  │  f    Continue with Facebook                  │  │
+│  └───────────────────────────────────────────────┘  │
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Sign In Modal
 
 ### Visual Reference
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                              HEADER                                      │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│                      Create your Tripma account                         │
-│                                                                         │
-│                  ┌─────────────────────────────────┐                    │
-│                  │ First name                      │                    │
-│                  └─────────────────────────────────┘                    │
-│                  ┌─────────────────────────────────┐                    │
-│                  │ Last name                       │                    │
-│                  └─────────────────────────────────┘                    │
-│                  ┌─────────────────────────────────┐                    │
-│                  │ Email address                   │                    │
-│                  └─────────────────────────────────┘                    │
-│                  ┌─────────────────────────────────┐                    │
-│                  │ Password                    👁  │                    │
-│                  └─────────────────────────────────┘                    │
-│                  Password strength: Strong                              │
-│                  ┌─────────────────────────────────┐                    │
-│                  │ Confirm password            👁  │                    │
-│                  └─────────────────────────────────┘                    │
-│                                                                         │
-│                  ☐ I agree to the Terms and Privacy Policy             │
-│                                                                         │
-│                  ┌─────────────────────────────────┐                    │
-│                  │        Create account          │                    │
-│                  └─────────────────────────────────┘                    │
-│                                                                         │
-│                  ──────────── or ────────────                          │
-│                                                                         │
-│                  [ G  Sign up with Google        ]                      │
-│                  [ 🍎 Sign up with Apple         ]                      │
-│                  [ f  Sign up with Facebook      ]                      │
-│                                                                         │
-│                  Already have an account? Sign in                       │
-│                                                                         │
-├─────────────────────────────────────────────────────────────────────────┤
-│                              FOOTER                                      │
-└─────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│                                                   ✕ │
+│  Sign in to Tripma                                  │
+│                                                     │
+│  ┌───────────────────────────────────────────────┐  │
+│  │ Email or phone number                         │  │
+│  └───────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────┐  │
+│  │ Password                                      │  │
+│  └───────────────────────────────────────────────┘  │
+│                                                     │
+│  ┌───────────────────────────────────────────────┐  │
+│  │              Sign in                          │  │
+│  └───────────────────────────────────────────────┘  │
+│                                                     │
+│  ────────────────── or ──────────────────           │
+│                                                     │
+│  ┌───────────────────────────────────────────────┐  │
+│  │  G    Continue with Google                    │  │
+│  └───────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────┐  │
+│  │  🍎   Continue with Apple                     │  │
+│  └───────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────┐  │
+│  │  f    Continue with Facebook                  │  │
+│  └───────────────────────────────────────────────┘  │
+│                                                     │
+│  Don't have an account? Sign up                     │
+│                                                     │
+└─────────────────────────────────────────────────────┘
 ```
 
-### Form Fields
-| Field | Type | Validation |
-|-------|------|------------|
-| First name | text | Required, min 2 chars |
-| Last name | text | Required, min 2 chars |
-| Email | email | Required, valid email |
-| Password | password | Required, min 8 chars, strength |
-| Confirm password | password | Must match password |
-| Terms agreement | checkbox | Required |
+---
+
+## Login Behavior (IMPORTANT)
+
+### Mock Authentication Rules:
+
+1. **Email/Phone Login:**
+   - Any email/password works (no real validation)
+   - Display name = email/phone (before @)
+   - Example: `john@email.com` → Display name: "john"
+
+2. **Social Login (Google/Apple/Facebook):**
+   - Click immediately logs in
+   - Display name = "User"
+   - No additional input needed
+
+3. **After Login:**
+   - Header changes: "Sign in | Sign up" → "My trips | 👤 [Name]"
+   - User can access booking flow
+
+---
+
+## Form Fields
+
+### Sign Up
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| Email or phone | text | Yes | Becomes display name |
+| Password | password | Yes | Any value works |
+| Terms agreement | checkbox | Yes | Must check |
+| Deal alerts | checkbox | No | Optional |
+
+### Sign In
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| Email or phone | text | Yes | Becomes display name |
+| Password | password | Yes | Any value works |
 
 ---
 
 ## Models (user.model.ts)
 
 ```typescript
-export type UserRole = 'passenger' | 'airline' | 'admin';
-
 export interface User {
   id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  createdAt: Date;
+  displayName: string;
+  email?: string;
+  loginMethod: 'email' | 'google' | 'apple' | 'facebook';
 }
 
-export interface LoginRequest {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
-
-export interface RegisterRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  user: User;
-  token: string;
+export interface AuthState {
+  isLoggedIn: boolean;
+  user: User | null;
 }
 ```
 
@@ -177,80 +173,168 @@ export interface AuthResponse {
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUser$ = new BehaviorSubject<User | null>(null);
+  private authState = new BehaviorSubject<AuthState>({
+    isLoggedIn: false,
+    user: null
+  });
 
-  // Mock login
-  login(request: LoginRequest): Observable<AuthResponse> { }
+  // Login with email/phone
+  loginWithEmail(email: string, password: string): void {
+    const displayName = email.split('@')[0] || email;
+    this.setUser({
+      id: Date.now().toString(),
+      displayName,
+      email,
+      loginMethod: 'email'
+    });
+  }
 
-  // Mock register
-  register(request: RegisterRequest): Observable<AuthResponse> { }
+  // Social login - instant, name = "User"
+  loginWithGoogle(): void {
+    this.setUser({
+      id: Date.now().toString(),
+      displayName: 'User',
+      loginMethod: 'google'
+    });
+  }
 
-  // Logout
-  logout(): void { }
+  loginWithApple(): void {
+    this.setUser({
+      id: Date.now().toString(),
+      displayName: 'User',
+      loginMethod: 'apple'
+    });
+  }
 
-  // Check if logged in
-  isLoggedIn(): boolean { }
+  loginWithFacebook(): void {
+    this.setUser({
+      id: Date.now().toString(),
+      displayName: 'User',
+      loginMethod: 'facebook'
+    });
+  }
 
-  // Get current user
-  getCurrentUser(): Observable<User | null> { }
+  logout(): void {
+    this.authState.next({ isLoggedIn: false, user: null });
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.authState.pipe(map(state => state.isLoggedIn));
+  }
+
+  getCurrentUser(): Observable<User | null> {
+    return this.authState.pipe(map(state => state.user));
+  }
+
+  private setUser(user: User): void {
+    this.authState.next({ isLoggedIn: true, user });
+  }
 }
 ```
 
 ---
 
-## Social Login Buttons
+## Modal Component
 
-Same style as SPEC-003C:
-- Google
-- Apple
-- Facebook
+### Inputs/Outputs
+```typescript
+@Input() mode: 'signin' | 'signup' = 'signup';
+@Output() close = new EventEmitter<void>();
+@Output() loginSuccess = new EventEmitter<User>();
+```
 
----
-
-## Password Strength Indicator
-
-| Strength | Color | Criteria |
-|----------|-------|----------|
-| Weak | Red | < 8 chars |
-| Medium | Yellow | 8+ chars, no variety |
-| Strong | Green | 8+ chars, mixed case, numbers |
+### Toggle between modes
+- "Don't have an account? Sign up" → switches to signup
+- "Already have an account? Sign in" → switches to signin
 
 ---
 
-## Error Messages
+## Header Integration
 
-| Error | Message |
-|-------|---------|
-| Invalid email | "Please enter a valid email address" |
-| Wrong password | "Incorrect email or password" |
-| Email exists | "An account with this email already exists" |
-| Passwords don't match | "Passwords do not match" |
-| Terms not accepted | "You must accept the Terms and Privacy Policy" |
+### Before Login
+```html
+<a class="sign-in" (click)="openAuthModal('signin')">Sign in</a>
+<button class="sign-up-btn" (click)="openAuthModal('signup')">Sign up</button>
+```
+
+### After Login
+```html
+<a routerLink="/my-trips">My trips</a>
+<span class="user-avatar">👤 {{ user.displayName }}</span>
+```
 
 ---
 
-## Navigation
+## Styles
 
-| From | To | Trigger |
-|------|-----|---------|
-| Login | Register | "Sign up" link |
-| Register | Login | "Sign in" link |
-| Login | Home | Successful login |
-| Login | Booking | Login after flight selection |
+```scss
+.auth-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.auth-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  width: 400px;
+  max-width: 90vw;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.social-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #CBD4E6;
+  border-radius: 4px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #605DEC;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: #605DEC;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+```
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] Login form validates email and password
-- [ ] Password visibility toggle works
-- [ ] "Remember me" checkbox saves session
-- [ ] Login error shows for wrong credentials
-- [ ] Register form validates all fields
-- [ ] Password strength indicator works
-- [ ] Confirm password must match
-- [ ] Terms checkbox required
-- [ ] Social login buttons display
-- [ ] Navigation between login/register works
-- [ ] Successful login redirects appropriately
-- [ ] Auth state persists in service
+- [ ] Sign in modal opens when clicking "Sign in"
+- [ ] Sign up modal opens when clicking "Sign up"
+- [ ] Modal closes with ✕ button or backdrop click
+- [ ] Any email/password logs in successfully
+- [ ] Display name = email prefix (before @)
+- [ ] Google/Apple/Facebook instant login with name "User"
+- [ ] Header updates after login (shows user name)
+- [ ] Terms checkbox required for signup
+- [ ] Toggle between signin/signup modes
+- [ ] Login state persists (service)
+- [ ] Logged in users can access booking flow
