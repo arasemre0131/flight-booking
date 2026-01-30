@@ -1,189 +1,224 @@
-# Frontend Spec Plan
+# Frontend Spec Plan - Complete
 
-## Overview
-İki ana sayfa ve bunların ortak bileşenleri. Backend entegrasyonu ayrı spec'lerde.
+## TAW 2025 Project Requirements Checklist
 
----
-
-## Sayfa Yapısı
-
-### SPEC-001: Landing Page
-Ana sayfa - arama formu ve içerik bölümleri
-
-### SPEC-002: Search Results Page
-Arama sonuçları - uçuş listesi, filtreler, harita
-
----
-
-## Ortak Bileşenler (Her iki sayfada kullanılan)
-
-| Bileşen | Kullanım | Dosya |
-|---------|----------|-------|
-| Header/Nav | Her iki sayfa | `shared/header/` |
-| Footer | Her iki sayfa | `shared/footer/` |
-| Search Form | Landing + Results (kompakt) | `shared/search-form/` |
-| Airport Autocomplete | Search form içinde | `shared/airport-autocomplete/` |
-| Date Picker | Search form içinde | `shared/date-picker/` |
-| Passenger Selector | Search form içinde | `shared/passenger-selector/` |
+| Requirement | Status | Spec |
+|-------------|--------|------|
+| ✅ Flight search (anonymous) | Planned | 001C, 002A |
+| ✅ Up to 1 intermediate stop | Planned | 002A |
+| ✅ Sort by cost/duration/stops | Planned | 002A |
+| ✅ Seat selection | Planned | 003B |
+| ✅ Extras (baggage, legroom) | Planned | 003A |
+| ✅ Real-time seat availability | Backend | WebSocket |
+| ✅ User registration | Planned | 004A |
+| ✅ Ticket purchase after login | Planned | 003C |
+| ⬜ Airline dashboard | Phase 2 | TBD |
+| ⬜ Admin panel | Phase 2 | TBD |
 
 ---
 
-## Dinamik Fonksiyonlar
+## Complete Page List
 
-### Search Form Bileşenleri
+### Phase 1: Passenger Flow (Current Focus)
+
+| # | Spec ID | Page | Description | Lines |
+|---|---------|------|-------------|-------|
+| 1 | 001A | Header + Footer | Shared components | ~100 |
+| 2 | 001B | Search Form | Airport autocomplete, date picker, passengers | ~200 |
+| 3 | 001C | Landing Page | Hero, deals, featured, testimonials | ~250 |
+| 4 | 002A | Search Results - Flights | Flight list, filters, price grid | ~200 |
+| 5 | 002B | Search Results - Bottom | Map, hotels, also searched | ~200 |
+| 6 | 003A | Passenger Info | Form, emergency contact, bags | ~200 |
+| 7 | 003B | Seat Selection | Aircraft map, economy/business toggle | ~250 |
+| 8 | 003C | Payment Method | Card form, social login, summary | ~200 |
+| 9 | 003D | Booking Confirmation | Success, itinerary, hotels, experiences | ~200 |
+| 10 | 004A | Auth (Login/Register) | Login form, register form | ~150 |
+
+**Phase 1 Total: ~1950 lines (10 specs)**
+
+### Phase 2: Airline & Admin (Later)
+
+| # | Spec ID | Page | Description |
+|---|---------|------|-------------|
+| 11 | 005A | Airline Dashboard | Overview, stats |
+| 12 | 005B | Routes Management | CRUD routes |
+| 13 | 005C | Flights Management | CRUD flights, pricing |
+| 14 | 005D | Aircraft Management | CRUD aircraft |
+| 15 | 005E | Statistics | Revenue, passengers, demand |
+| 16 | 006A | Admin Panel | User management |
+| 17 | 006B | Airline Invitation | Invite flow |
+
+---
+
+## Dependency Graph
+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  From where?  │  Where to?  │  Depart-Arrive  │ 1 Adult │Search│
-└─────────────────────────────────────────────────────────────────┘
-       ↓              ↓              ↓              ↓
-   Autocomplete   Autocomplete   DatePicker    PassengerSelector
-   (IATA codes)   (IATA codes)   (2 calendar)  (Adults/Minors)
-```
+Phase 1: Passenger Flow
+========================
 
-| Fonksiyon | Davranış | Mock Data |
-|-----------|----------|-----------|
-| Airport Autocomplete | Yazınca filtreleme, IATA kodu göster | airports.json |
-| Date Picker | 2 aylık takvim, range seçimi | - |
-| Passenger Selector | +/- butonları, Adults + Minors | - |
-| Round trip / One way | Radio toggle | - |
+001A (Header/Footer)
+    │
+    ├──► 001B (Search Form)
+    │        │
+    │        ├──► 001C (Landing Page)
+    │        │
+    │        └──► 002A (Search Results - Flights)
+    │                  │
+    │                  └──► 002B (Search Results - Bottom)
+    │
+    └──► 004A (Auth Login/Register)
+              │
+              └──► 003A (Passenger Info)
+                        │
+                        └──► 003B (Seat Selection)
+                                  │
+                                  └──► 003C (Payment Method)
+                                            │
+                                            └──► 003D (Confirmation)
+```
 
 ---
 
-## Spec Bölümleri
+## Booking Flow (003A → 003D)
 
-### SPEC-001: Landing Page (~350 lines)
-
-**Bölümler:**
-1. Hero Section (search form dahil)
-2. Flight Deals (3 kart)
-3. Featured Destination (1 büyük kart)
-4. Places to Stay (3 kart)
-5. Testimonials (3 avatar + review)
-6. Footer
-
-**Dosyalar:**
+### User Journey
 ```
-src/app/
+Search Results
+     │
+     ▼
+┌─────────────────┐
+│ Select Flight   │ ← Click on flight card
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ 003A: Passenger │ ← Enter passenger details
+│ Information     │   Emergency contact
+│                 │   Bag selection (+/-)
+└────────┬────────┘
+         │ [Select seats]
+         ▼
+┌─────────────────┐
+│ 003B: Seat      │ ← View aircraft map
+│ Selection       │   Choose Economy/Business
+│                 │   Click seat (e.g., 9F)
+│                 │   Upgrade modal ($199)
+└────────┬────────┘
+         │ [Payment method]
+         ▼
+┌─────────────────┐
+│ 003C: Payment   │ ← Credit card / Google Pay / Apple Pay
+│ Method          │   Create account option
+│                 │   Price summary (subtotal, taxes, total)
+└────────┬────────┘
+         │ [Confirm and pay]
+         ▼
+┌─────────────────┐
+│ 003D: Booking   │ ← Success message
+│ Confirmation    │   Flight summary
+│                 │   Price breakdown
+│                 │   Shop hotels
+│                 │   Find experiences
+└─────────────────┘
+```
+
+---
+
+## File Structure
+
+```
+frontend/src/app/
 ├── pages/
-│   └── landing/
-│       ├── landing.component.ts        (~80)
-│       ├── landing.component.html      (~120)
-│       └── landing.component.scss      (~100)
+│   ├── landing/                    # 001C
+│   ├── search-results/             # 002A, 002B
+│   ├── booking/
+│   │   ├── passenger-info/         # 003A
+│   │   ├── seat-selection/         # 003B
+│   │   ├── payment/                # 003C
+│   │   └── confirmation/           # 003D
+│   └── auth/
+│       ├── login/                  # 004A
+│       └── register/               # 004A
+│
+├── shared/
+│   ├── header/                     # 001A
+│   ├── footer/                     # 001A
+│   ├── search-form/                # 001B
+│   ├── airport-autocomplete/       # 001B
+│   ├── date-picker/                # 001B
+│   └── passenger-selector/         # 001B
+│
 ├── components/
-│   ├── destination-card/               (~50)
-│   ├── testimonial-card/               (~40)
-│   └── featured-card/                  (~40)
-└── shared/
-    ├── header/                         (SPEC-001A)
-    ├── footer/                         (SPEC-001A)
-    ├── search-form/                    (SPEC-001B)
-    ├── airport-autocomplete/           (SPEC-001B)
-    ├── date-picker/                    (SPEC-001B)
-    └── passenger-selector/             (SPEC-001B)
-```
-
----
-
-### SPEC-002: Search Results Page (~400 lines)
-
-**Bölümler:**
-1. Compact Search Bar (üstte)
-2. Filter Bar (Max price, Shops, Times, Airlines, Seat class)
-3. Flight List (airline logo, süre, saat, durak, fiyat)
-4. Price Grid (flexible dates)
-5. Price History Chart
-6. Route Map (SVG)
-7. Hotels Section (3 kart)
-8. Also Searched (3 kart)
-
-**Dosyalar:**
-```
-src/app/
-├── pages/
-│   └── search-results/
-│       ├── search-results.component.ts    (~100)
-│       ├── search-results.component.html  (~150)
-│       └── search-results.component.scss  (~100)
-├── components/
-│   ├── flight-card/                       (~60)
-│   ├── filter-bar/                        (~50)
-│   ├── price-grid/                        (~40)
-│   ├── price-chart/                       (~30)
-│   ├── route-map/                         (~40)
-│   └── hotel-card/                        (~40)
+│   ├── destination-card/           # 001C
+│   ├── testimonial-card/           # 001C
+│   ├── flight-card/                # 002A
+│   ├── filter-bar/                 # 002A
+│   ├── price-grid/                 # 002B
+│   ├── route-map/                  # 002B
+│   ├── hotel-card/                 # 002B
+│   ├── seat-map/                   # 003B
+│   ├── seat-class-selector/        # 003B
+│   ├── flight-summary-card/        # 003A, 003C
+│   └── experience-card/            # 003D
+│
+├── mock-data/
+│   ├── airports.ts
+│   ├── flights.ts
+│   ├── airlines.ts
+│   ├── destinations.ts
+│   ├── hotels.ts
+│   └── experiences.ts
+│
 └── models/
-    ├── flight.model.ts                    (~30)
-    ├── airport.model.ts                   (~15)
-    └── filter.model.ts                    (~20)
+    ├── airport.model.ts
+    ├── flight.model.ts
+    ├── passenger.model.ts
+    ├── booking.model.ts
+    └── seat.model.ts
 ```
 
 ---
 
-## Backend Entegrasyon Planı
+## Image Assets Required
 
-### Phase 1: Mock Data (Şimdi)
-```typescript
-// mock-data/airports.ts
-export const AIRPORTS = [
-  { code: 'SFO', name: 'San Francisco International', city: 'San Francisco' },
-  { code: 'NRT', name: 'Narita International', city: 'Tokyo' },
-  // ...
-];
+### Booking Flow (`images/booking-flow/`)
+| Image | Used In | Description |
+|-------|---------|-------------|
+| `economy-seats.png` | 003B | 4 blue seats (economy) |
+| `business-seats.png` | 003B | 4 teal seats (business) |
+| `luggage.png` | 003A | Backpack + suitcase illustration |
 
-// mock-data/flights.ts
-export const MOCK_FLIGHTS = [
-  {
-    id: '1',
-    airline: { code: 'HA', name: 'Hawaiian Airlines', logo: 'hawaiian.png' },
-    departure: { time: '7:00 AM', airport: 'SFO' },
-    arrival: { time: '4:15 PM', airport: 'NRT' },
-    duration: '16h 45m',
-    stops: 1,
-    stopInfo: '2h 45m in HNL',
-    price: 624
-  }
-];
-```
-
-### Phase 2: Backend API (Sonra)
-| Endpoint | Kullanım | Spec |
-|----------|----------|------|
-| `GET /api/airports/search?q=` | Autocomplete | SPEC-101 |
-| `GET /api/flights/search` | Flight search | SPEC-102 |
-| `GET /api/flights/:id` | Flight details | SPEC-102 |
+### Confirmation (`images/confirmation/`)
+| Image | Used In | Description |
+|-------|---------|-------------|
+| `ryokan-japan.png` | 003D | Hotel card |
+| `bessho-sasa.png` | 003D | Hotel card |
+| `hotel-the-flag.png` | 003D | Hotel card |
+| `9-hours-shinjuku.png` | 003D | Hotel card |
+| `nihon-kimono.png` | 003D | Experience card |
+| `teamlab-borderless.png` | 003D | Experience card |
 
 ---
 
-## Uygulama Sırası
+## Implementation Order
 
 ```
-1. SPEC-001A: Header + Footer (shared)
-   └── ~100 lines
+Week 1: Core Layout
+├── SPEC-001A: Header + Footer
+├── SPEC-001B: Search Form Components
+└── SPEC-001C: Landing Page Content
 
-2. SPEC-001B: Search Form + Alt Bileşenler
-   └── ~200 lines (autocomplete, datepicker, passenger)
+Week 2: Search Results
+├── SPEC-002A: Search Results - Flight List
+└── SPEC-002B: Search Results - Sidebar/Bottom
 
-3. SPEC-001C: Landing Page Content
-   └── ~250 lines (hero, cards, testimonials)
+Week 3: Booking Flow
+├── SPEC-003A: Passenger Information
+├── SPEC-003B: Seat Selection
+├── SPEC-003C: Payment Method
+└── SPEC-003D: Booking Confirmation
 
-4. SPEC-002A: Search Results - Flight List
-   └── ~200 lines (flight cards, filters)
-
-5. SPEC-002B: Search Results - Sidebar + Bottom
-   └── ~200 lines (price grid, chart, map, hotels)
-```
-
-**Toplam: ~950 lines (5 spec, her biri <400 line)**
-
----
-
-## Mock Data Dosyaları
-
-```
-src/app/
-└── mock-data/
-    ├── airports.ts      # IATA kodları + şehirler
-    ├── flights.ts       # Örnek uçuş verileri
-    ├── airlines.ts      # Havayolu bilgileri + logolar
-    └── destinations.ts  # Landing page kartları
+Week 4: Auth + Polish
+├── SPEC-004A: Login/Register
+└── Integration + Testing
 ```

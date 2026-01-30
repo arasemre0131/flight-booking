@@ -48,46 +48,71 @@
 
 ---
 
+## Booking Flow Images (`images/booking-flow/`)
+
+### Seat Class Icons
+| File | Description | Usage |
+|------|-------------|-------|
+| `economy-seats.png` | 4 blue economy seats | Seat selection - Economy option |
+| `business-seats.png` | 4 teal/green business seats | Seat selection - Business option |
+
+### Luggage Illustration
+| File | Description | Usage |
+|------|-------------|-------|
+| `luggage.png` | Purple backpack + green suitcase | Passenger info - Bag section |
+
+---
+
+## Confirmation Page Images (`images/confirmation/`)
+
+### Shop Hotels Section (3 cards)
+| Position | File | Hotel Name | Price |
+|----------|------|------------|-------|
+| Top | `ryokan-japan.png` | Ryokan Japan | $439 |
+| Middle | `bessho-sasa.png` | Bessho SASA | $529 |
+| Bottom | `hotel-the-flag.png` | HOTEL THE FLAG 大阪市 | $139 |
+| Bottom | `9-hours-shinjuku.png` | 9 Hours Shinjuku | $59 |
+
+### Find Unique Experiences Section (2 cards)
+| Position | File | Experience | Price |
+|----------|------|------------|-------|
+| Top | `nihon-kimono.png` | Nihon Kimono | $89 |
+| Bottom | `teamlab-borderless.png` | teamLab Borderless | $39 |
+
+---
+
+## Icon Assets (SVG)
+
+### Seat Map
+- Available seat: Blue (#605DEC)
+- Occupied seat: Light gray
+- Selected seat: Purple with checkmark
+- Exit row indicator
+
+### Airline Logos
+| Code | Airline | File |
+|------|---------|------|
+| HA | Hawaiian Airlines | `hawaiian.svg` |
+| JL | Japan Airlines | `jal.svg` |
+| DL | Delta | `delta.svg` |
+| UA | United Airlines | `united.svg` |
+
+---
+
 ## Usage in Angular Components
 
 ```typescript
-// Landing page
-const LANDING_IMAGES = {
-  flightDeals: [
-    { src: 'assets/images/landing/shanghai.png', city: 'Shanghai', country: 'China' },
-    { src: 'assets/images/landing/sydney.png', city: 'Sydney', country: 'Australia' },
-    { src: 'assets/images/landing/kyoto.png', city: 'Kyoto', country: 'Japan' }
-  ],
-  featured: {
-    src: 'assets/images/landing/kenya.png', city: 'Nairobi', country: 'Kenya'
-  },
-  placesToStay: [
-    { src: 'assets/images/landing/maldives.png', city: 'Maldives' },
-    { src: 'assets/images/landing/morocco.png', city: 'Morocco' },
-    { src: 'assets/images/landing/mongolia.png', city: 'Mongolia' }
-  ],
-  testimonials: [
-    { avatar: 'assets/images/landing/avatar-yifei.png', name: 'Yifei Chen' },
-    { avatar: 'assets/images/landing/avatar-kaori.png', name: 'Kaori Yamazaki' },
-    { avatar: 'assets/images/landing/avatar-anthony.png', name: 'Anthony Russo' }
-  ]
-};
-
-// Search results page
-const SEARCH_IMAGES = {
+// Confirmation page
+const CONFIRMATION_IMAGES = {
   hotels: [
-    { src: 'assets/images/search-results/hotel-kaneyamaen.png', name: 'Hotel Kaneyamaen' },
-    { src: 'assets/images/search-results/hotel-osaka.png', name: 'HOTEL THE FLAG' },
-    { src: 'assets/images/search-results/hotel-shinjuku.png', name: '9 Hours Shinjuku' }
+    { src: 'assets/images/confirmation/ryokan-japan.png', name: 'Ryokan Japan', price: 439 },
+    { src: 'assets/images/confirmation/bessho-sasa.png', name: 'Bessho SASA', price: 529 },
+    { src: 'assets/images/confirmation/hotel-the-flag.png', name: 'HOTEL THE FLAG', price: 139 },
+    { src: 'assets/images/confirmation/9-hours-shinjuku.png', name: '9 Hours Shinjuku', price: 59 }
   ],
-  alsoSearched: [
-    { src: 'assets/images/search-results/shanghai-night.png', city: 'Shanghai', price: 598 },
-    { src: 'assets/images/search-results/nairobi.png', city: 'Nairobi', price: 1248 },
-    { src: 'assets/images/search-results/seoul.png', city: 'Seoul', price: 589 }
+  experiences: [
+    { src: 'assets/images/confirmation/nihon-kimono.png', name: 'Nihon Kimono', price: 89 },
+    { src: 'assets/images/confirmation/teamlab-borderless.png', name: 'teamLab Borderless', price: 39 }
   ]
 };
 ```
-
-## Note
-- All images are PNG format with original quality preserved
-- Images will be copied to `frontend/src/assets/images/` during Angular setup

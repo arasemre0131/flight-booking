@@ -53,18 +53,33 @@ A flight booking web application for the "Tecnologie e Applicazioni Web" course 
 | 3 | SPEC-001C | Landing Page Content | ⬜ Pending | ~250 |
 | 4 | SPEC-002A | Search Results - Flights | ⬜ Pending | ~200 |
 | 5 | SPEC-002B | Search Results - Sidebar | ⬜ Pending | ~200 |
+| 6 | SPEC-003A | Passenger Information | ⬜ Pending | ~200 |
+| 7 | SPEC-003B | Seat Selection | ⬜ Pending | ~250 |
+| 8 | SPEC-003C | Payment Method | ⬜ Pending | ~200 |
+| 9 | SPEC-003D | Booking Confirmation | ⬜ Pending | ~200 |
+| 10 | SPEC-004A | Auth (Login/Register) | ⬜ Pending | ~150 |
 
 ### Dependency Graph
 ```
 SPEC-001A (Header/Footer)
-    ↓
-SPEC-001B (Search Form)
-    ↓
-SPEC-001C (Landing Content) ←──┐
-    ↓                          │
-SPEC-002A (Flight Results) ────┘
-    ↓
-SPEC-002B (Sidebar/Hotels)
+    │
+    ├──► SPEC-001B (Search Form)
+    │        │
+    │        ├──► SPEC-001C (Landing Page)
+    │        │
+    │        └──► SPEC-002A (Search Results - Flights)
+    │                  │
+    │                  └──► SPEC-002B (Search Results - Bottom)
+    │
+    └──► SPEC-004A (Auth Login/Register)
+              │
+              └──► SPEC-003A (Passenger Info)
+                        │
+                        └──► SPEC-003B (Seat Selection)
+                                  │
+                                  └──► SPEC-003C (Payment Method)
+                                            │
+                                            └──► SPEC-003D (Confirmation)
 ```
 
 ---
@@ -112,12 +127,17 @@ frontend/
 
 ```
 .speckit/specs/frontend/
-├── 000-spec-plan.md      # Overview
-├── 001A-header-footer.md
-├── 001B-search-form.md
-├── 001C-landing-content.md
-├── 002A-search-flights.md
-└── 002B-search-sidebar.md
+├── 000-spec-plan.md          # Overview & TAW requirements
+├── 001A-header-footer.md     # Header + Footer
+├── 001B-search-form.md       # Search form + sub-components
+├── 001C-landing-content.md   # Landing page content
+├── 002A-search-flights.md    # Search results - flight list
+├── 002B-search-sidebar.md    # Search results - sidebar/bottom
+├── 003A-passenger-info.md    # Passenger information form
+├── 003B-seat-selection.md    # Aircraft seat map
+├── 003C-payment.md           # Payment method
+├── 003D-confirmation.md      # Booking confirmation
+└── 004A-auth.md              # Login/Register
 ```
 
 ---
