@@ -4,10 +4,13 @@ $text-gray: #6E7491;
 $border-color: #CBD4E6;
 $bg-white: #FFFFFF;
 
+:host {
+  flex: 1;
+  min-width: 100px;
+}
+
 .location-input {
   position: relative;
-  flex: 1;
-  min-width: 140px;
 }
 
 .label {
@@ -36,6 +39,9 @@ $bg-white: #FFFFFF;
   background: transparent;
   outline: none;
   transition: border-color 0.15s ease;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 
   &::placeholder {
     color: $text-gray;

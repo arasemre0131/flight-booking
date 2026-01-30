@@ -3,9 +3,13 @@ $text-dark: #27273F;
 $text-gray: #6E7491;
 $border-color: #CBD4E6;
 
+:host {
+  flex: 1;
+  min-width: 100px;
+}
+
 .date-picker {
   position: relative;
-  flex: 1;
 }
 
 .label {

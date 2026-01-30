@@ -29,7 +29,7 @@ export class AirportService {
   }
 
   // Search airports by query (min 2 characters)
-  // Prioritizes: exact code match > city starts with > city contains > name contains
+  // Only matches airports where city or code STARTS WITH the query
   search(query: string): Observable<Airport[]> {
     if (!query || query.length < 2) {
       return of([]);
@@ -39,11 +39,10 @@ export class AirportService {
 
     return this.loadAirports().pipe(
       map(airports => {
-        // Filter matching airports
+        // Filter: only city or code that STARTS WITH query
         const matches = airports.filter(airport =>
-          airport.city.toLowerCase().includes(normalizedQuery) ||
-          airport.code.toLowerCase().includes(normalizedQuery) ||
-          airport.country.toLowerCase().includes(normalizedQuery)
+          airport.city.toLowerCase().startsWith(normalizedQuery) ||
+          airport.code.toLowerCase().startsWith(normalizedQuery)
         );
 
         // Sort by relevance
@@ -60,10 +59,6 @@ export class AirportService {
           // Code starts with query
           if (aCode.startsWith(normalizedQuery) && !bCode.startsWith(normalizedQuery)) return -1;
           if (bCode.startsWith(normalizedQuery) && !aCode.startsWith(normalizedQuery)) return 1;
-
-          // City starts with query
-          if (aCity.startsWith(normalizedQuery) && !bCity.startsWith(normalizedQuery)) return -1;
-          if (bCity.startsWith(normalizedQuery) && !aCity.startsWith(normalizedQuery)) return 1;
 
           // Alphabetical by city
           return aCity.localeCompare(bCity);

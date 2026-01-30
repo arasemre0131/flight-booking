@@ -12,10 +12,12 @@ $mobile: 768px;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 .form-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   gap: 16px;
   margin-top: 24px;
@@ -30,8 +32,8 @@ $mobile: 768px;
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  flex: 2.5;
-  min-width: 300px;
+  flex: 2 1 280px;
+  min-width: 280px;
 
   @media (max-width: $mobile) {
     flex-direction: column;
@@ -68,10 +70,12 @@ $mobile: 768px;
 .date-fields {
   display: flex;
   gap: 16px;
-  flex: 1.5;
+  flex: 1 1 200px;
+  min-width: 200px;
 
   @media (max-width: $mobile) {
     width: 100%;
+    min-width: unset;
   }
 }
 
@@ -85,6 +89,7 @@ $mobile: 768px;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.15s ease;
+  white-space: nowrap;
 
   &:hover {
     background: $primary-hover;
@@ -92,7 +97,7 @@ $mobile: 768px;
 
   @media (max-width: $mobile) {
     width: 100%;
-    margin-top: 16px;
+    margin-top: 8px;
   }
 }
 

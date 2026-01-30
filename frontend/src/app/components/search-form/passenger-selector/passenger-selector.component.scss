@@ -5,13 +5,17 @@ $border-color: #CBD4E6;
 $bg-white: #FFFFFF;
 $mobile: 768px;
 
-.passenger-selector {
-  position: relative;
-  min-width: 140px;
+:host {
+  flex-shrink: 0;
+  min-width: 120px;
 
   @media (max-width: $mobile) {
     width: 100%;
   }
+}
+
+.passenger-selector {
+  position: relative;
 }
 
 .label {
