@@ -1,0 +1,188 @@
+$primary: #605DEC;
+$primary-dark: #4B48D9;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+$border-color: #E9E8FC;
+$error-color: #EB5757;
+$background-light: #FAFAFC;
+
+.payment-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: $text-dark;
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 16px;
+  color: $text-gray;
+}
+
+.payment-content {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: start;
+}
+
+.payment-forms {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.payment-summary {
+  position: sticky;
+  top: 24px;
+}
+
+// Error Banner
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba($error-color, 0.1);
+  border: 1px solid rgba($error-color, 0.3);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.error-icon {
+  font-size: 20px;
+  color: $error-color;
+}
+
+.error-text {
+  font-size: 14px;
+  color: $error-color;
+  font-weight: 500;
+}
+
+// Form Actions
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid $border-color;
+}
+
+// Buttons
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: $primary;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background: $primary-dark;
+    }
+  }
+
+  &--secondary {
+    background: white;
+    color: $text-dark;
+    border: 1px solid $border-color;
+
+    &:hover:not(:disabled) {
+      background: $background-light;
+    }
+  }
+}
+
+// Spinner
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// No Booking State
+.no-booking {
+  text-align: center;
+  padding: 80px 24px;
+
+  h2 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    color: $text-dark;
+  }
+
+  p {
+    margin: 0 0 24px 0;
+    color: $text-gray;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .payment-page {
+    padding: 24px 16px;
+  }
+
+  .payment-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .payment-summary {
+    position: static;
+    order: -1; // Show summary first on mobile
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 12px;
+
+    .btn {
+      width: 100%;
+    }
+
+    .btn--secondary {
+      order: 1; // Move back button below Pay Now on mobile
+    }
+  }
+}

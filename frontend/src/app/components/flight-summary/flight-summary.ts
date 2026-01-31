@@ -16,6 +16,7 @@ export class FlightSummary {
   returnFlight = input<Flight | null>(null);
   totalPrice = input.required<number>();
   passengers = input<PassengerCount>({ adults: 1, children: 0 });
+  seatFees = input<number>(0);
 
   // Computed values
   isRoundTrip = computed(() => this.returnFlight() !== null);
@@ -33,8 +34,12 @@ export class FlightSummary {
 
   pricePerPerson = computed(() => {
     const count = this.passengerCount();
-    return count > 0 ? this.totalPrice() / count : this.totalPrice();
+    const basePrice = this.totalPrice() - this.seatFees();
+    return count > 0 ? basePrice / count : basePrice;
   });
+
+  // Total including seat fees
+  grandTotal = computed(() => this.totalPrice());
 
   // Format time for display (e.g., "7:00 AM")
   formatTime(time: string): string {

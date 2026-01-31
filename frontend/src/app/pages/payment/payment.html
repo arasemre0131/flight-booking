@@ -1,0 +1,69 @@
+<div class="payment-page">
+  @if (hasBooking()) {
+    <div class="page-header">
+      <h1 class="page-title">Complete Your Booking</h1>
+      <p class="page-subtitle">Enter your payment details to confirm your reservation</p>
+    </div>
+
+    <div class="payment-content">
+      <!-- Left Column: Forms -->
+      <div class="payment-forms">
+        <!-- Payment Form -->
+        <app-payment-form
+          (paymentDetailsChange)="onPaymentDetailsChange($event)"
+          (formValidChange)="onPaymentFormValidChange($event)"
+        />
+
+        <!-- Billing Form -->
+        <app-billing-form
+          (billingAddressChange)="onBillingAddressChange($event)"
+          (formValidChange)="onBillingFormValidChange($event)"
+        />
+
+        <!-- Error Message -->
+        @if (error()) {
+          <div class="error-banner">
+            <span class="error-icon">⚠</span>
+            <span class="error-text">{{ error() }}</span>
+          </div>
+        }
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button
+            class="btn btn--secondary"
+            (click)="goBack()"
+            [disabled]="isProcessing()"
+          >
+            ← Back to Seat Selection
+          </button>
+
+          <button
+            class="btn btn--primary"
+            (click)="onPayNow()"
+            [disabled]="!isFormValid() || isProcessing()"
+          >
+            @if (isProcessing()) {
+              <span class="spinner"></span>
+              Processing...
+            } @else {
+              Pay Now - {{ formatPrice(priceSummary().total) }}
+            }
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Summary -->
+      <div class="payment-summary">
+        <app-booking-summary />
+      </div>
+    </div>
+  } @else {
+    <!-- No Booking State -->
+    <div class="no-booking">
+      <h2>No Booking Found</h2>
+      <p>Please start a new search to book your flight.</p>
+      <button class="btn btn--primary" routerLink="/">Search Flights</button>
+    </div>
+  }
+</div>

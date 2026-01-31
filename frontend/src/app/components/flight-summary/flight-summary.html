@@ -73,9 +73,15 @@
       <span class="price-label">Price per person</span>
       <span class="price-value">{{ formatPrice(pricePerPerson()) }}</span>
     </div>
+    @if (seatFees() > 0) {
+      <div class="price-row seat-fees">
+        <span class="price-label">Seat upgrades</span>
+        <span class="price-value">{{ formatPrice(seatFees()) }}</span>
+      </div>
+    }
     <div class="price-row price-total">
       <span class="price-label">Total</span>
-      <span class="price-value">{{ formatPrice(totalPrice()) }}</span>
+      <span class="price-value">{{ formatPrice(grandTotal()) }}</span>
     </div>
   </div>
 </div>

@@ -1,0 +1,156 @@
+<div class="confirmation-page">
+  @if (hasBooking()) {
+    <!-- Success Header -->
+    <div class="confirmation-header">
+      <div class="success-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h1 class="page-title">Booking Confirmed!</h1>
+      <p class="confirmation-number">{{ confirmationNumber() }}</p>
+      <p class="success-message">Your flight has been booked successfully.</p>
+    </div>
+
+    <!-- Email Notification -->
+    @if (getPrimaryEmail()) {
+      <div class="email-notice">
+        <span class="email-icon">✉</span>
+        <span>Confirmation sent to <strong>{{ getPrimaryEmail() }}</strong></span>
+      </div>
+    }
+
+    <!-- Flight Details -->
+    <section class="section flight-details">
+      <h2 class="section-title">Flight Details</h2>
+
+      <!-- Outbound Flight -->
+      @if (booking()?.selectedFlight; as flight) {
+        <div class="flight-card">
+          <div class="flight-label">Outbound Flight</div>
+          <div class="flight-info">
+            <div class="flight-route">
+              <div class="flight-endpoint">
+                <span class="airport-code">{{ flight.departureAirport }}</span>
+                <span class="time">{{ formatTime(flight.departureTime) }}</span>
+              </div>
+              <div class="flight-arrow">
+                <span class="line"></span>
+                <span class="duration">{{ flight.duration }}</span>
+                <span class="line"></span>
+              </div>
+              <div class="flight-endpoint">
+                <span class="airport-code">{{ flight.arrivalAirport }}</span>
+                <span class="time">{{ formatTime(flight.arrivalTime) }}</span>
+              </div>
+            </div>
+            <div class="flight-meta">
+              <span class="airline">{{ flight.airline.name }}</span>
+              <span class="flight-number">{{ flight.airline.code }} {{ flight.id }}</span>
+              <span class="date">{{ formatDate(flight.departureTime) }}</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Return Flight -->
+      @if (booking()?.returnFlight; as flight) {
+        <div class="flight-card">
+          <div class="flight-label">Return Flight</div>
+          <div class="flight-info">
+            <div class="flight-route">
+              <div class="flight-endpoint">
+                <span class="airport-code">{{ flight.departureAirport }}</span>
+                <span class="time">{{ formatTime(flight.departureTime) }}</span>
+              </div>
+              <div class="flight-arrow">
+                <span class="line"></span>
+                <span class="duration">{{ flight.duration }}</span>
+                <span class="line"></span>
+              </div>
+              <div class="flight-endpoint">
+                <span class="airport-code">{{ flight.arrivalAirport }}</span>
+                <span class="time">{{ formatTime(flight.arrivalTime) }}</span>
+              </div>
+            </div>
+            <div class="flight-meta">
+              <span class="airline">{{ flight.airline.name }}</span>
+              <span class="flight-number">{{ flight.airline.code }} {{ flight.id }}</span>
+              <span class="date">{{ formatDate(flight.departureTime) }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+
+    <!-- Passengers & Seats -->
+    <section class="section passengers">
+      <h2 class="section-title">Passengers</h2>
+      <div class="passenger-list">
+        @for (passenger of booking()?.passengers; track passenger.id; let i = $index) {
+          <div class="passenger-row">
+            <div class="passenger-info">
+              <span class="passenger-number">{{ i + 1 }}.</span>
+              <span class="passenger-name">{{ passenger.firstName }} {{ passenger.lastName }}</span>
+            </div>
+            <div class="seat-info">
+              @if (booking()?.selectedFlight) {
+                <span class="seat-badge">
+                  Seat: {{ getSeatForPassenger(passenger.id, booking()!.selectedFlight.id) }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Payment Summary -->
+    <section class="section payment-summary">
+      <h2 class="section-title">Payment Summary</h2>
+      <div class="price-breakdown">
+        <div class="price-row">
+          <span class="label">Base Fare</span>
+          <span class="value">{{ formatPrice(priceSummary().baseFare) }}</span>
+        </div>
+        @if (priceSummary().seatFees > 0) {
+          <div class="price-row">
+            <span class="label">Seat Fees</span>
+            <span class="value">{{ formatPrice(priceSummary().seatFees) }}</span>
+          </div>
+        }
+        <div class="price-row">
+          <span class="label">Taxes & Fees</span>
+          <span class="value">{{ formatPrice(priceSummary().taxesAndFees) }}</span>
+        </div>
+        <div class="price-row total">
+          <span class="label">Total Charged</span>
+          <span class="value">{{ formatPrice(priceSummary().total) }}</span>
+        </div>
+      </div>
+      <div class="card-used">
+        <span>{{ getCardTypeIcon() }}</span>
+        <span>{{ getMaskedCard() }}</span>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn btn--secondary" (click)="printConfirmation()">
+        <span class="btn-icon">🖨</span>
+        Print Confirmation
+      </button>
+      <button class="btn btn--primary" (click)="bookAnotherFlight()">
+        Book Another Flight
+      </button>
+    </div>
+  } @else {
+    <!-- No Booking State -->
+    <div class="no-booking">
+      <div class="no-booking-icon">✈</div>
+      <h2>No Booking Found</h2>
+      <p>It looks like you haven't completed a booking yet.</p>
+      <button class="btn btn--primary" routerLink="/">Search Flights</button>
+    </div>
+  }
+</div>

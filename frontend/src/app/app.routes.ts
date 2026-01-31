@@ -14,6 +14,18 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/passenger-info/passenger-info').then(m => m.PassengerInfo)
   },
   {
+    path: 'seat-selection',
+    loadComponent: () => import('./pages/seat-selection/seat-selection').then(m => m.SeatSelection)
+  },
+  {
+    path: 'payment',
+    loadComponent: () => import('./pages/payment/payment').then(m => m.PaymentPage)
+  },
+  {
+    path: 'confirmation',
+    loadComponent: () => import('./pages/confirmation/confirmation').then(m => m.ConfirmationPage)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
