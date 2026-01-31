@@ -9,18 +9,15 @@
     }
   </nav>
 
-  <!-- Auth Buttons -->
+  <!-- Auth Section -->
   <div class="auth-section">
-    @if (isLoggedIn$ | async) {
+    @if (authService.isAuthenticated()) {
       <!-- Logged In State -->
-      <a routerLink="/my-trips" class="my-trips-link">My trips</a>
-      @if (currentUser$ | async; as user) {
-        <span class="user-avatar">👤 {{ user.displayName }}</span>
-      }
+      <app-user-menu />
     } @else {
       <!-- Logged Out State -->
-      <button class="sign-in-btn" (click)="openSignIn()">Sign in</button>
-      <button class="sign-up-btn" (click)="openSignUp()">Sign up</button>
+      <a routerLink="/login" class="sign-in-btn">Sign in</a>
+      <a routerLink="/register" class="sign-up-btn">Sign up</a>
     }
   </div>
 
@@ -44,14 +41,16 @@
         <a [routerLink]="link.route" (click)="closeMobileMenu()">{{ link.label }}</a>
       }
       <div class="mobile-auth">
-        @if (isLoggedIn$ | async) {
+        @if (authService.isAuthenticated()) {
+          <div class="mobile-user-info">
+            <span class="avatar">{{ authService.getUserInitials() }}</span>
+            <span class="name">{{ authService.getUserDisplayName() }}</span>
+          </div>
           <a routerLink="/my-trips" (click)="closeMobileMenu()">My trips</a>
-          @if (currentUser$ | async; as user) {
-            <span class="user-info">👤 {{ user.displayName }}</span>
-          }
+          <button class="logout-btn" (click)="authService.logout(); closeMobileMenu()">Sign out</button>
         } @else {
-          <button class="sign-in-btn" (click)="openSignIn(); closeMobileMenu()">Sign in</button>
-          <button class="sign-up-btn" (click)="openSignUp(); closeMobileMenu()">Sign up</button>
+          <a routerLink="/login" class="sign-in-btn" (click)="closeMobileMenu()">Sign in</a>
+          <a routerLink="/register" class="sign-up-btn" (click)="closeMobileMenu()">Sign up</a>
         }
       </div>
     </nav>

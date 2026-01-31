@@ -210,4 +210,48 @@ $mobile: 768px;
     color: $text-dark;
     font-weight: 600;
   }
+
+  .mobile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 8px;
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: $primary;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .name {
+      font-size: 14px;
+      font-weight: 600;
+      color: $text-dark;
+    }
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #dc2626;
+    background: none;
+    border: 1px solid #dc2626;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: #dc2626;
+      color: white;
+    }
+  }
 }
