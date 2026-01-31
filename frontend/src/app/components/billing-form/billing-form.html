@@ -1,0 +1,120 @@
+<div class="billing-form">
+  <h3 class="form-title">Billing Address</h3>
+
+  <form [formGroup]="form">
+    <!-- Street Address -->
+    <div class="form-group">
+      <label for="street">Street Address</label>
+      <input
+        type="text"
+        id="street"
+        autocomplete="billing street-address"
+        placeholder="123 Main Street"
+        formControlName="street"
+        (input)="onInputChange('street')"
+        (blur)="markTouched('street')"
+        [class.error]="shouldShowError('street')"
+      />
+      @if (shouldShowError('street')) {
+        <span class="error-message">{{ getErrorMessage('street') }}</span>
+      }
+    </div>
+
+    <!-- City and State Row -->
+    <div class="form-row">
+      <!-- City -->
+      <div class="form-group form-group--half">
+        <label for="city">City</label>
+        <input
+          type="text"
+          id="city"
+          autocomplete="billing address-level2"
+          placeholder="San Francisco"
+          formControlName="city"
+          (input)="onInputChange('city')"
+          (blur)="markTouched('city')"
+          [class.error]="shouldShowError('city')"
+        />
+        @if (shouldShowError('city')) {
+          <span class="error-message">{{ getErrorMessage('city') }}</span>
+        }
+      </div>
+
+      <!-- State -->
+      <div class="form-group form-group--half">
+        <label for="state">State / Province</label>
+        @if (showStateDropdown()) {
+          <select
+            id="state"
+            autocomplete="billing address-level1"
+            formControlName="state"
+            (change)="onStateChange($event)"
+            (blur)="markTouched('state')"
+            [class.error]="shouldShowError('state')"
+          >
+            <option value="">Select state</option>
+            @for (state of states(); track state.code) {
+              <option [value]="state.code">{{ state.name }}</option>
+            }
+          </select>
+        } @else {
+          <input
+            type="text"
+            id="state"
+            autocomplete="billing address-level1"
+            placeholder="State or Province"
+            formControlName="state"
+            (input)="onInputChange('state')"
+            (blur)="markTouched('state')"
+            [class.error]="shouldShowError('state')"
+          />
+        }
+        @if (shouldShowError('state')) {
+          <span class="error-message">{{ getErrorMessage('state') }}</span>
+        }
+      </div>
+    </div>
+
+    <!-- Postal Code and Country Row -->
+    <div class="form-row">
+      <!-- Postal Code -->
+      <div class="form-group form-group--half">
+        <label for="postalCode">Postal Code</label>
+        <input
+          type="text"
+          id="postalCode"
+          autocomplete="billing postal-code"
+          placeholder="94102"
+          formControlName="postalCode"
+          (input)="onInputChange('postalCode')"
+          (blur)="markTouched('postalCode')"
+          [class.error]="shouldShowError('postalCode')"
+        />
+        @if (shouldShowError('postalCode')) {
+          <span class="error-message">{{ getErrorMessage('postalCode') }}</span>
+        }
+      </div>
+
+      <!-- Country -->
+      <div class="form-group form-group--half">
+        <label for="country">Country</label>
+        <select
+          id="country"
+          autocomplete="billing country"
+          formControlName="country"
+          (change)="onCountryChange($event)"
+          (blur)="markTouched('country')"
+          [class.error]="shouldShowError('country')"
+        >
+          <option value="">Select country</option>
+          @for (country of countries; track country.code) {
+            <option [value]="country.code">{{ country.name }}</option>
+          }
+        </select>
+        @if (shouldShowError('country')) {
+          <span class="error-message">{{ getErrorMessage('country') }}</span>
+        }
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,103 @@
+$primary: #605DEC;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+$success: #4CAF50;
+
+.passenger-seat-list {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.list-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: $text-dark;
+}
+
+.assignment-count {
+  font-size: 13px;
+  color: $text-gray;
+  padding: 4px 8px;
+  background: #F6F6FE;
+  border-radius: 4px;
+
+  &.complete {
+    color: $success;
+    background: #E8F5E9;
+  }
+}
+
+.assignments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.assignment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-radius: 6px;
+  background: #F6F6FE;
+  border: 1px solid #E9E8FC;
+  transition: border-color 0.2s ease;
+
+  &.assigned {
+    border-color: $primary;
+    background: white;
+  }
+}
+
+.passenger-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.passenger-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: $text-dark;
+}
+
+.seat-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seat-display {
+  font-size: 14px;
+  color: $text-dark;
+  font-weight: 500;
+
+  &.unassigned {
+    color: $text-gray;
+    font-style: italic;
+    font-weight: 400;
+  }
+}
+
+.seat-fee {
+  font-size: 12px;
+  color: $primary;
+  font-weight: 600;
+}
+
+.assignment-hint {
+  margin: 16px 0 0 0;
+  font-size: 13px;
+  color: $text-gray;
+  text-align: center;
+}

@@ -1,0 +1,209 @@
+$primary: #605DEC;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+
+.seat-map-container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.aircraft-header {
+  margin-bottom: 16px;
+}
+
+.aircraft-type {
+  display: block;
+  font-size: 14px;
+  color: $text-gray;
+  margin-bottom: 12px;
+}
+
+.column-labels {
+  display: grid;
+  grid-template-columns: 40px repeat(3, 40px) 24px repeat(3, 40px);
+  gap: 4px;
+  margin-left: 40px;
+}
+
+.column-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-gray;
+}
+
+.column-spacer {
+  width: 24px;
+}
+
+.seat-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &.exit {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 2px dashed #90CAF9;
+
+    &::before {
+      content: 'EXIT';
+      position: absolute;
+      left: -60px;
+      font-size: 10px;
+      font-weight: 600;
+      color: #1976D2;
+    }
+  }
+}
+
+.row-number {
+  width: 32px;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 500;
+  color: $text-gray;
+}
+
+.seats {
+  display: grid;
+  grid-template-columns: repeat(3, 40px) 24px repeat(3, 40px);
+  gap: 4px;
+
+  &.business-layout {
+    grid-template-columns: repeat(2, 48px) 24px repeat(2, 48px);
+  }
+}
+
+.seat {
+  width: 100%;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  font-family: inherit;
+
+  &:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:focus {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+
+  // Economy available - purple/blue (Figma design)
+  &.economy.available {
+    background: linear-gradient(135deg, #7C7AE6 0%, #605DEC 100%);
+    border: 1px solid #4B48D9;
+    color: white;
+  }
+
+  // Business available - teal/green (Figma design)
+  &.business.available {
+    background: linear-gradient(135deg, #5FCFB5 0%, #3DBAA2 100%);
+    border: 1px solid #2DA38B;
+    color: white;
+  }
+
+  // Exit row available - blue tint
+  &.exit.available {
+    background: linear-gradient(135deg, #7C7AE6 0%, #605DEC 100%);
+    border: 2px solid #90CAF9;
+    color: white;
+  }
+
+  // Occupied seats - light lavender (Figma design)
+  &.occupied {
+    background: #E9E8FC;
+    border: 1px solid #D4D3F0;
+    cursor: not-allowed;
+    opacity: 0.85;
+    color: #A9A8C7;
+  }
+
+  // Selected seats - coral/pink with checkmark (Figma design)
+  &.selected {
+    background: linear-gradient(135deg, #FF6B6B 0%, #EB5757 100%);
+    border: 1px solid #D94848;
+    color: white;
+    position: relative;
+
+    &::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .seat-label {
+      display: none;
+    }
+  }
+}
+
+.seat-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.seat-price {
+  font-size: 8px;
+  font-weight: 500;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.aisle {
+  width: 24px;
+  background: transparent;
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .seat-map-container {
+    padding: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .seat-rows {
+    min-width: 320px;
+  }
+
+  .column-labels {
+    grid-template-columns: 32px repeat(3, 36px) 20px repeat(3, 36px);
+    margin-left: 32px;
+  }
+
+  .seats {
+    grid-template-columns: repeat(3, 36px) 20px repeat(3, 36px);
+
+    &.business-layout {
+      grid-template-columns: repeat(2, 44px) 20px repeat(2, 44px);
+    }
+  }
+
+  .row-number {
+    width: 24px;
+    font-size: 11px;
+  }
+}

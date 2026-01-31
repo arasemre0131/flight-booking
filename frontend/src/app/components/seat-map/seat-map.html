@@ -1,0 +1,41 @@
+<div class="seat-map-container">
+  <div class="aircraft-header">
+    <span class="aircraft-type">{{ seatMap().aircraftType }}</span>
+    <div class="column-labels">
+      <span class="column-label">A</span>
+      <span class="column-label">B</span>
+      <span class="column-label">C</span>
+      <span class="column-spacer"></span>
+      <span class="column-label">D</span>
+      <span class="column-label">E</span>
+      <span class="column-label">F</span>
+    </div>
+  </div>
+
+  <div class="seat-rows">
+    @for (row of seatMap().rows; track row.number) {
+      <div class="seat-row" [class.business]="row.type === 'business'" [class.exit]="row.type === 'exit'">
+        <span class="row-number">{{ row.number }}</span>
+        <div class="seats" [class.business-layout]="row.type === 'business'">
+          @for (item of row.seats; track $index) {
+            @if (isSeat(item)) {
+              <button
+                type="button"
+                [class]="getSeatClasses(item)"
+                [disabled]="item.status === 'occupied'"
+                [title]="getAssignedPassenger(item) || item.id"
+                (click)="onSeatClick(item)">
+                <span class="seat-label">{{ item.letter }}</span>
+                @if (item.upgradePrice > 0 && getSeatStatus(item) !== 'selected') {
+                  <span class="seat-price">+${{ item.upgradePrice }}</span>
+                }
+              </button>
+            } @else {
+              <div class="aisle"></div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

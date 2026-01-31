@@ -3,6 +3,8 @@
 import { Flight } from './flight.model';
 import { SearchCriteria } from './search-criteria.model';
 import { Passenger } from './passenger.model';
+import { SeatAssignment } from './seat.model';
+import { PaymentDetails, BillingAddress } from './payment.model';
 
 export interface EmergencyContact {
   name: string;
@@ -17,6 +19,12 @@ export interface BookingDraft {
   emergencyContact?: EmergencyContact;
   totalPrice: number;
   searchCriteria: SearchCriteria;
+  seatAssignments?: SeatAssignment[];
+  seatFees?: number;
+  // Payment fields (008-payment)
+  paymentDetails?: PaymentDetails;
+  billingAddress?: BillingAddress;
+  confirmationNumber?: string;
 }
 
 // Helper to generate unique booking draft ID

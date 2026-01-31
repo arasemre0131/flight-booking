@@ -1,0 +1,63 @@
+<div class="seat-selection-page">
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <button class="back-btn" (click)="onBack()">
+        <span class="back-icon">←</span>
+        Back to passenger info
+      </button>
+      <h1 class="page-title">Select Your Seats</h1>
+      <p class="page-subtitle">Choose seats for each passenger in your booking</p>
+    </div>
+
+    <div class="page-content">
+      <!-- Left Column: Seat Map -->
+      <div class="seat-map-column">
+        <app-seat-legend />
+
+        <app-seat-map
+          [seatMap]="seatMap()"
+          [seatAssignments]="localAssignments()"
+          (seatSelect)="onSeatSelect($event)" />
+      </div>
+
+      <!-- Right Column: Summary Sidebar -->
+      <aside class="sidebar-column">
+        <!-- Passenger Seat Assignments -->
+        <app-passenger-seat-list [seatAssignments]="localAssignments()" />
+
+        <!-- Flight Summary -->
+        @if (selectedFlight()) {
+          <app-flight-summary
+            [selectedFlight]="selectedFlight()!"
+            [returnFlight]="returnFlight()"
+            [totalPrice]="totalWithFees()"
+            [passengers]="passengersCount()"
+            [seatFees]="seatFees()" />
+        }
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button
+            class="continue-btn"
+            [disabled]="!allSeatsAssigned()"
+            (click)="onContinue()">
+            Continue to Payment
+          </button>
+
+          <button class="skip-btn" (click)="onSkip()">
+            Skip seat selection
+          </button>
+
+          <p class="skip-note">
+            @if (!allSeatsAssigned()) {
+              Select seats for all passengers or skip to have seats assigned at check-in
+            } @else {
+              All passengers have seats assigned
+            }
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

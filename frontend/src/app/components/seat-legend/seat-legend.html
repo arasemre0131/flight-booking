@@ -1,0 +1,40 @@
+<div class="seat-legend">
+  <!-- Seat Type Images -->
+  <div class="seat-images">
+    <div class="seat-image-item">
+      <div class="seat-img-row economy-row">
+        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
+        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
+        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
+      </div>
+      <span class="seat-type-label">Economy</span>
+    </div>
+    <div class="seat-image-item">
+      <div class="seat-img-row business-row">
+        <img [src]="economySeatImage" alt="Business Seat" class="seat-img business-color" />
+        <img [src]="economySeatImage" alt="Business Seat" class="seat-img business-color" />
+      </div>
+      <span class="seat-type-label">Business</span>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend-section">
+    <h4 class="legend-title">Seat Status</h4>
+    <div class="legend-items">
+      @for (item of legendItems; track item.label) {
+        <div class="legend-item">
+          <div class="seat-indicator {{ item.cssClass }}">
+            @if (item.cssClass === 'selected') {
+              <span class="check">✓</span>
+            }
+          </div>
+          <span class="legend-label">{{ item.label }}</span>
+          @if (item.price) {
+            <span class="legend-price">{{ item.price }}</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>
