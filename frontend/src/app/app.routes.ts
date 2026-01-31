@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/search-results/search-results').then(m => m.SearchResults)
   },
   {
+    path: 'passenger-info',
+    loadComponent: () => import('./pages/passenger-info/passenger-info').then(m => m.PassengerInfo)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

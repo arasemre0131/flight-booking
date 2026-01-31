@@ -1,0 +1,130 @@
+<div class="passenger-form">
+  <h3 class="passenger-header">{{ passengerLabel() }}</h3>
+
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="firstName-{{ passengerIndex() }}">
+          First name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="firstName-{{ passengerIndex() }}"
+          formControlName="firstName"
+          placeholder="First name"
+          [class.error]="isInvalid('firstName')"
+        />
+        @if (hasError('firstName', 'required')) {
+          <span class="error-message">First name is required</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="middleName-{{ passengerIndex() }}">
+          Middle name
+        </label>
+        <input
+          type="text"
+          id="middleName-{{ passengerIndex() }}"
+          formControlName="middleName"
+          placeholder="Middle name (optional)"
+        />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="lastName-{{ passengerIndex() }}">
+          Last name <span class="required">*</span>
+        </label>
+        <input
+          type="text"
+          id="lastName-{{ passengerIndex() }}"
+          formControlName="lastName"
+          placeholder="Last name"
+          [class.error]="isInvalid('lastName')"
+        />
+        @if (hasError('lastName', 'required')) {
+          <span class="error-message">Last name is required</span>
+        }
+      </div>
+
+      <div class="form-group form-group-small">
+        <label for="suffix-{{ passengerIndex() }}">
+          Suffix
+        </label>
+        <input
+          type="text"
+          id="suffix-{{ passengerIndex() }}"
+          formControlName="suffix"
+          placeholder="Jr, Sr, III"
+        />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dateOfBirth-{{ passengerIndex() }}">
+          Date of birth <span class="required">*</span>
+        </label>
+        <input
+          type="date"
+          id="dateOfBirth-{{ passengerIndex() }}"
+          formControlName="dateOfBirth"
+          [class.error]="isInvalid('dateOfBirth')"
+        />
+        @if (hasError('dateOfBirth', 'required')) {
+          <span class="error-message">Date of birth is required</span>
+        }
+      </div>
+    </div>
+
+    @if (showContactFields()) {
+      <div class="contact-section">
+        <h4 class="section-subtitle">Contact Information</h4>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email-{{ passengerIndex() }}">
+              Email address <span class="required">*</span>
+            </label>
+            <input
+              type="email"
+              id="email-{{ passengerIndex() }}"
+              formControlName="email"
+              placeholder="email@example.com"
+              [class.error]="isInvalid('email')"
+            />
+            @if (hasError('email', 'required')) {
+              <span class="error-message">Email is required</span>
+            }
+            @if (hasError('email', 'email')) {
+              <span class="error-message">Please enter a valid email address</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone-{{ passengerIndex() }}">
+              Phone number <span class="required">*</span>
+            </label>
+            <input
+              type="tel"
+              id="phone-{{ passengerIndex() }}"
+              formControlName="phone"
+              placeholder="+1 555-123-4567"
+              [class.error]="isInvalid('phone')"
+            />
+            @if (hasError('phone', 'required')) {
+              <span class="error-message">Phone number is required</span>
+            }
+            @if (hasError('phone', 'pattern')) {
+              <span class="error-message">Please enter a valid phone number</span>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </form>
+</div>

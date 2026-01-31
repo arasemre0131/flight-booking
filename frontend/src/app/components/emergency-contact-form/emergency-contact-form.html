@@ -1,0 +1,36 @@
+<div class="emergency-contact-form">
+  <h3 class="section-header">Emergency Contact Information</h3>
+  <p class="section-description">Optional - Provide an emergency contact for your trip.</p>
+
+  <form [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="emergency-name">
+          Contact name
+        </label>
+        <input
+          type="text"
+          id="emergency-name"
+          formControlName="name"
+          placeholder="Full name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="emergency-phone">
+          Contact phone
+        </label>
+        <input
+          type="tel"
+          id="emergency-phone"
+          formControlName="phone"
+          placeholder="+1 555-123-4567"
+          [class.error]="isInvalid('phone')"
+        />
+        @if (hasError('phone', 'pattern')) {
+          <span class="error-message">Please enter a valid phone number</span>
+        }
+      </div>
+    </div>
+  </form>
+</div>

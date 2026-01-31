@@ -23,10 +23,10 @@
 
 **Purpose**: Create data models and services that all user stories depend on
 
-- [ ] T001 [P] Create Passenger interface in frontend/src/app/models/passenger.model.ts
-- [ ] T002 [P] Create EmergencyContact and BookingDraft interfaces in frontend/src/app/models/booking.model.ts
-- [ ] T003 Create BookingService with signal-based state management in frontend/src/app/services/booking.service.ts
-- [ ] T004 Add /passenger-info route to frontend/src/app/app.routes.ts
+- [x] T001 [P] Create Passenger interface in frontend/src/app/models/passenger.model.ts
+- [x] T002 [P] Create EmergencyContact and BookingDraft interfaces in frontend/src/app/models/booking.model.ts
+- [x] T003 Create BookingService with signal-based state management in frontend/src/app/services/booking.service.ts
+- [x] T004 Add /passenger-info route to frontend/src/app/app.routes.ts
 
 ---
 
@@ -38,14 +38,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T005 [P] [US1] Generate passenger-form component scaffold: ng generate component components/passenger-form --standalone --skip-tests
-- [ ] T006 [US1] Implement passenger-form.ts with reactive form, input for passengerIndex and passengerType, form controls for firstName, middleName (optional), lastName, suffix (optional), dateOfBirth in frontend/src/app/components/passenger-form/passenger-form.ts
-- [ ] T007 [US1] Create passenger-form.html template with labeled form fields, required field indicators (asterisks), date input for DOB in frontend/src/app/components/passenger-form/passenger-form.html
-- [ ] T008 [US1] Style passenger-form.scss with form layout, input styling, section headers per Figma in frontend/src/app/components/passenger-form/passenger-form.scss
-- [ ] T009 [P] [US1] Generate passenger-info page scaffold: ng generate component pages/passenger-info --standalone --skip-tests
-- [ ] T010 [US1] Implement passenger-info.ts with dynamic passenger form generation based on search criteria (adults + children count) in frontend/src/app/pages/passenger-info/passenger-info.ts
-- [ ] T011 [US1] Create passenger-info.html with two-column layout, passenger form sections labeled (Passenger 1, Passenger 2, etc.) in frontend/src/app/pages/passenger-info/passenger-info.html
-- [ ] T012 [US1] Style passenger-info.scss with two-column grid (form left, sidebar right), responsive mobile stack at 768px in frontend/src/app/pages/passenger-info/passenger-info.scss
+- [x] T005 [P] [US1] Generate passenger-form component scaffold: ng generate component components/passenger-form --standalone --skip-tests
+- [x] T006 [US1] Implement passenger-form.ts with reactive form, input for passengerIndex and passengerType, form controls for firstName, middleName (optional), lastName, suffix (optional), dateOfBirth in frontend/src/app/components/passenger-form/passenger-form.ts
+- [x] T007 [US1] Create passenger-form.html template with labeled form fields, required field indicators (asterisks), date input for DOB in frontend/src/app/components/passenger-form/passenger-form.html
+- [x] T008 [US1] Style passenger-form.scss with form layout, input styling, section headers per Figma in frontend/src/app/components/passenger-form/passenger-form.scss
+- [x] T009 [P] [US1] Generate passenger-info page scaffold: ng generate component pages/passenger-info --standalone --skip-tests
+- [x] T010 [US1] Implement passenger-info.ts with dynamic passenger form generation based on search criteria (adults + children count) in frontend/src/app/pages/passenger-info/passenger-info.ts
+- [x] T011 [US1] Create passenger-info.html with two-column layout, passenger form sections labeled (Passenger 1, Passenger 2, etc.) in frontend/src/app/pages/passenger-info/passenger-info.html
+- [x] T012 [US1] Style passenger-info.scss with two-column grid (form left, sidebar right), responsive mobile stack at 768px in frontend/src/app/pages/passenger-info/passenger-info.scss
 
 **Checkpoint**: Form displays with correct fields for each passenger based on search criteria
 
@@ -59,12 +59,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [P] [US2] Generate flight-summary component scaffold: ng generate component components/flight-summary --standalone --skip-tests
-- [ ] T014 [US2] Implement flight-summary.ts with inputs for selectedFlight, returnFlight (optional), and totalPrice, display computed values in frontend/src/app/components/flight-summary/flight-summary.ts
-- [ ] T015 [US2] Create flight-summary.html with flight details (route, departure/arrival times, airline logo, price breakdown), show both outbound and return flight if round-trip in frontend/src/app/components/flight-summary/flight-summary.html
-- [ ] T016 [US2] Style flight-summary.scss matching sidebar design from 005-search-sidebar in frontend/src/app/components/flight-summary/flight-summary.scss
-- [ ] T017 [US2] Integrate flight-summary into passenger-info page sidebar, pass selected flight from BookingService in frontend/src/app/pages/passenger-info/passenger-info.ts
-- [ ] T018 [US2] Update passenger-info.html to include flight-summary in sidebar section in frontend/src/app/pages/passenger-info/passenger-info.html
+- [x] T013 [P] [US2] Generate flight-summary component scaffold: ng generate component components/flight-summary --standalone --skip-tests
+- [x] T014 [US2] Implement flight-summary.ts with inputs for selectedFlight, returnFlight (optional), and totalPrice, display computed values in frontend/src/app/components/flight-summary/flight-summary.ts
+- [x] T015 [US2] Create flight-summary.html with flight details (route, departure/arrival times, airline logo, price breakdown), show both outbound and return flight if round-trip in frontend/src/app/components/flight-summary/flight-summary.html
+- [x] T016 [US2] Style flight-summary.scss matching sidebar design from 005-search-sidebar in frontend/src/app/components/flight-summary/flight-summary.scss
+- [x] T017 [US2] Integrate flight-summary into passenger-info page sidebar, pass selected flight from BookingService in frontend/src/app/pages/passenger-info/passenger-info.ts
+- [x] T018 [US2] Update passenger-info.html to include flight-summary in sidebar section in frontend/src/app/pages/passenger-info/passenger-info.html
 
 **Checkpoint**: Flight summary displays in sidebar with correct flight details and total price
 
@@ -78,14 +78,14 @@
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Add email and phone form controls with validators to passenger-form.ts (required for primary adult only) in frontend/src/app/components/passenger-form/passenger-form.ts
-- [ ] T020 [US3] Add email validation (Validators.email) and phone validation (pattern) to passenger-form in frontend/src/app/components/passenger-form/passenger-form.ts
-- [ ] T021 [US3] Add error message display to passenger-form.html for each field (required, invalid format) in frontend/src/app/components/passenger-form/passenger-form.html
-- [ ] T022 [US3] Style error messages in passenger-form.scss (red text, proper spacing) in frontend/src/app/components/passenger-form/passenger-form.scss
-- [ ] T023 [US3] Add form validity tracking to passenger-info.ts, aggregate validity from all passenger forms in frontend/src/app/pages/passenger-info/passenger-info.ts
-- [ ] T024 [US3] Add "Save and continue" button to passenger-info.html, disabled when form invalid in frontend/src/app/pages/passenger-info/passenger-info.html
-- [ ] T025 [US3] Implement form submission: save passengers to BookingService, navigate to /seat-selection in frontend/src/app/pages/passenger-info/passenger-info.ts
-- [ ] T026 [US3] Add conditional email/phone fields for primary adult only (hide for children and non-primary adults) in frontend/src/app/components/passenger-form/passenger-form.html
+- [x] T019 [US3] Add email and phone form controls with validators to passenger-form.ts (required for primary adult only) in frontend/src/app/components/passenger-form/passenger-form.ts
+- [x] T020 [US3] Add email validation (Validators.email) and phone validation (pattern) to passenger-form in frontend/src/app/components/passenger-form/passenger-form.ts
+- [x] T021 [US3] Add error message display to passenger-form.html for each field (required, invalid format) in frontend/src/app/components/passenger-form/passenger-form.html
+- [x] T022 [US3] Style error messages in passenger-form.scss (red text, proper spacing) in frontend/src/app/components/passenger-form/passenger-form.scss
+- [x] T023 [US3] Add form validity tracking to passenger-info.ts, aggregate validity from all passenger forms in frontend/src/app/pages/passenger-info/passenger-info.ts
+- [x] T024 [US3] Add "Save and continue" button to passenger-info.html, disabled when form invalid in frontend/src/app/pages/passenger-info/passenger-info.html
+- [x] T025 [US3] Implement form submission: save passengers to BookingService, navigate to /seat-selection in frontend/src/app/pages/passenger-info/passenger-info.ts
+- [x] T026 [US3] Add conditional email/phone fields for primary adult only (hide for children and non-primary adults) in frontend/src/app/components/passenger-form/passenger-form.html
 
 **Checkpoint**: Form validates all required fields, shows errors, and navigates on valid submission
 
@@ -99,13 +99,13 @@
 
 ### Implementation for User Story 4
 
-- [ ] T027 [P] [US4] Generate emergency-contact-form component scaffold: ng generate component components/emergency-contact-form --standalone --skip-tests
-- [ ] T028 [US4] Implement emergency-contact-form.ts with reactive form for name and phone fields in frontend/src/app/components/emergency-contact-form/emergency-contact-form.ts
-- [ ] T029 [US4] Create emergency-contact-form.html with labeled fields, optional section header in frontend/src/app/components/emergency-contact-form/emergency-contact-form.html
-- [ ] T030 [US4] Style emergency-contact-form.scss matching passenger-form styling in frontend/src/app/components/emergency-contact-form/emergency-contact-form.scss
-- [ ] T031 [US4] Integrate emergency-contact-form into passenger-info page below passenger forms in frontend/src/app/pages/passenger-info/passenger-info.ts
-- [ ] T032 [US4] Update passenger-info.html to include emergency-contact-form section in frontend/src/app/pages/passenger-info/passenger-info.html
-- [ ] T033 [US4] Update form submission to include emergency contact data in BookingService in frontend/src/app/pages/passenger-info/passenger-info.ts
+- [x] T027 [P] [US4] Generate emergency-contact-form component scaffold: ng generate component components/emergency-contact-form --standalone --skip-tests
+- [x] T028 [US4] Implement emergency-contact-form.ts with reactive form for name and phone fields in frontend/src/app/components/emergency-contact-form/emergency-contact-form.ts
+- [x] T029 [US4] Create emergency-contact-form.html with labeled fields, optional section header in frontend/src/app/components/emergency-contact-form/emergency-contact-form.html
+- [x] T030 [US4] Style emergency-contact-form.scss matching passenger-form styling in frontend/src/app/components/emergency-contact-form/emergency-contact-form.scss
+- [x] T031 [US4] Integrate emergency-contact-form into passenger-info page below passenger forms in frontend/src/app/pages/passenger-info/passenger-info.ts
+- [x] T032 [US4] Update passenger-info.html to include emergency-contact-form section in frontend/src/app/pages/passenger-info/passenger-info.html
+- [x] T033 [US4] Update form submission to include emergency contact data in BookingService in frontend/src/app/pages/passenger-info/passenger-info.ts
 
 **Checkpoint**: Emergency contact section displays, data saves with booking when filled
 
@@ -115,11 +115,11 @@
 
 **Purpose**: Handle edge cases and improve user experience
 
-- [ ] T034 Add data persistence to BookingService for back navigation and page refresh (use session storage backup to retain form data) in frontend/src/app/services/booking.service.ts
-- [ ] T035 Handle child passenger edge case: adjust form to not require email for children, use parent info in frontend/src/app/components/passenger-form/passenger-form.ts
-- [ ] T036 Add form data pre-fill for logged-in users (placeholder for future auth integration) in frontend/src/app/pages/passenger-info/passenger-info.ts
-- [ ] T037 Verify responsive layout at 768px breakpoint, adjust styles if needed in frontend/src/app/pages/passenger-info/passenger-info.scss
-- [ ] T038 Run quickstart.md validation checklist
+- [x] T034 Add data persistence to BookingService for back navigation and page refresh (use session storage backup to retain form data) in frontend/src/app/services/booking.service.ts
+- [x] T035 Handle child passenger edge case: adjust form to not require email for children, use parent info in frontend/src/app/components/passenger-form/passenger-form.ts
+- [x] T036 Add form data pre-fill for logged-in users (placeholder for future auth integration) in frontend/src/app/pages/passenger-info/passenger-info.ts
+- [x] T037 Verify responsive layout at 768px breakpoint, adjust styles if needed in frontend/src/app/pages/passenger-info/passenger-info.scss
+- [x] T038 Run quickstart.md validation checklist
 
 ---
 

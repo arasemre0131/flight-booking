@@ -48,6 +48,14 @@
                 Show all {{ filteredFlights().length }} flights
               </button>
             }
+
+            @if (selectedFlight()) {
+              <div class="booking-action">
+                <button class="book-btn" (click)="bookFlight()">
+                  Book flight for ${{ selectedFlight()!.price }}
+                </button>
+              </div>
+            }
           }
         </div>
 

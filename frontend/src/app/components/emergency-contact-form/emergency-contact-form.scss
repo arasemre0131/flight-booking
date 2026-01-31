@@ -1,0 +1,94 @@
+$primary: #605DEC;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+$border-color: #A1B0CC;
+$error-color: #EB5757;
+
+.emergency-contact-form {
+  background: white;
+  border: 1px solid #E9E8FC;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.section-header {
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-dark;
+  margin: 0 0 4px 0;
+}
+
+.section-description {
+  font-size: 14px;
+  color: $text-gray;
+  margin: 0 0 20px 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: $text-dark;
+    margin-bottom: 6px;
+  }
+
+  input {
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    color: $text-dark;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &::placeholder {
+      color: $text-gray;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 2px rgba($primary, 0.1);
+    }
+
+    &.error {
+      border-color: $error-color;
+
+      &:focus {
+        box-shadow: 0 0 0 2px rgba($error-color, 0.1);
+      }
+    }
+  }
+}
+
+.error-message {
+  font-size: 12px;
+  color: $error-color;
+  margin-top: 4px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .emergency-contact-form {
+    padding: 16px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
