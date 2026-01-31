@@ -1,0 +1,178 @@
+<div class="statistics-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Platform Statistics</h1>
+      <p>Overview of platform performance and metrics</p>
+    </div>
+    <div class="header-actions">
+      <select [ngModel]="dateRange()" (ngModelChange)="dateRange.set($event); onDateRangeChange()">
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+        <option value="year">This Year</option>
+        <option value="all">All Time</option>
+      </select>
+      <button class="btn-export" (click)="exportCsv()">
+        📥 Export CSV
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">Loading statistics...</div>
+  } @else if (stats()) {
+    <!-- Key Metrics -->
+    <div class="stats-grid">
+      <app-stats-card
+        icon="👥"
+        [value]="stats()!.totalUsers"
+        label="Total Users"
+        [subtext]="stats()!.usersByRole.passenger + ' passengers, ' + stats()!.usersByRole.airline + ' airline staff'"
+        [trend]="12"
+        variant="primary"
+      />
+      <app-stats-card
+        icon="✈️"
+        [value]="stats()!.totalAirlines"
+        label="Airlines"
+        [subtext]="stats()!.activeAirlines + ' active'"
+        variant="success"
+      />
+      <app-stats-card
+        icon="📋"
+        [value]="stats()!.totalBookings"
+        label="Total Bookings"
+        [subtext]="stats()!.bookingsByStatus.confirmed + ' confirmed'"
+        [trend]="8"
+      />
+      <app-stats-card
+        icon="💰"
+        [value]="stats()!.totalRevenue"
+        label="Total Revenue"
+        format="currency"
+        [trend]="15"
+      />
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-row">
+      <!-- Booking Volume Chart -->
+      <div class="chart-card">
+        <h3>Booking Volume</h3>
+        <div class="bar-chart">
+          @for (item of getBookingChartData(); track item.label) {
+            <div class="bar-item">
+              <div class="bar-wrapper">
+                <div
+                  class="bar"
+                  [style.height.%]="(item.value / getMaxBookingValue()) * 100"
+                ></div>
+              </div>
+              <span class="bar-label">{{ item.label }}</span>
+              <span class="bar-value">{{ item.value }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Booking Status Breakdown -->
+      <div class="chart-card">
+        <h3>Booking Status</h3>
+        <div class="status-breakdown">
+          <div class="status-item">
+            <div class="status-bar">
+              <div class="status-fill confirmed" [style.width.%]="(stats()!.bookingsByStatus.confirmed / stats()!.totalBookings) * 100"></div>
+            </div>
+            <div class="status-info">
+              <span class="status-label">Confirmed</span>
+              <span class="status-value">{{ stats()!.bookingsByStatus.confirmed }}</span>
+            </div>
+          </div>
+          <div class="status-item">
+            <div class="status-bar">
+              <div class="status-fill pending" [style.width.%]="(stats()!.bookingsByStatus.pending / stats()!.totalBookings) * 100"></div>
+            </div>
+            <div class="status-info">
+              <span class="status-label">Pending</span>
+              <span class="status-value">{{ stats()!.bookingsByStatus.pending }}</span>
+            </div>
+          </div>
+          <div class="status-item">
+            <div class="status-bar">
+              <div class="status-fill completed" [style.width.%]="(stats()!.bookingsByStatus.completed / stats()!.totalBookings) * 100"></div>
+            </div>
+            <div class="status-info">
+              <span class="status-label">Completed</span>
+              <span class="status-value">{{ stats()!.bookingsByStatus.completed }}</span>
+            </div>
+          </div>
+          <div class="status-item">
+            <div class="status-bar">
+              <div class="status-fill cancelled" [style.width.%]="(stats()!.bookingsByStatus.cancelled / stats()!.totalBookings) * 100"></div>
+            </div>
+            <div class="status-info">
+              <span class="status-label">Cancelled</span>
+              <span class="status-value">{{ stats()!.bookingsByStatus.cancelled }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Airlines -->
+    <div class="section">
+      <h3>Top Airlines by Bookings</h3>
+      <div class="top-airlines">
+        @for (airline of topAirlines(); track airline.id; let i = $index) {
+          <div class="airline-row">
+            <div class="rank">{{ i + 1 }}</div>
+            <div class="airline-info">
+              <span class="airline-name">{{ airline.name }}</span>
+              <span class="airline-code">{{ airline.code }}</span>
+            </div>
+            <div class="airline-stats">
+              <span class="bookings">{{ airline.totalBookings }} bookings</span>
+              <span class="flights">{{ airline.totalFlights }} flights</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- User Distribution -->
+    <div class="section">
+      <h3>User Distribution by Role</h3>
+      <div class="user-distribution">
+        <div class="role-item">
+          <div class="role-icon">🧑‍💼</div>
+          <div class="role-info">
+            <span class="role-name">Passengers</span>
+            <span class="role-count">{{ stats()!.usersByRole.passenger }}</span>
+          </div>
+          <div class="role-percent">
+            {{ ((stats()!.usersByRole.passenger / stats()!.totalUsers) * 100).toFixed(1) }}%
+          </div>
+        </div>
+        <div class="role-item">
+          <div class="role-icon">✈️</div>
+          <div class="role-info">
+            <span class="role-name">Airline Staff</span>
+            <span class="role-count">{{ stats()!.usersByRole.airline }}</span>
+          </div>
+          <div class="role-percent">
+            {{ ((stats()!.usersByRole.airline / stats()!.totalUsers) * 100).toFixed(1) }}%
+          </div>
+        </div>
+        <div class="role-item">
+          <div class="role-icon">🛡️</div>
+          <div class="role-info">
+            <span class="role-name">Administrators</span>
+            <span class="role-count">{{ stats()!.usersByRole.admin }}</span>
+          </div>
+          <div class="role-percent">
+            {{ ((stats()!.usersByRole.admin / stats()!.totalUsers) * 100).toFixed(1) }}%
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

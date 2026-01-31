@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { airlineGuard } from './guards/airline.guard';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -20,6 +22,28 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('./pages/register/register').then(m => m.RegisterPage)
+  },
+  {
+    path: 'seat-selection',
+    loadComponent: () => import('./pages/seat-selection/seat-selection').then(m => m.SeatSelection)
+  },
+  {
+    path: 'payment',
+    loadComponent: () => import('./pages/payment/payment').then(m => m.PaymentPage)
+  },
+  {
+    path: 'confirmation',
+    loadComponent: () => import('./pages/confirmation/confirmation').then(m => m.ConfirmationPage)
+  },
+  {
+    path: 'airline',
+    loadChildren: () => import('./pages/airline/airline.routes').then(m => m.AIRLINE_ROUTES),
+    canActivate: [airlineGuard]
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./pages/admin/admin.routes').then(m => m.ADMIN_ROUTES),
+    canActivate: [adminGuard]
   },
   {
     path: '**',

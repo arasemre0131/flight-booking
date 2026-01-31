@@ -1,0 +1,214 @@
+<div class="flight-form-page">
+  <div class="page-header">
+    <a routerLink="/airline/flights" class="back-link">← Back to Flights</a>
+    <h1>{{ isEditMode() ? 'Edit Flight' : 'Schedule Flight' }}</h1>
+  </div>
+
+  @if (error()) {
+    <div class="error-banner">
+      {{ error() }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flight-form">
+    <div class="form-section">
+      <h2>Flight Details</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="routeId">Route *</label>
+          <select id="routeId" formControlName="routeId">
+            <option value="">Select a route</option>
+            @for (route of routes(); track route.id) {
+              <option [value]="route.id">{{ getRouteName(route) }}</option>
+            }
+          </select>
+          @if (form.get('routeId')?.invalid && form.get('routeId')?.touched) {
+            <span class="error-text">Please select a route</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="aircraftId">Aircraft *</label>
+          <select id="aircraftId" formControlName="aircraftId">
+            <option value="">Select an aircraft</option>
+            @for (ac of aircraft(); track ac.id) {
+              <option [value]="ac.id">{{ ac.registration }} - {{ ac.model }} ({{ ac.totalSeats }} seats)</option>
+            }
+          </select>
+          @if (form.get('aircraftId')?.invalid && form.get('aircraftId')?.touched) {
+            <span class="error-text">Please select an aircraft</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="departureTime">Departure Time *</label>
+          <input
+            type="datetime-local"
+            id="departureTime"
+            formControlName="departureTime"
+            (blur)="checkConflict()"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="arrivalTime">Arrival Time *</label>
+          <input
+            type="datetime-local"
+            id="arrivalTime"
+            formControlName="arrivalTime"
+            (blur)="checkConflict()"
+          />
+        </div>
+
+        <div class="duration-display">
+          <span class="duration-label">Duration</span>
+          <span class="duration-value" [class.invalid]="durationDisplay() === 'Invalid'">
+            {{ durationDisplay() }}
+          </span>
+        </div>
+      </div>
+
+      @if (form.errors?.['arrivalBeforeDeparture']) {
+        <div class="error-banner small">
+          Arrival time must be after departure time
+        </div>
+      }
+    </div>
+
+    <div class="form-section">
+      <h2>Ticket Pricing</h2>
+      <p class="section-description">Set prices in EUR for each cabin class</p>
+
+      <div class="pricing-grid">
+        <div class="form-group">
+          <label for="economyPrice">
+            💺 Economy Price *
+          </label>
+          <div class="price-input">
+            <span class="currency">€</span>
+            <input
+              type="number"
+              id="economyPrice"
+              formControlName="economyPrice"
+              min="1"
+              step="0.01"
+            />
+          </div>
+          @if (form.get('economyPrice')?.invalid && form.get('economyPrice')?.touched) {
+            <span class="error-text">Economy price required (min €1)</span>
+          }
+        </div>
+
+        @if (selectedAircraft()?.businessConfig) {
+          <div class="form-group">
+            <label for="businessPrice">
+              🪑 Business Price
+            </label>
+            <div class="price-input">
+              <span class="currency">€</span>
+              <input
+                type="number"
+                id="businessPrice"
+                formControlName="businessPrice"
+                min="0"
+                step="0.01"
+              />
+            </div>
+          </div>
+        }
+
+        @if (selectedAircraft()?.firstClassConfig) {
+          <div class="form-group">
+            <label for="firstClassPrice">
+              👑 First Class Price
+            </label>
+            <div class="price-input">
+              <span class="currency">€</span>
+              <input
+                type="number"
+                id="firstClassPrice"
+                formControlName="firstClassPrice"
+                min="0"
+                step="0.01"
+              />
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Seat Fees</h2>
+      <p class="section-description">Additional fees for preferred seats</p>
+
+      <div class="pricing-grid">
+        <div class="form-group">
+          <label for="aisleFee">Aisle Seat Fee</label>
+          <div class="price-input">
+            <span class="currency">€</span>
+            <input
+              type="number"
+              id="aisleFee"
+              formControlName="aisleFee"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="windowFee">Window Seat Fee</label>
+          <div class="price-input">
+            <span class="currency">€</span>
+            <input
+              type="number"
+              id="windowFee"
+              formControlName="windowFee"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="extraLegroomFee">Extra Legroom Fee</label>
+          <div class="price-input">
+            <span class="currency">€</span>
+            <input
+              type="number"
+              id="extraLegroomFee"
+              formControlName="extraLegroomFee"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/airline/flights" class="btn-cancel">Cancel</a>
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="form.invalid || isLoading()"
+      >
+        {{ isLoading() ? 'Saving...' : (isEditMode() ? 'Update Flight' : 'Schedule Flight') }}
+      </button>
+    </div>
+  </form>
+</div>
+
+@if (showConflictModal()) {
+  <app-confirmation-dialog
+    title="Aircraft Conflict Detected"
+    [message]="'The selected aircraft is already scheduled for flight ' + conflictFlight()?.flightNumber + ' during this time period. Do you want to proceed anyway?'"
+    confirmText="Proceed Anyway"
+    cancelText="Cancel"
+    (confirm)="proceedWithConflict()"
+    (cancel)="closeConflictModal()"
+  />
+}

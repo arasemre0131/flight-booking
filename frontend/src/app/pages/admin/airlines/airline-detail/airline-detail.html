@@ -1,0 +1,115 @@
+<div class="airline-detail-page">
+  @if (isLoading()) {
+    <div class="loading">Loading airline details...</div>
+  } @else if (!airline()) {
+    <div class="not-found">
+      <h2>Airline not found</h2>
+      <p>The airline you're looking for doesn't exist or has been removed.</p>
+      <button class="btn-primary" (click)="goBack()">Back to Airlines</button>
+    </div>
+  } @else {
+    <div class="page-header">
+      <button class="btn-back" (click)="goBack()">← Back to Airlines</button>
+      <div class="header-content">
+        <div class="header-left">
+          <h1>{{ airline()!.name }}</h1>
+          <div class="airline-meta">
+            <span class="code">{{ airline()!.code }}</span>
+            <span class="status-badge" [class]="airline()!.status">
+              {{ airline()!.status }}
+            </span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button
+            class="btn-action"
+            [class.danger]="airline()!.status === 'active'"
+            (click)="openSuspendConfirm()"
+          >
+            {{ airline()!.status === 'active' ? 'Suspend Airline' : 'Resume Airline' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">✈️</div>
+        <div class="stat-value">{{ airline()!.totalFlights }}</div>
+        <div class="stat-label">Total Flights</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-value">{{ airline()!.totalBookings }}</div>
+        <div class="stat-label">Total Bookings</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ airline()!.activeOperators }}</div>
+        <div class="stat-label">Active Operators</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h2>Operators</h2>
+        <div class="assign-form">
+          <select
+            [ngModel]="selectedUserId()"
+            (ngModelChange)="selectedUserId.set($event)"
+          >
+            <option value="">Select user to assign...</option>
+            @for (user of availableUsers(); track user.id) {
+              <option [value]="user.id">{{ user.firstName }} {{ user.lastName }} ({{ user.email }})</option>
+            }
+          </select>
+          <button
+            class="btn-assign"
+            [disabled]="!selectedUserId()"
+            (click)="openAssignConfirm()"
+          >
+            Assign
+          </button>
+        </div>
+      </div>
+
+      @if (operators().length === 0) {
+        <div class="empty-state">
+          <p>No operators assigned to this airline yet.</p>
+          <span class="hint">Use the dropdown above to assign airline staff members.</span>
+        </div>
+      } @else {
+        <app-data-table
+          [columns]="operatorColumns"
+          [data]="operators()"
+          [loading]="false"
+          emptyMessage="No operators"
+        />
+      }
+    </div>
+  }
+</div>
+
+<!-- Suspend/Resume Confirmation -->
+<app-confirmation-modal
+  [isOpen]="showSuspendConfirm()"
+  [title]="getSuspendAction() === 'suspend' ? 'Suspend Airline' : 'Resume Airline'"
+  [message]="getSuspendAction() === 'suspend'
+    ? 'Suspending this airline will prevent new bookings. Existing bookings remain valid. Are you sure?'
+    : 'Resuming this airline will allow new bookings again. Are you sure?'"
+  [confirmText]="getSuspendAction() === 'suspend' ? 'Suspend' : 'Resume'"
+  [variant]="getSuspendAction() === 'suspend' ? 'warning' : 'default'"
+  (confirm)="confirmSuspend()"
+  (cancel)="cancelSuspend()"
+/>
+
+<!-- Assign User Confirmation -->
+<app-confirmation-modal
+  [isOpen]="showAssignConfirm()"
+  title="Assign Operator"
+  [message]="'Are you sure you want to assign ' + getSelectedUserName() + ' as an operator for ' + (airline()?.name || '') + '?'"
+  confirmText="Assign"
+  variant="default"
+  (confirm)="confirmAssign()"
+  (cancel)="cancelAssign()"
+/>

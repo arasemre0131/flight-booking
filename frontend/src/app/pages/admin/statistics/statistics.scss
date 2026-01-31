@@ -1,0 +1,331 @@
+.statistics-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .header-left {
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin: 0 0 0.25rem 0;
+    }
+
+    p {
+      color: #666;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.75rem;
+
+    select {
+      padding: 0.625rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      background: white;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: #605dec;
+      }
+    }
+  }
+}
+
+.btn-export {
+  padding: 0.625rem 1rem;
+  background: #605dec;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #4a47c4;
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 1.25rem 0;
+  }
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  height: 200px;
+  padding-top: 1rem;
+
+  .bar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+  .bar-wrapper {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .bar {
+    width: 60%;
+    max-width: 60px;
+    background: linear-gradient(180deg, #605dec 0%, #8b5cf6 100%);
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    transition: height 0.3s ease;
+  }
+
+  .bar-label {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 0.5rem;
+  }
+
+  .bar-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+}
+
+.status-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .status-item {
+    .status-bar {
+      height: 8px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+
+      &.confirmed {
+        background: #22c55e;
+      }
+
+      &.pending {
+        background: #f59e0b;
+      }
+
+      &.completed {
+        background: #3b82f6;
+      }
+
+      &.cancelled {
+        background: #ef4444;
+      }
+    }
+
+    .status-info {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .status-label {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .status-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+  }
+}
+
+.section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 0 0 1rem 0;
+  }
+}
+
+.top-airlines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .airline-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+
+    .rank {
+      width: 28px;
+      height: 28px;
+      background: #605dec;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .airline-info {
+      flex: 1;
+
+      .airline-name {
+        display: block;
+        font-weight: 500;
+        color: #1a1a2e;
+      }
+
+      .airline-code {
+        font-size: 0.75rem;
+        color: #666;
+      }
+    }
+
+    .airline-stats {
+      text-align: right;
+
+      .bookings {
+        display: block;
+        font-weight: 500;
+        color: #1a1a2e;
+      }
+
+      .flights {
+        font-size: 0.75rem;
+        color: #666;
+      }
+    }
+  }
+}
+
+.user-distribution {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+
+  .role-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+
+    .role-icon {
+      font-size: 1.5rem;
+    }
+
+    .role-info {
+      flex: 1;
+
+      .role-name {
+        display: block;
+        font-size: 0.85rem;
+        color: #666;
+      }
+
+      .role-count {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1a1a2e;
+      }
+    }
+
+    .role-percent {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #605dec;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
+
+    select {
+      flex: 1;
+    }
+  }
+
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .user-distribution {
+    grid-template-columns: 1fr;
+  }
+}

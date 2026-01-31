@@ -1,0 +1,112 @@
+<div class="users-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Users</h1>
+      <p>Manage platform users ({{ totalUsers() }} total)</p>
+    </div>
+    <button class="btn-primary" (click)="openCreateForm()">
+      + Create User
+    </button>
+  </div>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search by name or email..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+        (keyup.enter)="onSearch()"
+      />
+      <button class="btn-search" (click)="onSearch()">Search</button>
+    </div>
+
+    <div class="filter-group">
+      <select [ngModel]="roleFilter()" (ngModelChange)="roleFilter.set($event); onFilterChange()">
+        <option value="all">All Roles</option>
+        <option value="passenger">Passenger</option>
+        <option value="airline">Airline</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); onFilterChange()">
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="users()"
+    [loading]="isLoading()"
+    emptyMessage="No users found"
+    emptyHint="Try adjusting your search or filters"
+    (sort)="onSort($event)"
+    (rowClick)="onRowClick($event)"
+  />
+
+  @if (totalPages() > 1) {
+    <div class="pagination">
+      <button
+        class="page-btn"
+        [disabled]="currentPage() === 1"
+        (click)="onPageChange(currentPage() - 1)"
+      >
+        Previous
+      </button>
+
+      @for (page of getPageNumbers(); track page) {
+        <button
+          class="page-btn"
+          [class.active]="page === currentPage()"
+          (click)="onPageChange(page)"
+        >
+          {{ page }}
+        </button>
+      }
+
+      <button
+        class="page-btn"
+        [disabled]="currentPage() === totalPages()"
+        (click)="onPageChange(currentPage() + 1)"
+      >
+        Next
+      </button>
+    </div>
+  }
+</div>
+
+<!-- User Form Modal -->
+@if (showUserForm()) {
+  <app-user-form
+    [user]="editingUser()"
+    (save)="onUserSaved()"
+    (cancel)="closeUserForm()"
+  />
+}
+
+<!-- Role Change Confirmation -->
+<app-confirmation-modal
+  [isOpen]="showRoleConfirm()"
+  title="Change User Role"
+  [message]="'Are you sure you want to change ' + (roleChangeUser()?.firstName || '') + ' role? This will affect their permissions.'"
+  confirmText="Change Role"
+  variant="warning"
+  (confirm)="confirmRoleChange()"
+  (cancel)="cancelRoleChange()"
+/>
+
+<!-- Status Toggle Confirmation -->
+<app-confirmation-modal
+  [isOpen]="showStatusConfirm()"
+  [title]="getStatusAction() === 'deactivate' ? 'Deactivate User' : 'Reactivate User'"
+  [message]="getStatusAction() === 'deactivate'
+    ? 'This will immediately log out the user and block all actions. Are you sure?'
+    : 'This will allow the user to log in again. Are you sure?'"
+  [confirmText]="getStatusAction() === 'deactivate' ? 'Deactivate' : 'Reactivate'"
+  [variant]="getStatusAction() === 'deactivate' ? 'danger' : 'default'"
+  (confirm)="confirmStatusToggle()"
+  (cancel)="cancelStatusToggle()"
+/>

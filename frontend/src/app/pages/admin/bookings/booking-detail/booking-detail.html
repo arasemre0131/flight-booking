@@ -1,0 +1,110 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Booking Details</h2>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
+
+    @if (isLoading()) {
+      <div class="loading">Loading booking details...</div>
+    } @else if (fullDetail()) {
+      <div class="modal-body">
+        <div class="detail-section">
+          <div class="confirmation-header">
+            <span class="confirmation-code">{{ fullDetail()!.confirmationCode }}</span>
+            <span class="status-badge" [class]="getStatusClass(fullDetail()!.status)">
+              {{ fullDetail()!.status }}
+            </span>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Flight Information</h3>
+          <div class="flight-info">
+            <div class="flight-route">
+              <div class="airport">
+                <span class="code">{{ fullDetail()!.origin }}</span>
+              </div>
+              <div class="arrow">→</div>
+              <div class="airport">
+                <span class="code">{{ fullDetail()!.destination }}</span>
+              </div>
+            </div>
+            <div class="flight-meta">
+              <div class="meta-item">
+                <span class="label">Flight</span>
+                <span class="value">{{ fullDetail()!.flightNumber }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">Airline</span>
+                <span class="value">{{ fullDetail()!.airlineName }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">Date</span>
+                <span class="value">{{ formatDate(fullDetail()!.departureTime) }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">Departure</span>
+                <span class="value">{{ formatTime(fullDetail()!.departureTime) }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">Arrival</span>
+                <span class="value">{{ formatTime(fullDetail()!.arrivalTime) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Passenger Information</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Name</span>
+              <span class="value">{{ fullDetail()!.passengerName }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Email</span>
+              <span class="value">{{ fullDetail()!.passengerEmail }}</span>
+            </div>
+            @if (fullDetail()!.passengerPhone) {
+              <div class="info-item">
+                <span class="label">Phone</span>
+                <span class="value">{{ fullDetail()!.passengerPhone }}</span>
+              </div>
+            }
+            <div class="info-item">
+              <span class="label">Seats</span>
+              <span class="value">{{ fullDetail()!.seats.join(', ') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h3>Payment</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="label">Total Amount</span>
+              <span class="value amount">{{ formatCurrency(fullDetail()!.totalAmount) }}</span>
+            </div>
+            @if (fullDetail()!.paymentMethod) {
+              <div class="info-item">
+                <span class="label">Payment Method</span>
+                <span class="value">{{ fullDetail()!.paymentMethod }} •••• {{ fullDetail()!.paymentLast4 }}</span>
+              </div>
+            }
+            <div class="info-item">
+              <span class="label">Booked On</span>
+              <span class="value">{{ formatDate(fullDetail()!.createdAt) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="error">Failed to load booking details</div>
+    }
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="onClose()">Close</button>
+    </div>
+  </div>
+</div>

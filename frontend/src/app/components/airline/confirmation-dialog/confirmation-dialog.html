@@ -1,0 +1,16 @@
+<div class="dialog-overlay" (click)="onOverlayClick($event)">
+  <div class="dialog-content">
+    <h2 class="dialog-title">{{ title }}</h2>
+    <p class="dialog-message">{{ message }}</p>
+    <div class="dialog-actions">
+      <button class="btn-cancel" (click)="onCancel()">{{ cancelText }}</button>
+      <button
+        class="btn-confirm"
+        [class.danger]="confirmDanger"
+        (click)="onConfirm()"
+      >
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+<div class="pricing-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Pricing</h1>
+      <p>Manage flight ticket prices</p>
+    </div>
+    <div class="header-actions">
+      @if (selectedFlights().size > 0) {
+        <button class="btn-secondary" (click)="openBulkModal()">
+          Apply to {{ selectedFlights().size }} Selected
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filters">
+    <select [(ngModel)]="selectedRoute" class="filter-select">
+      <option value="">All Routes</option>
+      @for (route of routes(); track route.id) {
+        <option [value]="route.id">{{ route.originAirport }} → {{ route.destinationAirport }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="pricing-table-container">
+    @if (filteredFlights().length === 0) {
+      <div class="empty-state">
+        <p>No scheduled flights to price.</p>
+      </div>
+    } @else {
+      <table class="pricing-table">
+        <thead>
+          <tr>
+            <th class="checkbox-col">
+              <input
+                type="checkbox"
+                [checked]="allSelected()"
+                (change)="toggleAllSelection()"
+              />
+            </th>
+            <th>Flight</th>
+            <th>Route</th>
+            <th>Date</th>
+            <th>Economy</th>
+            <th>Business</th>
+            <th>First Class</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (flight of filteredFlights(); track flight.id) {
+            <tr [class.saved]="savedFlightId() === flight.id">
+              <td class="checkbox-col">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(flight.id)"
+                  (change)="toggleSelection(flight.id)"
+                />
+              </td>
+              <td class="flight-number">{{ flight.flightNumber }}</td>
+              <td>{{ getRouteName(flight.routeId) }}</td>
+              <td>{{ formatDate(flight.departureTime) }}</td>
+
+              <!-- Economy Price -->
+              <td class="price-cell" (click)="startEdit(flight.id, 'economy', flight.pricing.economy)">
+                @if (isEditing(flight.id, 'economy')) {
+                  <input
+                    type="number"
+                    class="inline-edit"
+                    [ngModel]="editValue()"
+                    (ngModelChange)="editValue.set($event)"
+                    (blur)="saveEdit()"
+                    (keydown)="onEditKeydown($event)"
+                    autofocus
+                    min="0"
+                    step="0.01"
+                  />
+                } @else {
+                  <span class="price">{{ formatPrice(flight.pricing.economy) }}</span>
+                }
+              </td>
+
+              <!-- Business Price -->
+              <td class="price-cell" (click)="startEdit(flight.id, 'business', flight.pricing.business)">
+                @if (isEditing(flight.id, 'business')) {
+                  <input
+                    type="number"
+                    class="inline-edit"
+                    [ngModel]="editValue()"
+                    (ngModelChange)="editValue.set($event)"
+                    (blur)="saveEdit()"
+                    (keydown)="onEditKeydown($event)"
+                    autofocus
+                    min="0"
+                    step="0.01"
+                  />
+                } @else {
+                  <span class="price">{{ formatPrice(flight.pricing.business) }}</span>
+                }
+              </td>
+
+              <!-- First Class Price -->
+              <td class="price-cell" (click)="startEdit(flight.id, 'firstClass', flight.pricing.firstClass)">
+                @if (isEditing(flight.id, 'firstClass')) {
+                  <input
+                    type="number"
+                    class="inline-edit"
+                    [ngModel]="editValue()"
+                    (ngModelChange)="editValue.set($event)"
+                    (blur)="saveEdit()"
+                    (keydown)="onEditKeydown($event)"
+                    autofocus
+                    min="0"
+                    step="0.01"
+                  />
+                } @else {
+                  <span class="price">{{ formatPrice(flight.pricing.firstClass) }}</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+@if (showBulkModal()) {
+  <div class="modal-overlay" (click)="closeBulkModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Bulk Price Update</h2>
+        <button class="close-btn" (click)="closeBulkModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-description">
+          Set prices for {{ selectedFlights().size }} selected flight(s)
+        </p>
+
+        <div class="form-group">
+          <label>Economy Price (€)</label>
+          <input
+            type="number"
+            [ngModel]="bulkPricing().economy"
+            (ngModelChange)="updateBulkPricing('economy', $event)"
+            min="0"
+            step="0.01"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Business Price (€)</label>
+          <input
+            type="number"
+            [ngModel]="bulkPricing().business || 0"
+            (ngModelChange)="updateBulkPricing('business', $event)"
+            min="0"
+            step="0.01"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>First Class Price (€)</label>
+          <input
+            type="number"
+            [ngModel]="bulkPricing().firstClass || 0"
+            (ngModelChange)="updateBulkPricing('firstClass', $event)"
+            min="0"
+            step="0.01"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeBulkModal()">Cancel</button>
+        <button class="btn-primary" (click)="applyBulkPricing()">Apply Prices</button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,103 @@
+<div class="aircraft-form-page">
+  <div class="page-header">
+    <a routerLink="/airline/aircraft" class="back-link">← Back to Aircraft</a>
+    <h1>{{ isEditMode() ? 'Edit Aircraft' : 'Register Aircraft' }}</h1>
+  </div>
+
+  @if (error()) {
+    <div class="error-banner">
+      {{ error() }}
+    </div>
+  }
+
+  @if (warning()) {
+    <div class="warning-banner">
+      {{ warning() }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="aircraft-form">
+    <div class="form-section">
+      <h2>Aircraft Details</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="model">Aircraft Model *</label>
+          <input
+            type="text"
+            id="model"
+            formControlName="model"
+            placeholder="e.g., Airbus A320"
+          />
+          @if (form.get('model')?.invalid && form.get('model')?.touched) {
+            <span class="error-text">Model name required (min 2 characters)</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="registration">Registration Number *</label>
+          <input
+            type="text"
+            id="registration"
+            formControlName="registration"
+            placeholder="e.g., I-ABCD"
+            style="text-transform: uppercase"
+          />
+          <span class="hint">4-10 characters, letters, numbers, and hyphens only</span>
+          @if (form.get('registration')?.invalid && form.get('registration')?.touched) {
+            <span class="error-text">Valid registration required (e.g., I-ABCD)</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Seat Configuration</h2>
+      <p class="section-description">Configure the seating layout for each cabin class</p>
+
+      <div class="seat-configs">
+        <app-seat-config-builder
+          classType="economy"
+          [required]="true"
+          [enabled]="true"
+          [initialConfig]="initialEconomyConfig"
+          (configChange)="onEconomyConfigChange($event)"
+        />
+
+        <app-seat-config-builder
+          classType="business"
+          [required]="false"
+          [enabled]="businessEnabled()"
+          [initialConfig]="initialBusinessConfig"
+          (configChange)="onBusinessConfigChange($event)"
+          (enabledChange)="onBusinessEnabledChange($event)"
+        />
+
+        <app-seat-config-builder
+          classType="first"
+          [required]="false"
+          [enabled]="firstEnabled()"
+          [initialConfig]="initialFirstConfig"
+          (configChange)="onFirstClassConfigChange($event)"
+          (enabledChange)="onFirstEnabledChange($event)"
+        />
+      </div>
+
+      <div class="total-capacity">
+        <span class="total-label">Total Aircraft Capacity:</span>
+        <span class="total-value">{{ totalSeats() }} seats</span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/airline/aircraft" class="btn-cancel">Cancel</a>
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="!canSave || isLoading()"
+      >
+        {{ isLoading() ? 'Saving...' : (isEditMode() ? 'Update Aircraft' : 'Register Aircraft') }}
+      </button>
+    </div>
+  </form>
+</div>

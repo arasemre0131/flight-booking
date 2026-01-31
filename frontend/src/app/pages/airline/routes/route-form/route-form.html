@@ -1,0 +1,100 @@
+<div class="route-form-page">
+  <div class="page-header">
+    <a routerLink="/airline/routes" class="back-link">← Back to Routes</a>
+    <h1>{{ isEditMode() ? 'Edit Route' : 'Create Route' }}</h1>
+  </div>
+
+  @if (error()) {
+    <div class="error-banner">
+      {{ error() }}
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="route-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="originAirport">Origin Airport *</label>
+        <input
+          type="text"
+          id="originAirport"
+          formControlName="originAirport"
+          placeholder="Enter IATA code (e.g., VCE)"
+          (input)="filterOriginAirports($event)"
+          (focus)="showOriginDropdown()"
+          (blur)="clearOriginDropdown()"
+          autocomplete="off"
+        />
+        @if (filteredOriginAirports().length > 0 && form.get('originAirport')?.value) {
+          <ul class="autocomplete-list">
+            @for (airport of filteredOriginAirports().slice(0, 5); track airport.code) {
+              <li (mousedown)="selectOriginAirport(airport.code)">
+                <strong>{{ airport.code }}</strong> - {{ airport.name }}
+              </li>
+            }
+          </ul>
+        }
+        @if (form.get('originAirport')?.invalid && form.get('originAirport')?.touched) {
+          <span class="error-text">Valid 3-letter IATA code required</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="destinationAirport">Destination Airport *</label>
+        <input
+          type="text"
+          id="destinationAirport"
+          formControlName="destinationAirport"
+          placeholder="Enter IATA code (e.g., LHR)"
+          (input)="filterDestAirports($event)"
+          (focus)="showDestDropdown()"
+          (blur)="clearDestDropdown()"
+          autocomplete="off"
+        />
+        @if (filteredDestAirports().length > 0 && form.get('destinationAirport')?.value) {
+          <ul class="autocomplete-list">
+            @for (airport of filteredDestAirports().slice(0, 5); track airport.code) {
+              <li (mousedown)="selectDestAirport(airport.code)">
+                <strong>{{ airport.code }}</strong> - {{ airport.name }}
+              </li>
+            }
+          </ul>
+        }
+        @if (form.get('destinationAirport')?.invalid && form.get('destinationAirport')?.touched) {
+          <span class="error-text">Valid 3-letter IATA code required</span>
+        }
+      </div>
+    </div>
+
+    @if (form.errors?.['sameAirport']) {
+      <div class="error-banner small">
+        Origin and destination airports cannot be the same
+      </div>
+    }
+
+    <div class="form-group">
+      <label for="flightNumberPrefix">Flight Number Prefix *</label>
+      <input
+        type="text"
+        id="flightNumberPrefix"
+        formControlName="flightNumberPrefix"
+        placeholder="e.g., AZ100"
+        maxlength="6"
+      />
+      <span class="hint">Format: 2 letters followed by 1-4 digits (e.g., AZ100)</span>
+      @if (form.get('flightNumberPrefix')?.invalid && form.get('flightNumberPrefix')?.touched) {
+        <span class="error-text">Valid flight number prefix required (e.g., AZ100)</span>
+      }
+    </div>
+
+    <div class="form-actions">
+      <a routerLink="/airline/routes" class="btn-cancel">Cancel</a>
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="form.invalid || isLoading()"
+      >
+        {{ isLoading() ? 'Saving...' : (isEditMode() ? 'Update Route' : 'Create Route') }}
+      </button>
+    </div>
+  </form>
+</div>

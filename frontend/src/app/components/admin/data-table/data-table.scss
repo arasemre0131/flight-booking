@@ -1,0 +1,166 @@
+.data-table-wrapper {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e5e5;
+  border-top-color: #605dec;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 0.875rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  th {
+    background: #f9f9f9;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #666;
+    letter-spacing: 0.5px;
+
+    &.sortable {
+      cursor: pointer;
+      user-select: none;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+
+  .th-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sort-icon {
+    opacity: 0.3;
+    font-size: 0.75rem;
+
+    &.active {
+      opacity: 1;
+      color: #605dec;
+    }
+  }
+
+  td {
+    font-size: 0.9rem;
+    color: #333;
+  }
+
+  .data-row {
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: #f9f9f9;
+    }
+  }
+}
+
+.empty-row td {
+  padding: 3rem 1rem;
+}
+
+.empty-state {
+  text-align: center;
+
+  .empty-message {
+    font-size: 1rem;
+    color: #333;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .empty-hint {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 0;
+  }
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+
+  &.status-active {
+    background: #e6f4ea;
+    color: #1e7e34;
+  }
+
+  &.status-inactive {
+    background: #f5f5f5;
+    color: #666;
+  }
+
+  &.status-suspended {
+    background: #fce8e8;
+    color: #c62828;
+  }
+
+  &.status-pending {
+    background: #fff3e0;
+    color: #e65100;
+  }
+
+  &.status-confirmed {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+
+  &.status-cancelled {
+    background: #fce8e8;
+    color: #c62828;
+  }
+
+  &.status-completed {
+    background: #e6f4ea;
+    color: #1e7e34;
+  }
+
+  &.status-paid {
+    background: #e6f4ea;
+    color: #1e7e34;
+  }
+
+  &.status-refunded {
+    background: #fff3e0;
+    color: #e65100;
+  }
+}

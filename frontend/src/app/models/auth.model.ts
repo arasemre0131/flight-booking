@@ -1,12 +1,18 @@
 // Auth Models for User Authentication
 
+export type UserRole = 'passenger' | 'airline' | 'admin';
+export type UserStatus = 'active' | 'inactive';
+
 export interface User {
   id: string;
   email: string;
   password: string;
   firstName: string;
   lastName: string;
+  role: UserRole;
+  status: UserStatus;
   createdAt: string;
+  airlineId?: string;
 }
 
 export interface Session {

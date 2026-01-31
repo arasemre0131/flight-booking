@@ -130,13 +130,15 @@ export class AuthService {
         return { success: false, error: 'Email already registered' };
       }
 
-      // Create new user
+      // Create new user (default role is passenger for self-registration)
       const newUser: User = {
         id: `user-${Date.now()}`,
         email: data.email.toLowerCase(),
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
+        role: 'passenger',
+        status: 'active',
         createdAt: new Date().toISOString()
       };
 
@@ -208,6 +210,8 @@ export class AuthService {
       password: '',
       firstName: 'Google',
       lastName: 'User',
+      role: 'passenger',
+      status: 'active',
       createdAt: new Date().toISOString()
     };
     this._isAuthenticated.set(true);
@@ -221,6 +225,8 @@ export class AuthService {
       password: '',
       firstName: 'Apple',
       lastName: 'User',
+      role: 'passenger',
+      status: 'active',
       createdAt: new Date().toISOString()
     };
     this._isAuthenticated.set(true);
@@ -234,6 +240,8 @@ export class AuthService {
       password: '',
       firstName: 'Facebook',
       lastName: 'User',
+      role: 'passenger',
+      status: 'active',
       createdAt: new Date().toISOString()
     };
     this._isAuthenticated.set(true);

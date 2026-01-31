@@ -1,0 +1,111 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>{{ formTitle }}</h2>
+      <button class="close-btn" (click)="onCancel()">×</button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+      @if (error()) {
+        <div class="error-message">{{ error() }}</div>
+      }
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input
+            type="text"
+            id="firstName"
+            [ngModel]="firstName()"
+            (ngModelChange)="firstName.set($event)"
+            name="firstName"
+            placeholder="Enter first name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input
+            type="text"
+            id="lastName"
+            [ngModel]="lastName()"
+            (ngModelChange)="lastName.set($event)"
+            name="lastName"
+            placeholder="Enter last name"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input
+          type="email"
+          id="email"
+          [ngModel]="email()"
+          (ngModelChange)="email.set($event)"
+          name="email"
+          placeholder="Enter email address"
+        />
+      </div>
+
+      @if (!isEditMode) {
+        <div class="form-group">
+          <label for="role">Role *</label>
+          <select
+            id="role"
+            [ngModel]="role()"
+            (ngModelChange)="role.set($event)"
+            name="role"
+          >
+            <option value="airline">Airline Staff</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+
+        @if (role() === 'airline') {
+          <div class="form-group">
+            <label for="airlineId">Airline</label>
+            <select
+              id="airlineId"
+              [ngModel]="airlineId()"
+              (ngModelChange)="airlineId.set($event)"
+              name="airlineId"
+            >
+              <option value="">Select airline (optional)</option>
+              @for (airline of airlines(); track airline.id) {
+                <option [value]="airline.id">{{ airline.name }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="tempPassword">Temporary Password *</label>
+          <div class="password-input">
+            <input
+              type="text"
+              id="tempPassword"
+              [ngModel]="tempPassword()"
+              (ngModelChange)="tempPassword.set($event)"
+              name="tempPassword"
+              placeholder="Enter temporary password"
+            />
+            <button type="button" class="btn-generate" (click)="generatePassword()">
+              Generate
+            </button>
+          </div>
+          <span class="hint">User will be prompted to change this on first login</span>
+        </div>
+      }
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-primary" [disabled]="isLoading()">
+          {{ isLoading() ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Create User') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

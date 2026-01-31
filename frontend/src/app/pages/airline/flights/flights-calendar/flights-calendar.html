@@ -1,0 +1,45 @@
+<div class="calendar">
+  <div class="calendar-header">
+    <button class="nav-btn" (click)="previousMonth()">←</button>
+    <span class="month-year">{{ monthYearDisplay() }}</span>
+    <button class="nav-btn" (click)="nextMonth()">→</button>
+    <button class="today-btn" (click)="goToToday()">Today</button>
+  </div>
+
+  <div class="calendar-weekdays">
+    @for (day of weekDays; track day) {
+      <div class="weekday">{{ day }}</div>
+    }
+  </div>
+
+  <div class="calendar-grid">
+    @for (day of calendarDays(); track day.date.toISOString()) {
+      <button
+        class="calendar-day"
+        [class.other-month]="!day.isCurrentMonth"
+        [class.today]="day.isToday"
+        [class.selected]="isSelected(day)"
+        [class.has-flights]="day.flightCount > 0"
+        (click)="selectDate(day.date)"
+      >
+        <span class="day-number">{{ day.dayNumber }}</span>
+        @if (day.flightCount > 0) {
+          <span class="flight-indicator">
+            {{ day.flightCount }}
+          </span>
+        }
+      </button>
+    }
+  </div>
+
+  <div class="calendar-legend">
+    <span class="legend-item">
+      <span class="dot has-flights"></span>
+      Days with flights
+    </span>
+    <span class="legend-item">
+      <span class="dot today"></span>
+      Today
+    </span>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="seat-config-builder" [class.disabled]="!isEnabled()">
+  <div class="config-header">
+    <span class="class-icon">{{ classIcon }}</span>
+    <span class="class-label">{{ classLabel }}</span>
+    @if (!required) {
+      <label class="toggle">
+        <input
+          type="checkbox"
+          [checked]="isEnabled()"
+          (change)="toggleEnabled()"
+        />
+        <span class="toggle-label">{{ isEnabled() ? 'Enabled' : 'Disabled' }}</span>
+      </label>
+    }
+  </div>
+
+  @if (isEnabled()) {
+    <div class="config-inputs">
+      <div class="input-group">
+        <label>Rows</label>
+        <input
+          type="number"
+          [ngModel]="rows()"
+          (ngModelChange)="onRowsChange($event)"
+          min="1"
+          max="50"
+          placeholder="1-50"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Seats per Row</label>
+        <input
+          type="number"
+          [ngModel]="seatsPerRow()"
+          (ngModelChange)="onSeatsPerRowChange($event)"
+          min="1"
+          max="10"
+          placeholder="1-10"
+        />
+      </div>
+
+      <div class="total-display">
+        <span class="total-label">Total</span>
+        <span class="total-value">{{ totalSeats() }}</span>
+        <span class="total-unit">seats</span>
+      </div>
+    </div>
+
+    <div class="seat-preview">
+      @for (row of getPreviewRows(); track $index) {
+        <div class="preview-row">
+          @for (seat of getSeatsArray(); track $index) {
+            <span class="preview-seat" [class.class-economy]="classType === 'economy'" [class.class-business]="classType === 'business'" [class.class-first]="classType === 'first'"></span>
+          }
+        </div>
+      }
+      @if (rows() > 5) {
+        <div class="preview-ellipsis">... {{ rows() - 5 }} more rows</div>
+      }
+    </div>
+  }
+</div>

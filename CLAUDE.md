@@ -489,15 +489,17 @@ volumes:
 ---
 
 ## Recent Changes
+- 012-admin-panel: Added TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router, ng2-charts (Chart.js)
 
 - 010-auth: Tasks generated, ready for implementation
 - 009-confirmation: Implemented
-- 008-payment: Implemented, fixed form validation
-- EXAM-COMPLIANCE.md: Created comprehensive exam requirements mapping
-- CLAUDE.md: Updated with all new specs and exam requirements
 
 ## Next Steps
 
 1. `/speckit.implement` for 010-auth (son frontend spec)
 2. Backend specs oluşturma (INFRA-001, BE-001, etc.)
 3. 011-airline-dashboard ve 012-admin-panel specleri
+
+## Active Technologies
+- TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router, ng2-charts (Chart.js) (012-admin-panel)
+- localStorage (mock data persistence, consistent with existing auth/airline patterns) (012-admin-panel)
