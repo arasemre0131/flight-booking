@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output (we build inside container)
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Tests
+coverage/
+e2e/
+
+# Documentation
+*.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Angular cache
+.angular/
+
+# Environment files
+.env
+.env.*
