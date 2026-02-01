@@ -8,9 +8,9 @@
 
 ## Phase 1: Setup (Models)
 
-- [ ] T001 Create Route model in /backend/src/models/route.model.ts
-- [ ] T002 [P] Create Aircraft model in /backend/src/models/aircraft.model.ts
-- [ ] T003 [P] Create Flight model in /backend/src/models/flight.model.ts
+- [x] T001 Create Route model in /backend/src/models/route.model.ts
+- [x] T002 [P] Create Aircraft model in /backend/src/models/aircraft.model.ts
+- [x] T003 [P] Create Flight model in /backend/src/models/flight.model.ts
 
 ---
 
@@ -18,9 +18,9 @@
 
 > Goal: Airlines can create and manage routes
 
-- [ ] T004 [US1] Create route service in /backend/src/services/route.service.ts
-- [ ] T005 [US1] Create airline routes in /backend/src/routes/airline.routes.ts
-- [ ] T006 [US1] Register airline routes in /backend/src/app.ts
+- [x] T004 [US1] Create route service in /backend/src/services/route.service.ts
+- [x] T005 [US1] Create airline routes in /backend/src/routes/airline.routes.ts
+- [x] T006 [US1] Register airline routes in /backend/src/app.ts
 
 **Test**:
 ```bash
@@ -37,17 +37,10 @@ curl -X POST localhost:3000/api/airlines/routes \
 
 > Goal: Airlines can register aircraft
 
-- [ ] T007 [US2] Create aircraft service in /backend/src/services/aircraft.service.ts
-- [ ] T008 [US2] Add aircraft endpoints to /backend/src/routes/airline.routes.ts
+- [x] T007 [US2] Create aircraft service in /backend/src/services/aircraft.service.ts
+- [x] T008 [US2] Add aircraft endpoints to /backend/src/routes/airline.routes.ts
 
-**Test**:
-```bash
-# Create aircraft
-curl -X POST localhost:3000/api/airlines/aircraft \
-  -H "Authorization: Bearer <airline-token>" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"Boeing 737-800","registration":"N12345","seatConfiguration":{"economy":{"rows":25,"seatsPerRow":6},"business":{"rows":4,"seatsPerRow":4}}}'
-```
+**Test**: ✅ Passed
 
 ---
 
@@ -55,17 +48,10 @@ curl -X POST localhost:3000/api/airlines/aircraft \
 
 > Goal: Airlines can create flights
 
-- [ ] T009 [US3] Create flight service in /backend/src/services/flight.service.ts
-- [ ] T010 [US3] Add flight endpoints to /backend/src/routes/airline.routes.ts
+- [x] T009 [US3] Create flight service in /backend/src/services/flight.service.ts
+- [x] T010 [US3] Add flight endpoints to /backend/src/routes/airline.routes.ts
 
-**Test**:
-```bash
-# Create flight
-curl -X POST localhost:3000/api/airlines/flights \
-  -H "Authorization: Bearer <airline-token>" \
-  -H "Content-Type: application/json" \
-  -d '{"routeId":"<route-id>","aircraftId":"<aircraft-id>","departureTime":"2026-03-15T10:00:00Z","arrivalTime":"2026-03-15T20:00:00Z"}'
-```
+**Test**: ✅ Passed
 
 ---
 
@@ -73,23 +59,16 @@ curl -X POST localhost:3000/api/airlines/flights \
 
 > Goal: Airlines can set ticket prices
 
-- [ ] T011 [US4] Add pricing method to flight service in /backend/src/services/flight.service.ts
-- [ ] T012 [US4] Add pricing endpoint to /backend/src/routes/airline.routes.ts
+- [x] T011 [US4] Add pricing method to flight service in /backend/src/services/flight.service.ts
+- [x] T012 [US4] Add pricing endpoint to /backend/src/routes/airline.routes.ts
 
-**Test**:
-```bash
-# Set pricing
-curl -X PUT localhost:3000/api/airlines/flights/<flight-id>/pricing \
-  -H "Authorization: Bearer <airline-token>" \
-  -H "Content-Type: application/json" \
-  -d '{"economy":299,"business":899}'
-```
+**Test**: ✅ Passed
 
 ---
 
 ## Phase 6: Seed Data
 
-> Goal: Test data for exam
+> Goal: Test data for exam (deferred to BE-006)
 
 - [ ] T013 Create airline seed data in /backend/src/seed/airline.seed.ts
 - [ ] T014 Create routes seed data in /backend/src/seed/routes.seed.ts

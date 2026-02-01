@@ -91,7 +91,7 @@ A flight booking web application for the "Tecnologie e Applicazioni Web" course 
 |---|---------|------|--------|----------|
 | 11 | 013-docker-setup | Docker Setup | ✅ Done | P0 |
 | 12 | 014-backend-auth | Auth & User Management | ✅ Done | P0 |
-| 13 | BE-002 | Airline Management API | ❌ Not Started | P1 |
+| 13 | 015-airline-api | Airline Management API | ✅ Done | P1 |
 | 14 | BE-003 | Flight Search API | ❌ Not Started | P1 |
 | 15 | BE-004 | Booking & Seats API | ❌ Not Started | P1 |
 | 16 | BE-005 | Statistics API | ❌ Not Started | P2 |
