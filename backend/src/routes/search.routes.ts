@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { query, validationResult } from 'express-validator';
+import { query, param, validationResult } from 'express-validator';
 import { searchFlights, SearchParams } from '../services/search.service';
+import { getAvailableSeats } from '../services/seat.service';
 
 const router = Router();
 
@@ -71,5 +72,27 @@ router.get('/search', searchValidation, async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to search flights' });
   }
 });
+
+// GET /api/flights/:id/seats - Get available seats for a flight
+router.get(
+  '/:id/seats',
+  [param('id').isMongoId().withMessage('Valid flight ID required')],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const seatMap = await getAvailableSeats(req.params.id);
+      res.json(seatMap);
+    } catch (error: any) {
+      if (error.message === 'Flight not found' || error.message === 'Aircraft not found') {
+        return res.status(404).json({ error: error.message });
+      }
+      res.status(500).json({ error: 'Failed to get seat map' });
+    }
+  }
+);
 
 export default router;

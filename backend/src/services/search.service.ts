@@ -3,6 +3,7 @@ import { Flight, IFlight } from '../models/flight.model';
 import { Route, IRoute } from '../models/route.model';
 import { Aircraft, IAircraft } from '../models/aircraft.model';
 import { Airline, IAirline } from '../models/airline.model';
+import { getBookedSeats, generateSeatMap } from './seat.service';
 
 // Airport code to city mapping
 const AIRPORT_CITIES: Record<string, string> = {
@@ -90,13 +91,34 @@ function getSeatConfig(aircraft: IAircraft): string {
   return `${biz.seatsPerRow}-${eco.seatsPerRow}`;
 }
 
-function getAvailableSeats(aircraft: IAircraft): { economy: number; business: number } {
-  // Phase 1: Return full capacity (no Ticket model yet)
+async function getAvailableSeatCount(
+  flightId: string,
+  aircraft: IAircraft
+): Promise<{ economy: number; business: number }> {
   const eco = aircraft.seatConfiguration.economy;
   const biz = aircraft.seatConfiguration.business;
+
+  const totalEconomy = eco.rows * eco.seatsPerRow;
+  const totalBusiness = biz.rows * biz.seatsPerRow;
+
+  // Get booked seats from Ticket collection
+  const bookedSeats = await getBookedSeats(flightId);
+  const seatMap = generateSeatMap(aircraft);
+
+  let bookedEconomy = 0;
+  let bookedBusiness = 0;
+
+  for (const seatNumber of bookedSeats) {
+    const seat = seatMap.find((s) => s.seatNumber === seatNumber);
+    if (seat) {
+      if (seat.class === 'economy') bookedEconomy++;
+      else bookedBusiness++;
+    }
+  }
+
   return {
-    economy: eco.rows * eco.seatsPerRow,
-    business: biz.rows * biz.seatsPerRow,
+    economy: totalEconomy - bookedEconomy,
+    business: totalBusiness - bookedBusiness,
   };
 }
 
@@ -107,6 +129,8 @@ async function buildFlightResult(
   airline: IAirline,
   ticketClass: 'economy' | 'business'
 ): Promise<FlightResult> {
+  const availableSeats = await getAvailableSeatCount(flight._id.toString(), aircraft);
+
   return {
     flightId: flight._id.toString(),
     flightNumber: route.flightNumber,
@@ -131,7 +155,7 @@ async function buildFlightResult(
       model: aircraft.aircraftModel,
       seatConfig: getSeatConfig(aircraft),
     },
-    availableSeats: getAvailableSeats(aircraft),
+    availableSeats,
   };
 }
 
@@ -179,7 +203,7 @@ export async function findDirectFlights(
     const airline = await Airline.findById(flight.airlineId);
     if (!airline) continue;
 
-    const availableSeats = getAvailableSeats(aircraft);
+    const availableSeats = await getAvailableSeatCount(flight._id.toString(), aircraft);
     if (availableSeats[ticketClass] < passengers) continue;
 
     const flightResult = await buildFlightResult(flight, route, aircraft, airline, ticketClass);
@@ -301,8 +325,8 @@ export async function findConnectingFlights(
         if (!firstAirline || !secondAirline) continue;
 
         // Check seat availability on both flights
-        const firstSeats = getAvailableSeats(firstAircraft);
-        const secondSeats = getAvailableSeats(secondAircraft);
+        const firstSeats = await getAvailableSeatCount(firstFlight._id.toString(), firstAircraft);
+        const secondSeats = await getAvailableSeatCount(secondFlight._id.toString(), secondAircraft);
 
         if (
           firstSeats[ticketClass] < passengers ||

@@ -4,6 +4,7 @@ import authRoutes from './routes/auth.routes';
 import adminRoutes from './routes/admin.routes';
 import airlineRoutes from './routes/airline.routes';
 import searchRoutes from './routes/search.routes';
+import bookingRoutes from './routes/booking.routes';
 
 const app: Application = express();
 
@@ -17,6 +18,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/airlines', airlineRoutes);
 app.use('/api/flights', searchRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
