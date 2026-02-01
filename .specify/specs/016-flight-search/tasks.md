@@ -16,12 +16,12 @@ _No setup tasks - models already exist from BE-002_
 
 ### Goal: Implement flight search API with direct and connecting flight support
 
-- [ ] T001 Create search service with direct flight query in `backend/src/services/search.service.ts`
-- [ ] T002 Add connecting flight algorithm (2-8h layover) to `backend/src/services/search.service.ts`
-- [ ] T003 Implement seat availability (return aircraft capacity for now) in `backend/src/services/search.service.ts`
-- [ ] T004 Add result sorting (price, duration, stops) to `backend/src/services/search.service.ts`
-- [ ] T005 Create search routes with validation in `backend/src/routes/search.routes.ts`
-- [ ] T006 Register search routes in `backend/src/app.ts`
+- [x] T001 Create search service with direct flight query in `backend/src/services/search.service.ts`
+- [x] T002 Add connecting flight algorithm (2-8h layover) to `backend/src/services/search.service.ts`
+- [x] T003 Implement seat availability (return aircraft capacity for now) in `backend/src/services/search.service.ts`
+- [x] T004 Add result sorting (price, duration, stops) to `backend/src/services/search.service.ts`
+- [x] T005 Create search routes with validation in `backend/src/routes/search.routes.ts`
+- [x] T006 Register search routes in `backend/src/app.ts`
 
 ---
 

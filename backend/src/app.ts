@@ -3,6 +3,7 @@ import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 import adminRoutes from './routes/admin.routes';
 import airlineRoutes from './routes/airline.routes';
+import searchRoutes from './routes/search.routes';
 
 const app: Application = express();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/airlines', airlineRoutes);
+app.use('/api/flights', searchRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req: Request, res: Response) => {
