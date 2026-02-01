@@ -18,7 +18,7 @@ _No setup tasks - models already exist from BE-002_
 
 - [ ] T001 Create search service with direct flight query in `backend/src/services/search.service.ts`
 - [ ] T002 Add connecting flight algorithm (2-8h layover) to `backend/src/services/search.service.ts`
-- [ ] T003 Implement seat availability calculation in `backend/src/services/search.service.ts`
+- [ ] T003 Implement seat availability (return aircraft capacity for now) in `backend/src/services/search.service.ts`
 - [ ] T004 Add result sorting (price, duration, stops) to `backend/src/services/search.service.ts`
 - [ ] T005 Create search routes with validation in `backend/src/routes/search.routes.ts`
 - [ ] T006 Register search routes in `backend/src/app.ts`
@@ -35,6 +35,12 @@ _No setup tasks - models already exist from BE-002_
 // - flight.departureTime is on params.date
 // - flight.status === 'scheduled'
 // - availableSeats >= params.passengers
+
+// Include airport city mapping:
+const AIRPORT_CITIES: Record<string, string> = {
+  'JFK': 'New York', 'LAX': 'Los Angeles', 'ORD': 'Chicago',
+  'MIA': 'Miami', 'SFO': 'San Francisco', 'ATL': 'Atlanta', ...
+};
 ```
 
 ### T002: Connecting Flights
@@ -50,8 +56,8 @@ _No setup tasks - models already exist from BE-002_
 ```typescript
 // For each flight:
 // - Get aircraft seat config (economy, business counts)
-// - Count sold tickets for that flight/class
-// - availableSeats = total - sold
+// - Return full capacity as availableSeats (no Ticket model yet)
+// - When BE-004 is done: availableSeats = capacity - soldTickets
 ```
 
 ### T004: Sorting

@@ -83,8 +83,14 @@ Public API endpoint that allows any user (including anonymous) to search for fli
 
 ### FR-005: Available Seats Calculation
 - For each flight, calculate available seats by class
-- availableSeats = aircraft.totalSeats[class] - soldTickets[class]
+- **Phase 1 (BE-003)**: availableSeats = aircraft.seatCapacity[class] (full capacity, no tickets yet)
+- **Phase 2 (after BE-004)**: availableSeats = aircraft.seatCapacity[class] - soldTickets[class]
 - Only return flights with availableSeats >= passengers count
+
+### FR-006: Airport City Names
+- Use hardcoded airport code → city mapping for common airports (JFK→New York, LAX→Los Angeles, etc.)
+- Store mapping in search.service.ts as simple object
+- If airport not in mapping, use airport code as city name
 
 ## Files to Create/Modify
 
