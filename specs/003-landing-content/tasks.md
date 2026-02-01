@@ -246,12 +246,12 @@ See `data-model.md` for complete mock data arrays:
 
 After all tasks complete:
 
-- [ ] Flight Deals section shows 3 cards with images loading
-- [ ] Featured Destination shows full-width Kenya card
-- [ ] Places to Stay shows 3 cards without prices
-- [ ] Testimonials shows 3 cards with 5-star ratings
-- [ ] Section titles have purple highlighted keywords
-- [ ] All cards have hover effects
-- [ ] Layout is responsive (3-col → 1-col at 768px)
-- [ ] No console errors
-- [ ] All 10 images load successfully
+- [x] Flight Deals section shows 3 cards with images loading
+- [x] Featured Destination shows full-width Kenya card
+- [x] Places to Stay shows 3 cards without prices
+- [x] Testimonials shows 3 cards with 5-star ratings
+- [x] Section titles have purple highlighted keywords
+- [x] All cards have hover effects
+- [x] Layout is responsive (3-col → 1-col at 768px)
+- [x] No console errors
+- [x] All 10 images load successfully

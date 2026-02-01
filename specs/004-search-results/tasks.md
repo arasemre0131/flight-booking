@@ -254,20 +254,20 @@ See `data-model.md` for complete FilterState, TimeRange, SeatClass interfaces an
 
 After all tasks complete:
 
-- [ ] Navigate to `/search` with query params, page loads
-- [ ] Compact search bar displays with pre-filled values
-- [ ] Filter bar displays with 6 dropdown buttons
-- [ ] "Choose a departing flight" title displays
-- [ ] 6 flight cards display initially
-- [ ] Each card shows: airline logo, duration, airline name, times, stops, price
-- [ ] Cards with layovers show layover info (e.g., "2h 45m in HNL")
-- [ ] Nonstop flights show "Nonstop"
-- [ ] "Show all X flights" button reveals remaining flights
-- [ ] Hover over card shows light purple background
-- [ ] Click card shows purple left border (selected)
-- [ ] Filter dropdown shows purple border when active
-- [ ] Selecting filter updates visible flights
-- [ ] Two-column layout on desktop (768px+)
-- [ ] Single-column layout on mobile (<768px)
-- [ ] No console errors
-- [ ] Build succeeds with `npx ng build`
+- [x] Navigate to `/search` with query params, page loads
+- [x] Compact search bar displays with pre-filled values
+- [x] Filter bar displays with 6 dropdown buttons
+- [x] "Choose a departing flight" title displays
+- [x] 6 flight cards display initially
+- [x] Each card shows: airline logo, duration, airline name, times, stops, price
+- [x] Cards with layovers show layover info (e.g., "2h 45m in HNL")
+- [x] Nonstop flights show "Nonstop"
+- [x] "Show all X flights" button reveals remaining flights
+- [x] Hover over card shows light purple background
+- [x] Click card shows purple left border (selected)
+- [x] Filter dropdown shows purple border when active
+- [x] Selecting filter updates visible flights
+- [x] Two-column layout on desktop (768px+)
+- [x] Single-column layout on mobile (<768px)
+- [x] No console errors
+- [x] Build succeeds with `npx ng build`

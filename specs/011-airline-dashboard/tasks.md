@@ -954,65 +954,65 @@ Within US5:
 ## Checklist Summary
 
 ### Phase 1: Setup
-- [ ] T001 Install ng2-charts, chart.js, date-fns dependencies
-- [ ] T002 [P] Create AirlineRoute model in frontend/src/app/models/airline-route.model.ts
-- [ ] T003 [P] Create Aircraft model in frontend/src/app/models/aircraft.model.ts
-- [ ] T004 [P] Create AirlineStats model in frontend/src/app/models/airline-stats.model.ts
+- [x] T001 Install ng2-charts, chart.js, date-fns dependencies
+- [x] T002 [P] Create AirlineRoute model in frontend/src/app/models/airline-route.model.ts
+- [x] T003 [P] Create Aircraft model in frontend/src/app/models/aircraft.model.ts
+- [x] T004 [P] Create AirlineStats model in frontend/src/app/models/airline-stats.model.ts
 
 ### Phase 2: Foundational
-- [ ] T005 Create mock airline routes data in frontend/src/app/mock-data/airline-routes.data.ts
-- [ ] T006 [P] Create mock aircraft data in frontend/src/app/mock-data/aircraft.data.ts
-- [ ] T007 [P] Create mock airline stats data in frontend/src/app/mock-data/airline-stats.data.ts
-- [ ] T008 Create AirlineService in frontend/src/app/services/airline.service.ts
-- [ ] T009 Create airline role guard in frontend/src/app/guards/airline.guard.ts
-- [ ] T010 Create airline dashboard container in frontend/src/app/pages/airline/
+- [x] T005 Create mock airline routes data in frontend/src/app/mock-data/airline-routes.data.ts
+- [x] T006 [P] Create mock aircraft data in frontend/src/app/mock-data/aircraft.data.ts
+- [x] T007 [P] Create mock airline stats data in frontend/src/app/mock-data/airline-stats.data.ts
+- [x] T008 Create AirlineService in frontend/src/app/services/airline.service.ts
+- [x] T009 Create airline role guard in frontend/src/app/guards/airline.guard.ts
+- [x] T010 Create airline dashboard container in frontend/src/app/pages/airline/
 
 ### Phase 3: US1 - Route Management
-- [ ] T011 Create sidebar navigation in frontend/src/app/components/airline/sidebar/
-- [ ] T012 Create overview page in frontend/src/app/pages/airline/overview/
-- [ ] T013 [US1] Implement route CRUD methods in frontend/src/app/services/airline.service.ts
-- [ ] T014 [US1] Create routes list page in frontend/src/app/pages/airline/routes/routes-list/
-- [ ] T015 [P] [US1] Create confirmation dialog in frontend/src/app/components/airline/confirmation-dialog/
-- [ ] T016 [US1] Create route form page in frontend/src/app/pages/airline/routes/route-form/
+- [x] T011 Create sidebar navigation in frontend/src/app/components/airline/sidebar/
+- [x] T012 Create overview page in frontend/src/app/pages/airline/overview/
+- [x] T013 [US1] Implement route CRUD methods in frontend/src/app/services/airline.service.ts
+- [x] T014 [US1] Create routes list page in frontend/src/app/pages/airline/routes/routes-list/
+- [x] T015 [P] [US1] Create confirmation dialog in frontend/src/app/components/airline/confirmation-dialog/
+- [x] T016 [US1] Create route form page in frontend/src/app/pages/airline/routes/route-form/
 
 ### Phase 4: US2 - Aircraft Management
-- [ ] T017 [US2] Implement aircraft CRUD methods in frontend/src/app/services/airline.service.ts
-- [ ] T018 [US2] Create aircraft list page in frontend/src/app/pages/airline/aircraft/aircraft-list/
-- [ ] T019 [P] [US2] Create seat config builder in frontend/src/app/components/airline/seat-config-builder/
-- [ ] T020 [US2] Create aircraft form page in frontend/src/app/pages/airline/aircraft/aircraft-form/
-- [ ] T021 [P] [US2] Create mock flights data in frontend/src/app/mock-data/airline-flights.data.ts
-- [ ] T022 [US2] Add flights state to AirlineService
-- [ ] T023 [US2] Add scheduled flights warning to aircraft form
+- [x] T017 [US2] Implement aircraft CRUD methods in frontend/src/app/services/airline.service.ts
+- [x] T018 [US2] Create aircraft list page in frontend/src/app/pages/airline/aircraft/aircraft-list/
+- [x] T019 [P] [US2] Create seat config builder in frontend/src/app/components/airline/seat-config-builder/
+- [x] T020 [US2] Create aircraft form page in frontend/src/app/pages/airline/aircraft/aircraft-form/
+- [x] T021 [P] [US2] Create mock flights data in frontend/src/app/mock-data/airline-flights.data.ts
+- [x] T022 [US2] Add flights state to AirlineService
+- [x] T023 [US2] Add scheduled flights warning to aircraft form
 
 ### Phase 5: US3 - Flight Scheduling
-- [ ] T024 [US3] Implement flight CRUD in frontend/src/app/services/airline.service.ts
-- [ ] T025 [US3] Create flights list page in frontend/src/app/pages/airline/flights/flights-list/
-- [ ] T026 [US3] Create flight form page in frontend/src/app/pages/airline/flights/flight-form/
-- [ ] T027 [P] [US3] Create calendar view in frontend/src/app/pages/airline/flights/flights-calendar/
-- [ ] T028 [US3] Integrate calendar with flights list
-- [ ] T029 [US3] Implement flight status management
-- [ ] T030 [US3] Add pricing fields to flight form
-- [ ] T031 [US3] Add conflict detection modal
+- [x] T024 [US3] Implement flight CRUD in frontend/src/app/services/airline.service.ts
+- [x] T025 [US3] Create flights list page in frontend/src/app/pages/airline/flights/flights-list/
+- [x] T026 [US3] Create flight form page in frontend/src/app/pages/airline/flights/flight-form/
+- [x] T027 [P] [US3] Create calendar view in frontend/src/app/pages/airline/flights/flights-calendar/
+- [x] T028 [US3] Integrate calendar with flights list
+- [x] T029 [US3] Implement flight status management
+- [x] T030 [US3] Add pricing fields to flight form
+- [x] T031 [US3] Add conflict detection modal
 
 ### Phase 6: US4 - Ticket Pricing
-- [ ] T032 [US4] Create pricing list page in frontend/src/app/pages/airline/pricing/pricing-list/
-- [ ] T033 [US4] Implement inline price editing
-- [ ] T034 [US4] Implement bulk pricing functionality
-- [ ] T035 [US4] Add pricing update methods to AirlineService
+- [x] T032 [US4] Create pricing list page in frontend/src/app/pages/airline/pricing/pricing-list/
+- [x] T033 [US4] Implement inline price editing
+- [x] T034 [US4] Implement bulk pricing functionality
+- [x] T035 [US4] Add pricing update methods to AirlineService
 
 ### Phase 7: US5 - Statistics Dashboard
-- [ ] T036 [P] [US5] Create stat card component in frontend/src/app/components/airline/stat-card/
-- [ ] T037 [US5] Implement getStatistics in AirlineService
-- [ ] T038 [US5] Create statistics page in frontend/src/app/pages/airline/statistics/
-- [ ] T039 [P] [US5] Implement popular routes bar chart
-- [ ] T040 [P] [US5] Implement revenue trend line chart
-- [ ] T041 [P] [US5] Implement flight status pie chart
-- [ ] T042 [US5] Implement CSV export functionality
+- [x] T036 [P] [US5] Create stat card component in frontend/src/app/components/airline/stat-card/
+- [x] T037 [US5] Implement getStatistics in AirlineService
+- [x] T038 [US5] Create statistics page in frontend/src/app/pages/airline/statistics/
+- [x] T039 [P] [US5] Implement popular routes bar chart
+- [x] T040 [P] [US5] Implement revenue trend line chart
+- [x] T041 [P] [US5] Implement flight status pie chart
+- [x] T042 [US5] Implement CSV export functionality
 
 ### Phase 8: Polish
-- [ ] T043 Add loading states to all pages
-- [ ] T044 Add error handling throughout
-- [ ] T045 Final build verification and testing
+- [x] T043 Add loading states to all pages
+- [x] T044 Add error handling throughout
+- [x] T045 Final build verification and testing
 
 ---
 

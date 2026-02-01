@@ -275,15 +275,15 @@ export const MOCK_DESTINATIONS: RelatedDestination[] = [
 
 After all tasks complete:
 
-- [ ] Navigate to `/search` with query params, sidebar content loads
-- [ ] "Find places to stay in Tokyo" header displays (dynamic city)
-- [ ] 3 hotel cards display vertically with images, names, descriptions
-- [ ] Hotel prices show "from $X/night" format
-- [ ] Hover over hotel card shows visual effect
-- [ ] "People also search for" header displays
-- [ ] 3 destination cards display horizontally
-- [ ] Destination cards show city name and price overlay on image
-- [ ] Hover over destination card shows visual effect
-- [ ] At 768px breakpoint, sidebar moves below flight list
-- [ ] No console errors
-- [ ] Build succeeds with `npx ng build`
+- [x] Navigate to `/search` with query params, sidebar content loads
+- [x] "Find places to stay in Tokyo" header displays (dynamic city)
+- [x] 3 hotel cards display vertically with images, names, descriptions
+- [x] Hotel prices show "from $X/night" format
+- [x] Hover over hotel card shows visual effect
+- [x] "People also search for" header displays
+- [x] 3 destination cards display horizontally
+- [x] Destination cards show city name and price overlay on image
+- [x] Hover over destination card shows visual effect
+- [x] At 768px breakpoint, sidebar moves below flight list
+- [x] No console errors
+- [x] Build succeeds with `npx ng build`
