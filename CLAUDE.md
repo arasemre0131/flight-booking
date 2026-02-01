@@ -89,8 +89,8 @@ A flight booking web application for the "Tecnologie e Applicazioni Web" course 
 
 | # | Spec ID | Name | Status | Priority |
 |---|---------|------|--------|----------|
-| 11 | INFRA-001 | Docker Setup | ❌ Not Started | P0 |
-| 12 | BE-001 | Auth & User Management | ❌ Not Started | P0 |
+| 11 | 013-docker-setup | Docker Setup | ✅ Done | P0 |
+| 12 | 014-backend-auth | Auth & User Management | ✅ Done | P0 |
 | 13 | BE-002 | Airline Management API | ❌ Not Started | P1 |
 | 14 | BE-003 | Flight Search API | ❌ Not Started | P1 |
 | 15 | BE-004 | Booking & Seats API | ❌ Not Started | P1 |
@@ -481,6 +481,23 @@ volumes:
 6. **Role guards** - Check user role for airline/admin endpoints
 7. **Seed data** - Auto-create test data on first run
 
+### 🔴 BACKEND SPEC RULES (FAZLALIK YAPMA!)
+
+**Her backend spec yazarken SADECE PDF'deki gereksinimleri ekle:**
+
+| Spec | PDF'de OLAN | PDF'de OLMAYAN (EKLEME!) |
+|------|-------------|--------------------------|
+| BE-001 Auth | Register, Login, Admin seed, Airline invite, Password change, User delete | Token refresh, Rate limiting, 2FA, Email verification |
+| BE-002 Airline | Route CRUD, Aircraft CRUD, Flight CRUD, Pricing | Route optimization, Bulk import |
+| BE-003 Search | Search by origin/dest/date, 1 stop with 2h transfer, Sort by price/duration/stops | Caching, Saved searches, Price alerts |
+| BE-004 Booking | Create booking, Seat selection, Extras, Payment | Cancellation, Refunds, Loyalty points |
+| BE-005 Stats | Passenger count, Revenue, Popular routes | Advanced analytics, Export, Dashboards |
+
+**Frontend ile uyum kontrolü:**
+- Login response → `{ token, user: { id, email, firstName, lastName, role, status, airlineId? } }`
+- Register response → `{ token, user }`
+- Tüm protected endpoints → `Authorization: Bearer <token>` header
+
 ### General Rules
 1. **English only** - all code and comments
 2. **Docker** - All services containerized
@@ -489,16 +506,17 @@ volumes:
 ---
 
 ## Recent Changes
-- 012-admin-panel: Added TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router, ng2-charts (Chart.js)
-
-- 010-auth: Tasks generated, ready for implementation
-- 009-confirmation: Implemented
+- 014-backend-auth: Implemented - Register, Login, Admin seed, Airline invite, Password change, User delete
+- 013-docker-setup: Implemented - 3 containers (frontend, backend, mongodb)
+- 012-admin-panel: Frontend done with mock data
 
 ## Next Steps
 
-1. `/speckit.implement` for 010-auth (son frontend spec)
-2. Backend specs oluşturma (INFRA-001, BE-001, etc.)
-3. 011-airline-dashboard ve 012-admin-panel specleri
+1. BE-002: Airline Management API (Routes, Aircraft, Flights, Pricing)
+2. BE-003: Flight Search API (with 2h transfer logic)
+3. BE-004: Booking & Seats API (with WebSocket)
+4. BE-005: Statistics API
+5. Frontend-Backend integration
 
 ## Active Technologies
 - TypeScript 5.x with Angular 17+ + Angular 17+ (standalone components), RxJS, Angular Router, ng2-charts (Chart.js) (012-admin-panel)
