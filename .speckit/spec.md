@@ -2,7 +2,7 @@
 
 > **Course:** Tecnologie e Applicazioni Web (CT0142) - 2024/2025
 > **University:** Ca' Foscari University Venice
-> **Design:** [Tripma Figma](https://www.figma.com/community/file/911320742349428744)
+> **Design:** [SkyRoute Figma](https://www.figma.com/community/file/911320742349428744)
 
 ## Project Summary
 

@@ -16,7 +16,7 @@ Templates requiring updates:
 Follow-up TODOs: None
 -->
 
-# Tripma Flight Booking Constitution
+# SkyRoute Flight Booking Constitution
 
 ## Core Principles
 
@@ -26,7 +26,7 @@ All UI implementation MUST follow the Figma design reference exactly. Deviations
 
 - Components MUST match Figma colors, spacing, and typography
 - Design assets located in `frontend/design/images/`
-- Reference: [Tripma Figma](https://www.figma.com/community/file/911320742349428744)
+- Reference: [SkyRoute Figma](https://www.figma.com/community/file/911320742349428744)
 
 ### II. Component-Based Architecture
 
@@ -103,7 +103,7 @@ All features follow the speckit-driven development process:
 
 ## Governance
 
-This constitution establishes the non-negotiable standards for the Tripma flight booking project.
+This constitution establishes the non-negotiable standards for the SkyRoute flight booking project.
 
 - All implementations MUST comply with Core Principles
 - Violations require explicit justification in plan.md

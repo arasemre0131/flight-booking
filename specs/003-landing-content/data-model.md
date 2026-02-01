@@ -143,7 +143,7 @@ export const TESTIMONIALS: Testimonial[] = [
     name: 'Yifei Chen',
     location: 'Seoul, South Korea',
     rating: 5,
-    review: 'Tripma is awesome. I just booked my trip to Tokyo and the process was seamless. The app found me the best deals and I was able to book my flight in minutes.'
+    review: 'SkyRoute is awesome. I just booked my trip to Tokyo and the process was seamless. The app found me the best deals and I was able to book my flight in minutes.'
   },
   {
     id: 2,
@@ -151,7 +151,7 @@ export const TESTIMONIALS: Testimonial[] = [
     name: 'Kaori Yamazaki',
     location: 'Hokkaido, Japan',
     rating: 5,
-    review: 'I always use Tripma when booking flights. The interface is clean and the prices are always competitive. Highly recommended!'
+    review: 'I always use SkyRoute when booking flights. The interface is clean and the prices are always competitive. Highly recommended!'
   },
   {
     id: 3,

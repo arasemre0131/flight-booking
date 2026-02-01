@@ -10,7 +10,7 @@ export async function seedAdmin(): Promise<void> {
       const hashedPassword = await hashPassword('admin123');
 
       await User.create({
-        email: 'admin@tripma.com',
+        email: 'admin@skyroute.com',
         password: hashedPassword,
         firstName: 'Admin',
         lastName: 'User',
@@ -19,7 +19,7 @@ export async function seedAdmin(): Promise<void> {
         mustChangePassword: false,
       });
 
-      console.log('✅ Admin account created: admin@tripma.com / admin123');
+      console.log('✅ Admin account created: admin@skyroute.com / admin123');
     } else {
       console.log('ℹ️  Admin account already exists');
     }

@@ -23,8 +23,8 @@ import {
   AdminUser
 } from '../mock-data/admin.data';
 
-const USERS_KEY = 'tripma_admin_users';
-const AIRLINES_KEY = 'tripma_admin_airlines';
+const USERS_KEY = 'skyroute_admin_users';
+const AIRLINES_KEY = 'skyroute_admin_airlines';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
@@ -250,20 +250,20 @@ export class AdminService {
 
   private terminateUserSession(userId: string): void {
     // Check localStorage session
-    const localSession = localStorage.getItem('tripma_session');
+    const localSession = localStorage.getItem('skyroute_session');
     if (localSession) {
       const session = JSON.parse(localSession);
       if (session.userId === userId) {
-        localStorage.removeItem('tripma_session');
+        localStorage.removeItem('skyroute_session');
       }
     }
 
     // Check sessionStorage session
-    const sessionSession = sessionStorage.getItem('tripma_session');
+    const sessionSession = sessionStorage.getItem('skyroute_session');
     if (sessionSession) {
       const session = JSON.parse(sessionSession);
       if (session.userId === userId) {
-        sessionStorage.removeItem('tripma_session');
+        sessionStorage.removeItem('skyroute_session');
       }
     }
   }

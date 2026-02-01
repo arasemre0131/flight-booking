@@ -73,7 +73,7 @@ docker-compose exec mongodb mongosh
 
 2. **Test frontend**:
    - Open http://localhost:4200
-   - Should see the Tripma landing page
+   - Should see the SkyRoute landing page
 
 3. **Test backend**:
    ```bash
@@ -124,5 +124,5 @@ docker-compose exec backend ping mongodb
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@tripma.com | admin123 |
+| Admin | admin@skyroute.com | admin123 |
 | Passenger | test@example.com | password123 |

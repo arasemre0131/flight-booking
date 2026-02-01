@@ -70,7 +70,7 @@ As a potential customer, I want to read reviews from other travelers so I can tr
 
 **Acceptance Scenarios**:
 
-1. **Given** I am viewing the landing page, **When** I scroll to the testimonials section, **Then** I see "What Tripma users are saying" with 3 testimonial cards
+1. **Given** I am viewing the landing page, **When** I scroll to the testimonials section, **Then** I see "What SkyRoute users are saying" with 3 testimonial cards
 2. **Given** I view a testimonial card, **When** I look at the content, **Then** I see a user avatar, name, location, star rating, and review text
 3. **Given** I view the star rating, **When** I count the stars, **Then** I see 5 filled stars indicating the rating
 
@@ -97,7 +97,7 @@ As a potential customer, I want to read reviews from other travelers so I can tr
 - **FR-008**: Each places card MUST show: destination image and location name
 - **FR-009**: System MUST display a "Testimonials" section with 3 review cards
 - **FR-010**: Each testimonial card MUST show: user avatar, name, location, 5-star rating, and review text
-- **FR-011**: Section titles with key words ("flight deals", "places to stay", "Tripma users") MUST be highlighted in brand color (purple)
+- **FR-011**: Section titles with key words ("flight deals", "places to stay", "SkyRoute users") MUST be highlighted in brand color (purple)
 - **FR-012**: All cards MUST have hover effects for interactivity feedback
 - **FR-013**: Page layout MUST be responsive (3-column grid on desktop, single column on mobile)
 

@@ -32,7 +32,7 @@ Booking confirmation page with success message, flight summary, price breakdown,
 ### Visual Reference
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  Tripma        Flights  Hotels  Packages        My trips  👤           │
+│  SkyRoute        Flights  Hotels  Packages        My trips  👤           │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  ┌─────────────────────────────────────────────────────────────────┐   │
@@ -43,10 +43,10 @@ Booking confirmation page with success message, flight summary, price breakdown,
 ├───────────────────────────────────────┬─────────────────────────────────┤
 │                                       │                                 │
 │  Bon voyage, Sophia!                  │  Shop hotels                    │
-│  Confirmation number: #381029404387   │  Tripma partners with thousands │
+│  Confirmation number: #381029404387   │  SkyRoute partners with thousands │
 │                                       │  of hotels to get you the best  │
 │  Thank you for booking your travel    │  deal. Save up to 30% when you  │
-│  with Tripma! Below is a summary of   │  add a hotel to your trip.      │
+│  with SkyRoute! Below is a summary of   │  add a hotel to your trip.      │
 │  your trip to Narita airport in       │                                 │
 │  Tokyo, Japan. We've sent a copy of   │  ┌─────────────────────────┐   │
 │  your booking confirmation to your    │  │ [Ryokan Japan image]    │   │
@@ -80,7 +80,7 @@ Booking confirmation page with success message, flight summary, price breakdown,
 │  Subtotal              $702           │  Find unique experiences        │
 │  Taxes (9.4%)          $66            │  Find events and authentic      │
 │  ─────────────────────────────────    │  cultural experiences available │
-│  Amount paid           $768           │  exclusively to Tripma users.   │
+│  Amount paid           $768           │  exclusively to SkyRoute users.   │
 │                                       │                                 │
 │  Payment method                       │  ┌─────────────────────────┐   │
 │  ┌────────────────────────────────┐   │  │ [Nihon Kimono image]    │   │

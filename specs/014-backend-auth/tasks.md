@@ -48,7 +48,7 @@ curl -X POST localhost:3000/api/auth/login \
 - [x] T010 [US3] Create admin seed in /backend/src/seed/admin.seed.ts
 - [x] T011 [US3] Call seed on startup in /backend/src/server.ts
 
-**Test**: Start server, login as admin@tripma.com / admin123 ✅
+**Test**: Start server, login as admin@skyroute.com / admin123 ✅
 
 ---
 

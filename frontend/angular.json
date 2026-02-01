@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "tripma": {
+    "skyroute": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -89,10 +89,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "tripma:build:production"
+              "buildTarget": "skyroute:build:production"
             },
             "development": {
-              "buildTarget": "tripma:build:development"
+              "buildTarget": "skyroute:build:development"
             }
           },
           "defaultConfiguration": "development"

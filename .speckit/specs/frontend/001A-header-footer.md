@@ -31,7 +31,7 @@ Shared header navigation and footer components used across all pages.
 ### Visual Reference
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│  Tripma          Flights  Hotels  Packages     Sign in  Sign up│
+│  SkyRoute          Flights  Hotels  Packages     Sign in  Sign up│
 │  (purple)        (gray links)                  (gray)  (button)│
 └────────────────────────────────────────────────────────────────┘
 ```
@@ -39,7 +39,7 @@ Shared header navigation and footer components used across all pages.
 ### Elements
 | Element | Type | Style |
 |---------|------|-------|
-| Logo "Tripma" | Text | Purple (#605DEC), font-weight: 600 |
+| Logo "SkyRoute" | Text | Purple (#605DEC), font-weight: 600 |
 | Nav Links | Links | Gray (#6E7491), hover: purple |
 | Sign in | Link | Gray (#6E7491) |
 | Sign up | Button | Purple bg (#605DEC), white text, rounded |
@@ -47,7 +47,7 @@ Shared header navigation and footer components used across all pages.
 ### HTML Structure
 ```html
 <header class="header">
-  <a routerLink="/" class="logo">Tripma</a>
+  <a routerLink="/" class="logo">SkyRoute</a>
 
   <nav class="nav-links">
     <a routerLink="/flights">Flights</a>
@@ -69,24 +69,24 @@ Shared header navigation and footer components used across all pages.
 ### Visual Reference
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│  Tripma       About           Partner with us    Support       │
-│               About Tripma    Partnership        Help Center   │
+│  SkyRoute       About           Partner with us    Support       │
+│               About SkyRoute    Partnership        Help Center   │
 │               How it works    Affiliate          Contact us    │
 │               Careers         ...                ...           │
 │               Press                                            │
 │               Blog            Get the app                      │
-│               Forum           Tripma for Android               │
-│                               Tripma for iOS                   │
+│               Forum           SkyRoute for Android               │
+│                               SkyRoute for iOS                   │
 └────────────────────────────────────────────────────────────────┘
 ```
 
 ### Footer Columns
 | Column | Links |
 |--------|-------|
-| About | About Tripma, How it works, Careers, Press, Blog, Forum |
+| About | About SkyRoute, How it works, Careers, Press, Blog, Forum |
 | Partner with us | Partnership programs, Affiliate program, Connectivity partners, Promotions and events, Integrations, Community, Loyalty program |
 | Support | Help Center, Contact us, FAQ, Accessibility |
-| Get the app | Tripma for Android, Tripma for iOS |
+| Get the app | SkyRoute for Android, SkyRoute for iOS |
 
 ---
 

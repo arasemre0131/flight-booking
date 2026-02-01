@@ -137,7 +137,7 @@ async function seedAdmin(): Promise<void> {
   const adminExists = await User.findOne({ role: 'admin' });
   if (!adminExists) {
     await User.create({
-      email: 'admin@tripma.com',
+      email: 'admin@skyroute.com',
       password: await bcrypt.hash('admin123', 10),
       firstName: 'Admin',
       lastName: 'User',
@@ -145,7 +145,7 @@ async function seedAdmin(): Promise<void> {
       mustChangePassword: false,
       status: 'active'
     });
-    console.log('Admin account created: admin@tripma.com');
+    console.log('Admin account created: admin@skyroute.com');
   }
 }
 ```

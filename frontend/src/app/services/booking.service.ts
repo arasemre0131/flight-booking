@@ -6,7 +6,7 @@ import { BookingDraft, EmergencyContact, generateBookingId, calculateTotalPrice 
 import { SeatAssignment, calculateSeatFees } from '../models/seat.model';
 import { PaymentDetails, BillingAddress, PriceSummary } from '../models/payment.model';
 
-const STORAGE_KEY = 'tripma_booking_draft';
+const STORAGE_KEY = 'skyroute_booking_draft';
 
 @Injectable({
   providedIn: 'root'

@@ -5,7 +5,7 @@
 # Default admin after first startup
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@tripma.com","password":"admin123"}'
+  -d '{"email":"admin@skyroute.com","password":"admin123"}'
 ```
 
 ## Test 2: Passenger Registration

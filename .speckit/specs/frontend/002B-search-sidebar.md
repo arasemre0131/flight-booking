@@ -142,7 +142,7 @@ Use simple SVG path or CSS (no external chart library needed for MVP).
 │ but could rise 18% to $885 in two    │
 │ weeks.                               │
 │                                      │
-│ Tripma analyzes thousands of         │
+│ SkyRoute analyzes thousands of         │
 │ flights, prices, and trends to       │
 │ ensure you get the best deal.        │
 └──────────────────────────────────────┘

@@ -5,7 +5,7 @@
 
 ## Summary
 
-Implement a flight search form component for the Tripma landing page. The form allows users to search for flights by entering origin/destination (with autocomplete), selecting trip type (round-trip/one-way), choosing dates, and specifying passenger counts. Form validates inputs and navigates to search results page on submission.
+Implement a flight search form component for the SkyRoute landing page. The form allows users to search for flights by entering origin/destination (with autocomplete), selecting trip type (round-trip/one-way), choosing dates, and specifying passenger counts. Form validates inputs and navigates to search results page on submission.
 
 ## Technical Context
 

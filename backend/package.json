@@ -1,7 +1,7 @@
 {
-  "name": "tripma-backend",
+  "name": "skyroute-backend",
   "version": "1.0.0",
-  "description": "Tripma Flight Booking Backend API",
+  "description": "SkyRoute Flight Booking Backend API",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",

@@ -454,7 +454,7 @@ interface SeatAvailability {
 // Seed on first run
 const seedData = {
   admin: {
-    email: 'admin@tripma.com',
+    email: 'admin@skyroute.com',
     password: 'admin123', // hashed
     role: 'admin'
   },
@@ -603,7 +603,7 @@ frontend/src/app/
 ## Test Accounts
 
 Admin:
-- Email: admin@tripma.com
+- Email: admin@skyroute.com
 - Password: admin123
 
 Passenger:

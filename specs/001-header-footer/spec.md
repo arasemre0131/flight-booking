@@ -3,7 +3,7 @@
 **Feature Branch**: `001-header-footer`
 **Created**: 2025-01-30
 **Status**: Draft
-**Input**: User description: "Shared header navigation and footer components for Tripma flight booking application"
+**Input**: User description: "Shared header navigation and footer components for SkyRoute flight booking application"
 
 ## Clarifications
 
@@ -25,7 +25,7 @@ As a visitor, I want to see a clear navigation header so I can easily access dif
 
 **Acceptance Scenarios**:
 
-1. **Given** I am on any page, **When** the page loads, **Then** I see the Tripma logo and navigation links (Flights, Hotels, Packages)
+1. **Given** I am on any page, **When** the page loads, **Then** I see the SkyRoute logo and navigation links (Flights, Hotels, Packages)
 2. **Given** I am viewing the header, **When** I click on "Flights", **Then** I am navigated to the flights page
 3. **Given** I am viewing the header, **When** I hover over a navigation link, **Then** the link color changes to purple (#605DEC)
 
@@ -57,7 +57,7 @@ As a visitor, I want to see a footer with useful links so I can find information
 
 **Acceptance Scenarios**:
 
-1. **Given** I am on any page, **When** I scroll to the bottom, **Then** I see the footer with Tripma branding
+1. **Given** I am on any page, **When** I scroll to the bottom, **Then** I see the footer with SkyRoute branding
 2. **Given** I am viewing the footer, **When** I look at the content, **Then** I see 4 columns: About, Partner with us, Support, Get the app
 3. **Given** I am viewing the footer, **When** I click any footer link, **Then** I am taken to the appropriate page
 
@@ -80,7 +80,7 @@ As a mobile user, I want the navigation to adapt to my screen size so I can easi
 
 ### Edge Cases
 
-- What happens when the logo image fails to load? Display text "Tripma" as fallback
+- What happens when the logo image fails to load? Display text "SkyRoute" as fallback
 - How does system handle very long navigation text? Truncate or use responsive breakpoints
 - What happens on extremely wide screens? Max-width container to maintain readability
 
@@ -88,7 +88,7 @@ As a mobile user, I want the navigation to adapt to my screen size so I can easi
 
 ### Functional Requirements
 
-- **FR-001**: System MUST display the Tripma logo that links to the home page
+- **FR-001**: System MUST display the SkyRoute logo that links to the home page
 - **FR-002**: System MUST display navigation links for Flights, Hotels, and Packages sections
 - **FR-003**: System MUST display Sign in link and Sign up button for unauthenticated users
 - **FR-009**: System MUST display "My trips" link and user avatar with name (e.g., "👤 John") for authenticated users
@@ -121,7 +121,7 @@ As a mobile user, I want the navigation to adapt to my screen size so I can easi
 ### Header Layout
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│  Tripma          Flights  Hotels  Packages     Sign in  Sign up│
+│  SkyRoute          Flights  Hotels  Packages     Sign in  Sign up│
 │  (purple)        (gray links)                  (gray)  (button)│
 └────────────────────────────────────────────────────────────────┘
 ```
@@ -129,14 +129,14 @@ As a mobile user, I want the navigation to adapt to my screen size so I can easi
 ### Footer Layout
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│  Tripma       About           Partner with us    Support       │
-│               About Tripma    Partnership        Help Center   │
+│  SkyRoute       About           Partner with us    Support       │
+│               About SkyRoute    Partnership        Help Center   │
 │               How it works    Affiliate          Contact us    │
 │               Careers         ...                ...           │
 │               Press                                            │
 │               Blog            Get the app                      │
-│               Forum           Tripma for Android               │
-│                               Tripma for iOS                   │
+│               Forum           SkyRoute for Android               │
+│                               SkyRoute for iOS                   │
 └────────────────────────────────────────────────────────────────┘
 ```
 
@@ -153,7 +153,7 @@ As a mobile user, I want the navigation to adapt to my screen size so I can easi
 
 | Column | Links |
 |--------|-------|
-| About | About Tripma, How it works, Careers, Press, Blog, Forum |
+| About | About SkyRoute, How it works, Careers, Press, Blog, Forum |
 | Partner with us | Partnership programs, Affiliate program, Connectivity partners, Promotions and events, Integrations, Community, Loyalty program |
 | Support | Help Center, Contact us, FAQ, Accessibility |
-| Get the app | Tripma for Android, Tripma for iOS |
+| Get the app | SkyRoute for Android, SkyRoute for iOS |

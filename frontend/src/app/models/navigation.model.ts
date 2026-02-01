@@ -23,7 +23,7 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: 'About',
     links: [
-      { label: 'About Tripma', route: '/about' },
+      { label: 'About SkyRoute', route: '/about' },
       { label: 'How it works', route: '/how-it-works' },
       { label: 'Careers', route: '/careers' },
       { label: 'Press', route: '/press' },
@@ -55,8 +55,8 @@ export const FOOTER_COLUMNS: FooterColumn[] = [
   {
     title: 'Get the app',
     links: [
-      { label: 'Tripma for Android', route: '/android', external: true },
-      { label: 'Tripma for iOS', route: '/ios', external: true }
+      { label: 'SkyRoute for Android', route: '/android', external: true },
+      { label: 'SkyRoute for iOS', route: '/ios', external: true }
     ]
   }
 ];

@@ -62,7 +62,7 @@ Landing page with hero section, flight deals, featured destination, places to st
 │  │ Maldives │  │ Morocco  │  │ Mongolia │                     │
 │  └──────────┘  └──────────┘  └──────────┘                     │
 ├────────────────────────────────────────────────────────────────┤
-│  What Tripma users are saying                                  │
+│  What SkyRoute users are saying                                  │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐                     │
 │  │  Yifei   │  │  Kaori   │  │ Anthony  │                     │
 │  │ ⭐⭐⭐⭐⭐│  │ ⭐⭐⭐⭐⭐│  │ ⭐⭐⭐⭐⭐│                     │
@@ -163,19 +163,19 @@ Landing page with hero section, flight deals, featured destination, places to st
 ## Section 5: Testimonials
 
 ### Title
-"What **Tripma users** are saying"
+"What **SkyRoute users** are saying"
 
 ### Cards (3)
 | Avatar | Name | Location | Rating | Review |
 |--------|------|----------|--------|--------|
-| `avatar-yifei.png` | Yifei Chen | Seoul, South Korea | 5 stars | "Tripma is awesome..." |
-| `avatar-kaori.png` | Kaori Yamazaki | Hokkaido, Japan | 5 stars | "I always use Tripma..." |
+| `avatar-yifei.png` | Yifei Chen | Seoul, South Korea | 5 stars | "SkyRoute is awesome..." |
+| `avatar-kaori.png` | Kaori Yamazaki | Hokkaido, Japan | 5 stars | "I always use SkyRoute..." |
 | `avatar-anthony.png` | Anthony Russo | California, USA | 5 stars | "Best travel app..." |
 
 ### Testimonial Card Layout
 ```
 ┌─────────────────────────────────┐
-│ "Tripma is awesome. I just     │
+│ "SkyRoute is awesome. I just     │
 │ booked my trip to Tokyo and    │
 │ the process was seamless."     │
 │                                 │
@@ -239,14 +239,14 @@ export const TESTIMONIALS = [
     name: 'Yifei Chen',
     location: 'Seoul, South Korea',
     rating: 5,
-    review: 'Tripma is awesome. I just booked my trip to Tokyo and the process was seamless. The app found me the best deals and I was able to book my flight in minutes.'
+    review: 'SkyRoute is awesome. I just booked my trip to Tokyo and the process was seamless. The app found me the best deals and I was able to book my flight in minutes.'
   },
   {
     avatar: 'assets/images/landing/avatar-kaori.png',
     name: 'Kaori Yamazaki',
     location: 'Hokkaido, Japan',
     rating: 5,
-    review: 'I always use Tripma when booking flights. The interface is clean and the prices are always competitive. Highly recommended!'
+    review: 'I always use SkyRoute when booking flights. The interface is clean and the prices are always competitive. Highly recommended!'
   },
   {
     avatar: 'assets/images/landing/avatar-anthony.png',

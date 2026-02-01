@@ -33,7 +33,7 @@ Payment form with multiple payment options, account creation, and order summary.
 ├─────────────────────────────────────────┬───────────────────────────────┤
 │                                         │                               │
 │  Payment method                         │  ┌─────────────────────────┐  │
-│  Select a payment method below. Tripma  │  │ 🔵 Hawaiian Airlines    │  │
+│  Select a payment method below. SkyRoute  │  │ 🔵 Hawaiian Airlines    │  │
 │  processes your payment securely with   │  │ FIG4312    16h 45m (+1d)│  │
 │  end-to-end encryption.                 │  │ 7:00 AM - 4:15 PM       │  │
 │                                         │  │ 2h 45m in HNL           │  │
@@ -56,7 +56,7 @@ Payment form with multiple payment options, account creation, and order summary.
 │  └─────────────────┘ └───────────────┘  │                               │
 │                                         │                               │
 │  Create an account                      │                               │
-│  Tripma is free to use as a guest...   │                               │
+│  SkyRoute is free to use as a guest...   │                               │
 │  ☐ Save card and create account        │                               │
 │                                         │                               │
 │  ┌───────────────────────────────────┐  │                               │
@@ -118,7 +118,7 @@ Default: Credit card selected
 ## Create Account Section
 
 ### Description
-"Tripma is free to use as a guest, but if you create an account today, you can save and view flights, manage your trips, earn rewards, and more."
+"SkyRoute is free to use as a guest, but if you create an account today, you can save and view flights, manage your trips, earn rewards, and more."
 
 ### Fields
 | Field | Type | Validation |
@@ -176,7 +176,7 @@ Cancellation policy
 
 This flight has a flexible cancellation policy. If you cancel or
 change your flight up to 30 days before the departure date, you
-are eligible for a free refund. All flights booked on Tripma are
+are eligible for a free refund. All flights booked on SkyRoute are
 backed by our satisfaction guarantee, however cancellation
 policies vary by airline. See the full cancellation policy for
 this flight.

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { IUser } from '../models/user.model';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'tripma-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET || 'skyroute-secret-key-change-in-production';
 
 export interface TokenPayload {
   userId: string;

@@ -38,7 +38,7 @@ Backend authentication for flight booking app. Three user roles: passenger (self
 
 ### US3: Admin Auto-Creation
 - Created on first backend startup if no admin exists
-- Default: admin@tripma.com / admin123
+- Default: admin@skyroute.com / admin123
 
 ### US4: Airline Invitation
 - Admin provides: email, company name, airline code

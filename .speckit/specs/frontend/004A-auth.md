@@ -38,9 +38,9 @@ Login and registration modals for passengers. Triggered from header buttons. Any
 ```
 ┌─────────────────────────────────────────────────────┐
 │                                                   ✕ │
-│  Sign up for Tripma                                 │
+│  Sign up for SkyRoute                                 │
 │                                                     │
-│  Tripma is totally free to use. Sign up using your  │
+│  SkyRoute is totally free to use. Sign up using your  │
 │  email address or phone number below to get started.│
 │                                                     │
 │  ┌───────────────────────────────────────────────┐  │
@@ -80,7 +80,7 @@ Login and registration modals for passengers. Triggered from header buttons. Any
 ```
 ┌─────────────────────────────────────────────────────┐
 │                                                   ✕ │
-│  Sign in to Tripma                                  │
+│  Sign in to SkyRoute                                  │
 │                                                     │
 │  ┌───────────────────────────────────────────────┐  │
 │  │ Email or phone number                         │  │

@@ -28,7 +28,7 @@ app.get('/api/health', (req: Request, res: Response) => {
 // Root endpoint
 app.get('/', (req: Request, res: Response) => {
   res.json({
-    message: 'Tripma API',
+    message: 'SkyRoute API',
     version: '1.0.0',
     endpoints: {
       health: '/api/health'

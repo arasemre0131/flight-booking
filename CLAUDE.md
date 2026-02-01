@@ -12,7 +12,7 @@ A flight booking web application for the "Tecnologie e Applicazioni Web" course 
 - **Containerization:** Docker (3 separate containers)
 
 ## Design Reference
-- **Figma:** Tripma Flight Booking Web App
+- **Figma:** SkyRoute Flight Booking Web App
 - https://www.figma.com/community/file/911320742349428744
 - Assets: `frontend/design/images/`
 - Mapping: `frontend/design/IMAGE-MAPPING.md`
@@ -403,7 +403,7 @@ flight-booking/
 // Otomatik oluşturulacak veriler
 {
   admin: {
-    email: 'admin@tripma.com',
+    email: 'admin@skyroute.com',
     password: 'admin123',  // hashed
     role: 'admin'
   },
@@ -444,7 +444,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/tripma
+      - MONGODB_URI=mongodb://mongodb:27017/skyroute
       - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb

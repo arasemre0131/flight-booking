@@ -35,7 +35,7 @@ Aircraft seat map with Economy/Business class toggle, interactive seat selection
 ### Visual Reference
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  ≡  Tripma              SFO → NRT    Feb 25|7:00AM    Mar 21|12:15PM   │
+│  ≡  SkyRoute              SFO → NRT    Feb 25|7:00AM    Mar 21|12:15PM   │
 │                         California    Tokyo    Departing     Arriving   │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                         │                                               │

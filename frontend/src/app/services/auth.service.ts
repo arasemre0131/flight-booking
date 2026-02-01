@@ -4,8 +4,8 @@ import { MOCK_USERS } from '../mock-data/users.data';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly USERS_KEY = 'tripma_users';
-  private readonly SESSION_KEY = 'tripma_session';
+  private readonly USERS_KEY = 'skyroute_users';
+  private readonly SESSION_KEY = 'skyroute_session';
 
   // Private signals for state
   private _isAuthenticated = signal(false);

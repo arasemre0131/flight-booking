@@ -1,4 +1,4 @@
-# Tripma - Flight Booking Application
+# SkyRoute - Flight Booking Application
 # TAW 2024/2025 - Tecnologie e Applicazioni Web
 # Ca' Foscari University Venice
 
@@ -27,7 +27,7 @@
 ## Test Accounts
 
 Admin:
-- Email: admin@tripma.com
+- Email: admin@skyroute.com
 - Password: admin123
 
 Passenger:

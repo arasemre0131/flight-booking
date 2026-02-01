@@ -22,7 +22,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built files from builder stage
-COPY --from=builder /app/dist/tripma/browser /usr/share/nginx/html
+COPY --from=builder /app/dist/skyroute/browser /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80

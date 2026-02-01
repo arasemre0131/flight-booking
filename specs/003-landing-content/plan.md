@@ -109,7 +109,7 @@ No violations. Feature follows standard Angular component patterns with static m
 │    - 3x destination-card (Maldives, Morocco, Mongolia)               │
 ├─────────────────────────────────────────────────────────────────────┤
 │  SECTION: Testimonials (new)                                          │
-│    - Title: "What Tripma users are saying"                           │
+│    - Title: "What SkyRoute users are saying"                           │
 │    - 3x testimonial-card (Yifei, Kaori, Anthony)                     │
 ├─────────────────────────────────────────────────────────────────────┤
 │                              FOOTER                                   │

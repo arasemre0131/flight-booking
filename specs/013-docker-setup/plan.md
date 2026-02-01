@@ -101,7 +101,7 @@ flight-booking/
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `MONGODB_URI` | `mongodb://mongodb:27017/tripma` | Database connection |
+| `MONGODB_URI` | `mongodb://mongodb:27017/skyroute` | Database connection |
 | `FRONTEND_PORT` | `4200` | Frontend exposed port |
 | `BACKEND_PORT` | `3000` | Backend exposed port |
 | `MONGODB_PORT` | `27017` | MongoDB exposed port |

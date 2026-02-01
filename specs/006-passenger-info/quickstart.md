@@ -144,7 +144,7 @@ http://localhost:4200/passenger-info
 
 ## Design Reference
 
-Figma: Tripma Flight Booking - Passenger Information page
+Figma: SkyRoute Flight Booking - Passenger Information page
 - Two-column layout: form (left), flight summary (right)
 - Required field indicators with asterisks
 - Error messages in red below fields

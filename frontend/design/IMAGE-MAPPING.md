@@ -1,4 +1,4 @@
-# Image Mapping - Tripma Flight Booking
+# Image Mapping - SkyRoute Flight Booking
 
 ## Directory Structure
 

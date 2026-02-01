@@ -216,7 +216,7 @@ Created on first server startup if no admin exists:
 
 ```typescript
 {
-  email: 'admin@tripma.com',
+  email: 'admin@skyroute.com',
   password: '<bcrypt hash of "admin123">',
   firstName: 'Admin',
   lastName: 'User',

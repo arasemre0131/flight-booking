@@ -5,7 +5,7 @@
 
 ## Summary
 
-Implement shared Header and Footer Angular components for the Tripma flight booking application. Header includes navigation links (Flights, Hotels, Packages), authentication buttons (Sign in/Sign up for guests, My trips/User avatar for logged-in users), and responsive mobile menu. Footer includes 4-column layout with company links that stacks vertically on mobile.
+Implement shared Header and Footer Angular components for the SkyRoute flight booking application. Header includes navigation links (Flights, Hotels, Packages), authentication buttons (Sign in/Sign up for guests, My trips/User avatar for logged-in users), and responsive mobile menu. Footer includes 4-column layout with company links that stacks vertically on mobile.
 
 ## Technical Context
 
