@@ -6,19 +6,17 @@ export type UserStatus = 'active' | 'inactive';
 export interface User {
   id: string;
   email: string;
-  password: string;
   firstName: string;
   lastName: string;
   role: UserRole;
   status: UserStatus;
-  createdAt: string;
   airlineId?: string;
+  mustChangePassword?: boolean;
 }
 
 export interface Session {
-  userId: string;
   token: string;
-  expiresAt: string;
+  user: User;
   rememberMe: boolean;
 }
 
@@ -45,4 +43,15 @@ export interface AuthResult {
   success: boolean;
   error?: string;
   user?: User;
+  mustChangePassword?: boolean;
+}
+
+// Backend API response types
+export interface AuthApiResponse {
+  token: string;
+  user: User;
+}
+
+export interface ApiError {
+  error: string;
 }

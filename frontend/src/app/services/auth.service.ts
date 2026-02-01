@@ -1,39 +1,33 @@
-import { Injectable, signal, computed } from '@angular/core';
-import { User, Session, AuthResult, RegisterData } from '../models/auth.model';
-import { MOCK_USERS } from '../mock-data/users.data';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { User, Session, AuthResult, RegisterData, AuthApiResponse } from '../models/auth.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly USERS_KEY = 'skyroute_users';
+  private readonly http = inject(HttpClient);
+  private readonly API_URL = environment.apiUrl;
   private readonly SESSION_KEY = 'skyroute_session';
 
   // Private signals for state
   private _isAuthenticated = signal(false);
   private _currentUser = signal<User | null>(null);
   private _isLoading = signal(false);
+  private _token = signal<string | null>(null);
 
   // Public readonly signals
   readonly isAuthenticated = this._isAuthenticated.asReadonly();
   readonly currentUser = this._currentUser.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
+  readonly token = this._token.asReadonly();
 
   // Computed signals for backwards compatibility
   readonly isLoggedIn$ = computed(() => this._isAuthenticated());
   readonly currentUser$ = computed(() => this._currentUser());
 
   constructor() {
-    this.initializeUsers();
     this.checkSession();
-  }
-
-  /**
-   * Initialize users in localStorage if not exists
-   */
-  private initializeUsers(): void {
-    const existingUsers = localStorage.getItem(this.USERS_KEY);
-    if (!existingUsers) {
-      localStorage.setItem(this.USERS_KEY, JSON.stringify(MOCK_USERS));
-    }
   }
 
   /**
@@ -51,25 +45,20 @@ export class AuthService {
     if (sessionData) {
       try {
         const session: Session = JSON.parse(sessionData);
-
-        // Check if session is expired
-        if (new Date(session.expiresAt) > new Date()) {
-          const users = this.getUsers();
-          const user = users.find(u => u.id === session.userId);
-          if (user) {
-            this._isAuthenticated.set(true);
-            this._currentUser.set(user);
-          } else {
-            this.clearSession();
-          }
-        } else {
-          // Session expired, clear it
-          this.clearSession();
-        }
+        this._isAuthenticated.set(true);
+        this._currentUser.set(session.user);
+        this._token.set(session.token);
       } catch {
         this.clearSession();
       }
     }
+  }
+
+  /**
+   * Get auth token for API requests
+   */
+  getToken(): string | null {
+    return this._token();
   }
 
   /**
@@ -78,36 +67,34 @@ export class AuthService {
   async login(email: string, password: string, rememberMe: boolean): Promise<AuthResult> {
     this._isLoading.set(true);
 
-    // Simulate network delay
-    await this.delay(500);
-
     try {
-      const users = this.getUsers();
-      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-
-      if (!user) {
-        this._isLoading.set(false);
-        return { success: false, error: 'Invalid email or password' };
-      }
-
-      if (user.password !== password) {
-        this._isLoading.set(false);
-        return { success: false, error: 'Invalid email or password' };
-      }
+      const response = await firstValueFrom(
+        this.http.post<AuthApiResponse>(`${this.API_URL}/auth/login`, { email, password })
+      );
 
       // Create session
-      const session = this.createSession(user.id, rememberMe);
+      const session: Session = {
+        token: response.token,
+        user: response.user,
+        rememberMe
+      };
       this.saveSession(session);
 
       // Update state
       this._isAuthenticated.set(true);
-      this._currentUser.set(user);
+      this._currentUser.set(response.user);
+      this._token.set(response.token);
       this._isLoading.set(false);
 
-      return { success: true, user };
+      return {
+        success: true,
+        user: response.user,
+        mustChangePassword: response.user.mustChangePassword
+      };
     } catch (error) {
       this._isLoading.set(false);
-      return { success: false, error: 'An unexpected error occurred' };
+      const message = this.getErrorMessage(error);
+      return { success: false, error: message };
     }
   }
 
@@ -117,58 +104,93 @@ export class AuthService {
   async register(data: RegisterData): Promise<AuthResult> {
     this._isLoading.set(true);
 
-    // Simulate network delay
-    await this.delay(500);
-
     try {
-      const users = this.getUsers();
+      const response = await firstValueFrom(
+        this.http.post<AuthApiResponse>(`${this.API_URL}/auth/register`, data)
+      );
 
-      // Check if email already exists
-      const existingUser = users.find(u => u.email.toLowerCase() === data.email.toLowerCase());
-      if (existingUser) {
-        this._isLoading.set(false);
-        return { success: false, error: 'Email already registered' };
-      }
-
-      // Create new user (default role is passenger for self-registration)
-      const newUser: User = {
-        id: `user-${Date.now()}`,
-        email: data.email.toLowerCase(),
-        password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        role: 'passenger',
-        status: 'active',
-        createdAt: new Date().toISOString()
+      // Create session (auto-login after registration)
+      const session: Session = {
+        token: response.token,
+        user: response.user,
+        rememberMe: true
       };
-
-      // Save user
-      users.push(newUser);
-      this.saveUsers(users);
-
-      // Auto-login after registration (with remember me = true)
-      const session = this.createSession(newUser.id, true);
       this.saveSession(session);
 
       // Update state
       this._isAuthenticated.set(true);
-      this._currentUser.set(newUser);
+      this._currentUser.set(response.user);
+      this._token.set(response.token);
       this._isLoading.set(false);
 
-      return { success: true, user: newUser };
+      return { success: true, user: response.user };
     } catch (error) {
       this._isLoading.set(false);
-      return { success: false, error: 'An unexpected error occurred' };
+      const message = this.getErrorMessage(error);
+      return { success: false, error: message };
+    }
+  }
+
+  /**
+   * Change password
+   */
+  async changePassword(currentPassword: string, newPassword: string): Promise<AuthResult> {
+    this._isLoading.set(true);
+
+    try {
+      await firstValueFrom(
+        this.http.put(`${this.API_URL}/auth/change-password`, {
+          currentPassword,
+          newPassword
+        }, {
+          headers: { Authorization: `Bearer ${this._token()}` }
+        })
+      );
+
+      // Update user state to clear mustChangePassword
+      const user = this._currentUser();
+      if (user) {
+        const updatedUser = { ...user, mustChangePassword: false };
+        this._currentUser.set(updatedUser);
+
+        // Update session
+        const sessionData = localStorage.getItem(this.SESSION_KEY) || sessionStorage.getItem(this.SESSION_KEY);
+        if (sessionData) {
+          const session: Session = JSON.parse(sessionData);
+          session.user = updatedUser;
+          this.saveSession(session);
+        }
+      }
+
+      this._isLoading.set(false);
+      return { success: true };
+    } catch (error) {
+      this._isLoading.set(false);
+      const message = this.getErrorMessage(error);
+      return { success: false, error: message };
     }
   }
 
   /**
    * Logout the current user
    */
-  logout(): void {
+  async logout(): Promise<void> {
+    try {
+      if (this._token()) {
+        await firstValueFrom(
+          this.http.post(`${this.API_URL}/auth/logout`, {}, {
+            headers: { Authorization: `Bearer ${this._token()}` }
+          })
+        );
+      }
+    } catch {
+      // Ignore errors, clear local session anyway
+    }
+
     this.clearSession();
     this._isAuthenticated.set(false);
     this._currentUser.set(null);
+    this._token.set(null);
   }
 
   /**
@@ -203,74 +225,18 @@ export class AuthService {
   }
 
   loginWithGoogle(): void {
-    // Mock social login
-    const mockUser: User = {
-      id: `user-google-${Date.now()}`,
-      email: 'google.user@gmail.com',
-      password: '',
-      firstName: 'Google',
-      lastName: 'User',
-      role: 'passenger',
-      status: 'active',
-      createdAt: new Date().toISOString()
-    };
-    this._isAuthenticated.set(true);
-    this._currentUser.set(mockUser);
+    console.warn('Social login not implemented with backend');
   }
 
   loginWithApple(): void {
-    const mockUser: User = {
-      id: `user-apple-${Date.now()}`,
-      email: 'apple.user@icloud.com',
-      password: '',
-      firstName: 'Apple',
-      lastName: 'User',
-      role: 'passenger',
-      status: 'active',
-      createdAt: new Date().toISOString()
-    };
-    this._isAuthenticated.set(true);
-    this._currentUser.set(mockUser);
+    console.warn('Social login not implemented with backend');
   }
 
   loginWithFacebook(): void {
-    const mockUser: User = {
-      id: `user-fb-${Date.now()}`,
-      email: 'fb.user@facebook.com',
-      password: '',
-      firstName: 'Facebook',
-      lastName: 'User',
-      role: 'passenger',
-      status: 'active',
-      createdAt: new Date().toISOString()
-    };
-    this._isAuthenticated.set(true);
-    this._currentUser.set(mockUser);
+    console.warn('Social login not implemented with backend');
   }
 
   // Private helpers
-  private getUsers(): User[] {
-    const data = localStorage.getItem(this.USERS_KEY);
-    return data ? JSON.parse(data) : [];
-  }
-
-  private saveUsers(users: User[]): void {
-    localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
-  }
-
-  private createSession(userId: string, rememberMe: boolean): Session {
-    const expiryDays = rememberMe ? 30 : 1;
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + expiryDays);
-
-    return {
-      userId,
-      token: crypto.randomUUID(),
-      expiresAt: expiresAt.toISOString(),
-      rememberMe
-    };
-  }
-
   private saveSession(session: Session): void {
     const sessionData = JSON.stringify(session);
     if (session.rememberMe) {
@@ -287,7 +253,10 @@ export class AuthService {
     sessionStorage.removeItem(this.SESSION_KEY);
   }
 
-  private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      return error.error?.error || error.message || 'An unexpected error occurred';
+    }
+    return 'An unexpected error occurred';
   }
 }

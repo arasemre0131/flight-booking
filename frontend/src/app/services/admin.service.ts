@@ -1,6 +1,8 @@
-// Admin Service - 012-admin-panel
+// Admin Service - 012-admin-panel (Backend Integration)
 
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { User } from '../models/auth.model';
 import {
   AirlineSummary,
@@ -10,30 +12,54 @@ import {
   PaginatedResult,
   UserFilters,
   BookingFilters,
-  DateRange,
   CreateUserData,
   UpdateUserData,
   UserRole
 } from '../models/admin.model';
-import {
-  ADMIN_MOCK_USERS,
-  ADMIN_MOCK_AIRLINES,
-  ADMIN_MOCK_BOOKINGS,
-  generatePlatformStats,
-  AdminUser
-} from '../mock-data/admin.data';
+import { environment } from '../../environments/environment';
 
-const USERS_KEY = 'skyroute_admin_users';
-const AIRLINES_KEY = 'skyroute_admin_airlines';
+// Backend response types
+export interface BackendUser {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: 'passenger' | 'airline' | 'admin';
+  status: 'active' | 'inactive';
+  airlineId?: string;
+  mustChangePassword: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InviteAirlineResponse {
+  message: string;
+  user: BackendUser;
+  airline: {
+    _id: string;
+    name: string;
+    code: string;
+  };
+  tempPassword: string;
+}
+
+// Extended user for admin panel
+export interface AdminUser extends User {
+  createdAt?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
+  private readonly http = inject(HttpClient);
+  private readonly API_URL = environment.apiUrl;
+
   // Private state
   private _users = signal<AdminUser[]>([]);
   private _airlines = signal<AirlineSummary[]>([]);
   private _bookings = signal<BookingSummary[]>([]);
   private _stats = signal<PlatformStats | null>(null);
   private _isLoading = signal(false);
+  private _error = signal<string | null>(null);
 
   // Public readonly signals
   readonly users = this._users.asReadonly();
@@ -41,44 +67,27 @@ export class AdminService {
   readonly bookings = this._bookings.asReadonly();
   readonly stats = this._stats.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
+  readonly error = this._error.asReadonly();
 
-  constructor() {
-    this.initializeData();
-  }
+  // ============================================================================
+  // Data Loading
+  // ============================================================================
 
-  private initializeData(): void {
-    // Load or initialize users
-    const storedUsers = localStorage.getItem(USERS_KEY);
-    if (storedUsers) {
-      this._users.set(JSON.parse(storedUsers));
-    } else {
-      this._users.set(ADMIN_MOCK_USERS);
-      this.saveUsers();
+  async loadUsers(): Promise<void> {
+    this._isLoading.set(true);
+    this._error.set(null);
+
+    try {
+      const users = await firstValueFrom(
+        this.http.get<BackendUser[]>(`${this.API_URL}/admin/users`)
+      );
+      this._users.set(users.map(u => this.convertUser(u)));
+    } catch (error) {
+      console.error('Failed to load users:', error);
+      this._error.set('Failed to load users');
+    } finally {
+      this._isLoading.set(false);
     }
-
-    // Load or initialize airlines
-    const storedAirlines = localStorage.getItem(AIRLINES_KEY);
-    if (storedAirlines) {
-      this._airlines.set(JSON.parse(storedAirlines));
-    } else {
-      this._airlines.set(ADMIN_MOCK_AIRLINES);
-      this.saveAirlines();
-    }
-
-    // Bookings are always from mock (no persistence needed for read-only)
-    this._bookings.set(ADMIN_MOCK_BOOKINGS);
-  }
-
-  private saveUsers(): void {
-    localStorage.setItem(USERS_KEY, JSON.stringify(this._users()));
-  }
-
-  private saveAirlines(): void {
-    localStorage.setItem(AIRLINES_KEY, JSON.stringify(this._airlines()));
-  }
-
-  private delay(ms: number = 300): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   // ============================================================================
@@ -86,8 +95,8 @@ export class AdminService {
   // ============================================================================
 
   async getUsers(filters: UserFilters, pagination: PaginationParams): Promise<PaginatedResult<User>> {
-    this._isLoading.set(true);
-    await this.delay();
+    // Load fresh data from backend
+    await this.loadUsers();
 
     let filtered = [...this._users()];
 
@@ -126,8 +135,6 @@ export class AdminService {
     const start = (pagination.page - 1) * pagination.pageSize;
     const items = filtered.slice(start, start + pagination.pageSize);
 
-    this._isLoading.set(false);
-
     return {
       items,
       total,
@@ -138,162 +145,132 @@ export class AdminService {
   }
 
   async getUserById(id: string): Promise<User | null> {
-    await this.delay(100);
     return this._users().find(u => u.id === id) || null;
   }
 
-  async createUser(data: CreateUserData): Promise<User> {
+  async deleteUser(id: string): Promise<void> {
     this._isLoading.set(true);
-    await this.delay();
+    this._error.set(null);
 
-    const newUser: AdminUser = {
-      id: `user-${Date.now()}`,
-      email: data.email,
-      password: data.tempPassword,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      role: data.role,
-      status: 'active',
-      airlineId: data.airlineId,
-      createdAt: new Date().toISOString()
-    };
-
-    this._users.update(users => [...users, newUser]);
-    this.saveUsers();
-    this._isLoading.set(false);
-
-    return newUser;
-  }
-
-  async updateUser(id: string, data: UpdateUserData): Promise<User> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    let updatedUser: AdminUser | null = null;
-
-    this._users.update(users =>
-      users.map(u => {
-        if (u.id === id) {
-          updatedUser = { ...u, ...data };
-          return updatedUser;
-        }
-        return u;
-      })
-    );
-
-    this.saveUsers();
-    this._isLoading.set(false);
-
-    if (!updatedUser) {
-      throw new Error('User not found');
+    try {
+      await firstValueFrom(
+        this.http.delete(`${this.API_URL}/admin/users/${id}`)
+      );
+      this._users.update(users => users.filter(u => u.id !== id));
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+      this._error.set('Failed to delete user');
+      throw error;
+    } finally {
+      this._isLoading.set(false);
     }
-
-    return updatedUser;
-  }
-
-  async changeUserRole(id: string, newRole: UserRole): Promise<User> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    let updatedUser: AdminUser | null = null;
-
-    this._users.update(users =>
-      users.map(u => {
-        if (u.id === id) {
-          updatedUser = { ...u, role: newRole };
-          // Clear airlineId if changing from airline role
-          if (newRole !== 'airline') {
-            updatedUser.airlineId = undefined;
-          }
-          return updatedUser;
-        }
-        return u;
-      })
-    );
-
-    this.saveUsers();
-    this._isLoading.set(false);
-
-    if (!updatedUser) {
-      throw new Error('User not found');
-    }
-
-    return updatedUser;
   }
 
   async deactivateUser(id: string): Promise<void> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    this._users.update(users =>
-      users.map(u => u.id === id ? { ...u, status: 'inactive' as const } : u)
-    );
-
-    // Clear user session from storage
-    this.terminateUserSession(id);
-
-    this.saveUsers();
-    this._isLoading.set(false);
+    // Backend doesn't have deactivate, use delete
+    await this.deleteUser(id);
   }
 
   async reactivateUser(id: string): Promise<void> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    this._users.update(users =>
-      users.map(u => u.id === id ? { ...u, status: 'active' as const } : u)
-    );
-
-    this.saveUsers();
-    this._isLoading.set(false);
-  }
-
-  private terminateUserSession(userId: string): void {
-    // Check localStorage session
-    const localSession = localStorage.getItem('skyroute_session');
-    if (localSession) {
-      const session = JSON.parse(localSession);
-      if (session.userId === userId) {
-        localStorage.removeItem('skyroute_session');
-      }
-    }
-
-    // Check sessionStorage session
-    const sessionSession = sessionStorage.getItem('skyroute_session');
-    if (sessionSession) {
-      const session = JSON.parse(sessionSession);
-      if (session.userId === userId) {
-        sessionStorage.removeItem('skyroute_session');
-      }
-    }
+    // Not implemented in backend
+    console.warn('Reactivate user not implemented in backend');
   }
 
   // ============================================================================
-  // Airline Management
+  // Airline Invitation
+  // ============================================================================
+
+  async inviteAirline(data: {
+    email: string;
+    companyName: string;
+    airlineCode: string;
+    firstName?: string;
+    lastName?: string;
+  }): Promise<InviteAirlineResponse> {
+    this._isLoading.set(true);
+    this._error.set(null);
+
+    try {
+      const response = await firstValueFrom(
+        this.http.post<InviteAirlineResponse>(`${this.API_URL}/admin/invite-airline`, data)
+      );
+
+      // Add new user to local state
+      const newUser = this.convertUser(response.user);
+      this._users.update(users => [...users, newUser]);
+
+      return response;
+    } catch (error: any) {
+      console.error('Failed to invite airline:', error);
+      const message = error.error?.error || 'Failed to invite airline';
+      this._error.set(message);
+      throw new Error(message);
+    } finally {
+      this._isLoading.set(false);
+    }
+  }
+
+  // Legacy method for compatibility
+  async createUser(data: CreateUserData): Promise<User> {
+    if (data.role === 'airline' && data.airlineId) {
+      const response = await this.inviteAirline({
+        email: data.email,
+        companyName: data.airlineId,
+        airlineCode: 'NEW',
+        firstName: data.firstName,
+        lastName: data.lastName
+      });
+      return this.convertUser(response.user);
+    }
+    throw new Error('Only airline users can be created via invitation');
+  }
+
+  async updateUser(id: string, data: UpdateUserData): Promise<User> {
+    // Backend doesn't support user updates currently
+    console.warn('Update user not fully implemented in backend');
+    const user = this._users().find(u => u.id === id);
+    if (!user) throw new Error('User not found');
+    return user;
+  }
+
+  async changeUserRole(id: string, newRole: UserRole): Promise<User> {
+    // Backend doesn't support role changes currently
+    console.warn('Change user role not implemented in backend');
+    const user = this._users().find(u => u.id === id);
+    if (!user) throw new Error('User not found');
+    return user;
+  }
+
+  // ============================================================================
+  // Airline Management (Mock - backend doesn't have these endpoints yet)
   // ============================================================================
 
   async getAirlines(pagination: PaginationParams): Promise<PaginatedResult<AirlineSummary>> {
-    this._isLoading.set(true);
-    await this.delay();
+    // Extract airlines from users
+    const airlineUsers = this._users().filter(u => u.role === 'airline');
+    const airlineIds = new Set(airlineUsers.map(u => u.airlineId).filter(Boolean));
 
-    let airlines = [...this._airlines()];
+    const airlines: AirlineSummary[] = Array.from(airlineIds).map(id => {
+      const operatorCount = airlineUsers.filter(u => u.airlineId === id).length;
+      return {
+        id: id!,
+        name: `Airline ${id?.substring(0, 8)}`,
+        code: 'XX',
+        status: 'active' as const,
+        operatorCount,
+        activeOperators: operatorCount,
+        routeCount: 0,
+        aircraftCount: 0,
+        flightCount: 0,
+        totalFlights: 0,
+        totalBookings: 0,
+        totalRevenue: 0
+      };
+    });
 
-    // Apply sorting
-    if (pagination.sortBy) {
-      airlines.sort((a, b) => {
-        const aVal = (a as any)[pagination.sortBy!];
-        const bVal = (b as any)[pagination.sortBy!];
-        const order = pagination.sortOrder === 'desc' ? -1 : 1;
-        return aVal < bVal ? -order : aVal > bVal ? order : 0;
-      });
-    }
-
-    // Apply pagination
     const total = airlines.length;
     const start = (pagination.page - 1) * pagination.pageSize;
     const items = airlines.slice(start, start + pagination.pageSize);
-
-    this._isLoading.set(false);
 
     return {
       items,
@@ -305,135 +282,42 @@ export class AdminService {
   }
 
   async getAirlineById(id: string): Promise<AirlineSummary | null> {
-    await this.delay(100);
     return this._airlines().find(a => a.id === id) || null;
   }
 
   async getAirlineOperators(airlineId: string): Promise<User[]> {
-    await this.delay(100);
     return this._users().filter(u => u.airlineId === airlineId);
   }
 
   async suspendAirline(id: string): Promise<void> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    this._airlines.update(airlines =>
-      airlines.map(a => a.id === id ? { ...a, status: 'suspended' as const } : a)
-    );
-
-    this.saveAirlines();
-    this._isLoading.set(false);
+    console.warn('Suspend airline not implemented in backend');
   }
 
   async resumeAirline(id: string): Promise<void> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    this._airlines.update(airlines =>
-      airlines.map(a => a.id === id ? { ...a, status: 'active' as const } : a)
-    );
-
-    this.saveAirlines();
-    this._isLoading.set(false);
+    console.warn('Resume airline not implemented in backend');
   }
 
   async assignUserToAirline(userId: string, airlineId: string): Promise<void> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    this._users.update(users =>
-      users.map(u => {
-        if (u.id === userId) {
-          return { ...u, role: 'airline' as const, airlineId };
-        }
-        return u;
-      })
-    );
-
-    // Update operator count
-    this._airlines.update(airlines =>
-      airlines.map(a => {
-        if (a.id === airlineId) {
-          return { ...a, operatorCount: a.operatorCount + 1 };
-        }
-        return a;
-      })
-    );
-
-    this.saveUsers();
-    this.saveAirlines();
-    this._isLoading.set(false);
+    console.warn('Assign user to airline not implemented in backend');
   }
 
   // ============================================================================
-  // Booking Overview
+  // Booking Overview (Mock - backend doesn't have admin booking endpoints)
   // ============================================================================
 
   async getBookings(filters: BookingFilters, pagination: PaginationParams): Promise<PaginatedResult<BookingSummary>> {
-    this._isLoading.set(true);
-    await this.delay();
-
-    let filtered = [...this._bookings()];
-
-    // Apply search filter
-    if (filters.search) {
-      const search = filters.search.toLowerCase();
-      filtered = filtered.filter(b =>
-        b.confirmationCode.toLowerCase().includes(search) ||
-        b.passengerEmail.toLowerCase().includes(search)
-      );
-    }
-
-    // Apply airline filter
-    if (filters.airlineId && filters.airlineId !== 'all') {
-      filtered = filtered.filter(b => b.airlineId === filters.airlineId);
-    }
-
-    // Apply status filter
-    if (filters.status && filters.status !== 'all') {
-      filtered = filtered.filter(b => b.status === filters.status);
-    }
-
-    // Apply date range filter
-    if (filters.dateFrom) {
-      const from = new Date(filters.dateFrom);
-      filtered = filtered.filter(b => new Date(b.departureDate) >= from);
-    }
-    if (filters.dateTo) {
-      const to = new Date(filters.dateTo);
-      filtered = filtered.filter(b => new Date(b.departureDate) <= to);
-    }
-
-    // Apply sorting
-    if (pagination.sortBy) {
-      filtered.sort((a, b) => {
-        const aVal = (a as any)[pagination.sortBy!];
-        const bVal = (b as any)[pagination.sortBy!];
-        const order = pagination.sortOrder === 'desc' ? -1 : 1;
-        return aVal < bVal ? -order : aVal > bVal ? order : 0;
-      });
-    }
-
-    // Apply pagination
-    const total = filtered.length;
-    const start = (pagination.page - 1) * pagination.pageSize;
-    const items = filtered.slice(start, start + pagination.pageSize);
-
-    this._isLoading.set(false);
-
+    // Return empty for now - would need backend endpoint
     return {
-      items,
-      total,
+      items: [],
+      total: 0,
       page: pagination.page,
       pageSize: pagination.pageSize,
-      totalPages: Math.ceil(total / pagination.pageSize)
+      totalPages: 0
     };
   }
 
   async getBookingById(id: string): Promise<BookingSummary | null> {
-    await this.delay(100);
-    return this._bookings().find(b => b.id === id) || null;
+    return null;
   }
 
   // ============================================================================
@@ -441,13 +325,38 @@ export class AdminService {
   // ============================================================================
 
   async getStats(dateRange: 'week' | 'month' | 'year' | 'all'): Promise<PlatformStats> {
-    this._isLoading.set(true);
-    await this.delay(500);
+    await this.loadUsers();
 
-    const stats = generatePlatformStats(this._users(), this._airlines(), this._bookings());
+    const users = this._users();
+    const passengers = users.filter(u => u.role === 'passenger').length;
+    const airlines = users.filter(u => u.role === 'airline').length;
+    const admins = users.filter(u => u.role === 'admin').length;
+    const totalAirlines = new Set(users.filter(u => u.airlineId).map(u => u.airlineId)).size;
+
+    const stats: PlatformStats = {
+      totalUsers: users.length,
+      usersByRole: {
+        passenger: passengers,
+        airline: airlines,
+        admin: admins
+      },
+      totalAirlines,
+      activeAirlines: totalAirlines,
+      totalBookings: 0,
+      totalRevenue: 0,
+      bookingsByStatus: {
+        pending: 0,
+        confirmed: 0,
+        cancelled: 0,
+        completed: 0
+      },
+      userGrowth: [],
+      bookingVolume: [],
+      revenueOverTime: [],
+      topAirlines: []
+    };
+
     this._stats.set(stats);
-    this._isLoading.set(false);
-
     return stats;
   }
 
@@ -455,10 +364,7 @@ export class AdminService {
     const stats = this._stats();
     if (!stats) return;
 
-    // Build CSV content
     const lines: string[] = [];
-
-    // Summary section
     lines.push('Platform Statistics Summary');
     lines.push(`Date Range,${dateRange}`);
     lines.push('');
@@ -470,19 +376,10 @@ export class AdminService {
     lines.push(`Total Airlines,${stats.totalAirlines}`);
     lines.push(`Total Bookings,${stats.totalBookings}`);
     lines.push(`Total Revenue,${stats.totalRevenue.toFixed(2)}`);
-    lines.push('');
-
-    // Top airlines
-    lines.push('Top Airlines by Revenue');
-    lines.push('Airline,Bookings,Revenue');
-    stats.topAirlines.forEach(a => {
-      lines.push(`${a.name},${a.bookingCount},${a.revenue.toFixed(2)}`);
-    });
 
     const csv = lines.join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
 
-    // Trigger download
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -498,14 +395,28 @@ export class AdminService {
   // ============================================================================
 
   async refreshData(): Promise<void> {
-    this._isLoading.set(true);
-    await this.delay(200);
-    this.initializeData();
-    this._isLoading.set(false);
+    await this.loadUsers();
   }
 
-  // Get all airlines for dropdowns
   getAllAirlines(): AirlineSummary[] {
     return this._airlines();
+  }
+
+  // ============================================================================
+  // Converters
+  // ============================================================================
+
+  private convertUser(u: BackendUser): AdminUser {
+    return {
+      id: u._id,
+      email: u.email,
+      firstName: u.firstName,
+      lastName: u.lastName,
+      role: u.role,
+      status: u.status,
+      airlineId: u.airlineId,
+      mustChangePassword: u.mustChangePassword,
+      createdAt: u.createdAt
+    };
   }
 }

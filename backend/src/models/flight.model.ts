@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export type FlightStatus = 'scheduled' | 'departed' | 'arrived' | 'cancelled';
+export type FlightStatus = 'scheduled' | 'boarding' | 'departed' | 'arrived' | 'cancelled';
 
 export interface IFlight extends Document {
   _id: mongoose.Types.ObjectId;
@@ -49,7 +49,7 @@ const flightSchema = new Schema<IFlight>(
     },
     status: {
       type: String,
-      enum: ['scheduled', 'departed', 'arrived', 'cancelled'],
+      enum: ['scheduled', 'boarding', 'departed', 'arrived', 'cancelled'],
       default: 'scheduled',
     },
   },

@@ -1,6 +1,12 @@
 import { User } from '../models/auth.model';
 
-export const MOCK_USERS: User[] = [
+// Mock user type with password for testing (not exposed to UI)
+interface MockUser extends User {
+  password: string;
+  createdAt?: string;
+}
+
+export const MOCK_USERS: MockUser[] = [
   {
     id: 'user-001',
     email: 'test@example.com',

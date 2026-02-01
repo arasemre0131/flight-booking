@@ -1,21 +1,90 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map, catchError, of, firstValueFrom } from 'rxjs';
 import { Flight } from '../models/flight.model';
 import { SearchCriteria } from '../models/search-criteria.model';
 import { Passenger } from '../models/passenger.model';
 import { BookingDraft, EmergencyContact, generateBookingId, calculateTotalPrice } from '../models/booking.model';
 import { SeatAssignment, calculateSeatFees } from '../models/seat.model';
 import { PaymentDetails, BillingAddress, PriceSummary } from '../models/payment.model';
+import { environment } from '../../environments/environment';
 
 const STORAGE_KEY = 'skyroute_booking_draft';
+
+// Backend API response types
+export interface FlightSearchResult {
+  type: 'direct' | 'connecting';
+  pricePerPerson: number;
+  totalDuration: number;
+  stops: number;
+  layover?: { airport: string; city: string; duration: number };
+  flights: BackendFlight[];
+}
+
+export interface BackendFlight {
+  flightId: string;
+  flightNumber: string;
+  airline: { id: string; name: string; code: string };
+  origin: { code: string; city: string };
+  destination: { code: string; city: string };
+  departureTime: string;
+  arrivalTime: string;
+  duration: number;
+  price: number;
+  aircraft: { model: string; seatConfig: string };
+  availableSeats: { economy: number; business: number };
+}
+
+export interface SearchResponse {
+  results: FlightSearchResult[];
+  searchParams: any;
+}
+
+export interface SeatInfo {
+  seatNumber: string;
+  row: number;
+  column: string;
+  class: 'economy' | 'business';
+  isAvailable: boolean;
+  hasExtraLegroom: boolean;
+  price: number;
+}
+
+export interface SeatMapResponse {
+  flightId: string;
+  aircraft: { model: string; seatConfig: string };
+  seats: SeatInfo[];
+}
+
+export interface BackendBooking {
+  id: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
+  totalPrice: number;
+  passengers: number;
+  expiresIn?: string;
+  flightId?: string;
+  ticketClass?: string;
+}
+
+export interface ConfirmBookingResponse {
+  message: string;
+  booking: BackendBooking;
+  tickets: string[];
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
+  private readonly http = inject(HttpClient);
+  private readonly API_URL = environment.apiUrl;
+
   private _bookingDraft = signal<BookingDraft | null>(null);
+  private _backendBookingId = signal<string | null>(null);
 
   // Public readonly signals
   readonly bookingDraft = this._bookingDraft.asReadonly();
+  readonly backendBookingId = this._backendBookingId.asReadonly();
 
   readonly selectedFlight = computed(() => this._bookingDraft()?.selectedFlight ?? null);
   readonly returnFlight = computed(() => this._bookingDraft()?.returnFlight ?? null);
@@ -38,6 +107,171 @@ export class BookingService {
     this.restoreFromStorage();
   }
 
+  // ============================================
+  // Backend API Methods
+  // ============================================
+
+  /**
+   * Search flights from backend
+   */
+  searchFlights(
+    origin: string,
+    destination: string,
+    date: string,
+    passengers: number = 1,
+    ticketClass: 'economy' | 'business' = 'economy'
+  ): Observable<FlightSearchResult[]> {
+    const params = new URLSearchParams({
+      origin,
+      destination,
+      date,
+      passengers: passengers.toString(),
+      class: ticketClass
+    });
+
+    return this.http.get<SearchResponse>(`${this.API_URL}/flights/search?${params}`).pipe(
+      map(response => response.results),
+      catchError(error => {
+        console.error('Flight search error:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Get seat map for a flight
+   */
+  getFlightSeats(flightId: string): Observable<SeatMapResponse | null> {
+    return this.http.get<SeatMapResponse>(`${this.API_URL}/flights/${flightId}/seats`).pipe(
+      catchError(error => {
+        console.error('Get seats error:', error);
+        return of(null);
+      })
+    );
+  }
+
+  /**
+   * Create booking on backend
+   */
+  async createBackendBooking(
+    flightId: string,
+    passengers: Array<{
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone: string;
+      dateOfBirth: string;
+      passportNumber: string;
+    }>,
+    ticketClass: 'economy' | 'business' = 'economy',
+    extras: { additionalBaggage?: number; extraLegroom?: boolean } = {}
+  ): Promise<BackendBooking | null> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ message: string; booking: BackendBooking }>(
+          `${this.API_URL}/bookings`,
+          { flightId, passengers, ticketClass, extras }
+        )
+      );
+      this._backendBookingId.set(response.booking.id);
+      return response.booking;
+    } catch (error) {
+      console.error('Create booking error:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Select seats on backend
+   */
+  async selectSeatsOnBackend(
+    bookingId: string,
+    assignments: Array<{ passengerIndex: number; seatNumber: string }>
+  ): Promise<BackendBooking | null> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<{ message: string; booking: BackendBooking }>(
+          `${this.API_URL}/bookings/${bookingId}/seats`,
+          { assignments }
+        )
+      );
+      return response.booking;
+    } catch (error) {
+      console.error('Select seats error:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Confirm booking with payment
+   */
+  async confirmBookingWithPayment(
+    bookingId: string,
+    cardDetails: {
+      number: string;
+      expiry: string;
+      cvv: string;
+      name: string;
+    }
+  ): Promise<ConfirmBookingResponse | null> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<ConfirmBookingResponse>(
+          `${this.API_URL}/bookings/${bookingId}/confirm`,
+          { paymentMethod: 'card', cardDetails }
+        )
+      );
+      return response;
+    } catch (error) {
+      console.error('Confirm booking error:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Cancel a booking
+   */
+  async cancelBooking(bookingId: string): Promise<boolean> {
+    try {
+      await firstValueFrom(
+        this.http.delete(`${this.API_URL}/bookings/${bookingId}`)
+      );
+      return true;
+    } catch (error) {
+      console.error('Cancel booking error:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get user's bookings
+   */
+  getUserBookings(): Observable<any[]> {
+    return this.http.get<{ bookings: any[] }>(`${this.API_URL}/bookings`).pipe(
+      map(response => response.bookings),
+      catchError(error => {
+        console.error('Get bookings error:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Get booking details
+   */
+  getBookingDetails(bookingId: string): Observable<any | null> {
+    return this.http.get<any>(`${this.API_URL}/bookings/${bookingId}`).pipe(
+      catchError(error => {
+        console.error('Get booking details error:', error);
+        return of(null);
+      })
+    );
+  }
+
+  // ============================================
+  // Frontend Draft Management (unchanged)
+  // ============================================
+
   // Initialize booking with selected flight
   initializeBooking(
     selectedFlight: Flight,
@@ -56,6 +290,7 @@ export class BookingService {
     };
 
     this._bookingDraft.set(draft);
+    this._backendBookingId.set(null);
     this.saveToStorage();
   }
 
@@ -170,6 +405,7 @@ export class BookingService {
   // Clear booking
   clearBooking(): void {
     this._bookingDraft.set(null);
+    this._backendBookingId.set(null);
     this.clearStorage();
   }
 
@@ -210,5 +446,42 @@ export class BookingService {
     } catch (e) {
       console.warn('Failed to clear booking from session storage:', e);
     }
+  }
+
+  // ============================================
+  // Helper: Convert backend flight to frontend format
+  // ============================================
+
+  convertBackendFlightToFrontend(result: FlightSearchResult): Flight {
+    const flight = result.flights[0];
+    const formatTime = (dateStr: string) => {
+      const d = new Date(dateStr);
+      return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    };
+
+    const formatDuration = (minutes: number) => {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      return `${h}h ${m}m`;
+    };
+
+    return {
+      id: flight.flightId,
+      airline: {
+        code: flight.airline.code,
+        name: flight.airline.name
+      },
+      departureTime: formatTime(flight.departureTime),
+      arrivalTime: formatTime(result.flights[result.flights.length - 1].arrivalTime),
+      departureAirport: flight.origin.code,
+      arrivalAirport: result.flights[result.flights.length - 1].destination.code,
+      duration: formatDuration(result.totalDuration),
+      stops: result.stops,
+      layovers: result.layover ? [{
+        airport: result.layover.airport,
+        duration: formatDuration(result.layover.duration)
+      }] : undefined,
+      price: result.pricePerPerson
+    };
   }
 }

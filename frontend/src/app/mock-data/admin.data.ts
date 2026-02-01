@@ -7,10 +7,16 @@ import { AirlineSummary, BookingSummary, PlatformStats, UserStatus } from '../mo
 export interface AdminUser extends User {
   status: UserStatus;
   airlineId?: string;
+  createdAt?: string;
+}
+
+// Mock user type with password (not exposed to UI)
+interface MockAdminUser extends AdminUser {
+  password: string;
 }
 
 // Generate 35 mock users for pagination testing
-export const ADMIN_MOCK_USERS: AdminUser[] = [
+export const ADMIN_MOCK_USERS: MockAdminUser[] = [
   // Existing users with status
   {
     id: 'user-001',

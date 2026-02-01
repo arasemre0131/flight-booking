@@ -4,6 +4,7 @@ import { requireRole } from '../middleware/role.middleware';
 import * as routeService from '../services/route.service';
 import * as aircraftService from '../services/aircraft.service';
 import * as flightService from '../services/flight.service';
+import * as statsService from '../services/stats.service';
 import { User } from '../models/user.model';
 
 const router = Router();
@@ -244,6 +245,20 @@ router.delete('/flights/:id', async (req: AuthRequest, res: Response) => {
     res.json({ message: 'Flight cancelled successfully', flight });
   } catch (error) {
     res.status(400).json({ error: 'Failed to cancel flight' });
+  }
+});
+
+// ============ STATISTICS ============
+
+// GET /api/airlines/stats
+router.get('/stats', async (req: AuthRequest, res: Response) => {
+  try {
+    const airlineId = await getAirlineId(req);
+    const stats = await statsService.getAirlineStats(airlineId);
+    res.json(stats);
+  } catch (error) {
+    console.error('Stats error:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
   }
 });
 
