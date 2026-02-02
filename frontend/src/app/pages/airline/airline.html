@@ -1,0 +1,17 @@
+<div class="airline-dashboard">
+  <app-airline-sidebar />
+
+  <main class="main-content">
+    <header class="dashboard-header">
+      <h1>Airline Dashboard</h1>
+      <div class="user-info">
+        <span>{{ airlineName }}</span>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <router-outlet />
+    </div>
+  </main>
+</div>

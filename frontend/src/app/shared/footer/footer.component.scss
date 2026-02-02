@@ -1,0 +1,90 @@
+// Footer Component Styles
+
+$primary: #605DEC;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+$bg-white: #FFFFFF;
+$mobile: 768px;
+
+.footer {
+  background: $bg-white;
+  padding: 64px 104px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+  @media (max-width: $mobile) {
+    padding: 40px 20px;
+  }
+}
+
+.footer-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  gap: 64px;
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+
+// Logo
+.footer-brand {
+  flex-shrink: 0;
+
+  .logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+// Columns Container
+.footer-columns {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  gap: 32px;
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    gap: 32px;
+  }
+}
+
+// Individual Column
+.footer-column {
+  min-width: 120px;
+}
+
+.column-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: $text-dark;
+  margin-bottom: 16px;
+}
+
+.column-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  li a {
+    font-size: 14px;
+    color: $text-gray;
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}

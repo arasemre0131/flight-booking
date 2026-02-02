@@ -1,0 +1,126 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>{{ formTitle }}</h2>
+      <button class="close-btn" (click)="onCancel()">×</button>
+    </div>
+
+    @if (successInfo()) {
+      <!-- Success State -->
+      <div class="success-state">
+        <div class="success-icon">✓</div>
+        <h3>Airline Invited Successfully!</h3>
+        <p>An operator account has been created. Share these credentials with the airline:</p>
+
+        <div class="credentials-box">
+          <div class="credential">
+            <span class="label">Email:</span>
+            <span class="value">{{ email() }}</span>
+          </div>
+          <div class="credential">
+            <span class="label">Temporary Password:</span>
+            <span class="value password">{{ successInfo()?.tempPassword }}</span>
+            <button type="button" class="btn-copy" [class.copied]="copied()" (click)="copyPassword()">
+              {{ copied() ? 'Copied!' : 'Copy' }}
+            </button>
+          </div>
+        </div>
+
+        <p class="note">The operator will be prompted to change their password on first login.</p>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-primary" (click)="onDone()">Done</button>
+        </div>
+      </div>
+    } @else {
+      <!-- Form State -->
+      <form (ngSubmit)="onSubmit()">
+        @if (error()) {
+          <div class="error-message">{{ error() }}</div>
+        }
+
+        @if (!isEditMode) {
+          <div class="form-group">
+            <label for="companyName">Airline Name *</label>
+            <input
+              type="text"
+              id="companyName"
+              [ngModel]="companyName()"
+              (ngModelChange)="companyName.set($event)"
+              name="companyName"
+              placeholder="e.g. Turkish Airlines"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="airlineCode">Airline Code *</label>
+            <input
+              type="text"
+              id="airlineCode"
+              [ngModel]="airlineCode()"
+              (ngModelChange)="airlineCode.set($event)"
+              name="airlineCode"
+              placeholder="e.g. TK (2-3 characters)"
+              maxlength="3"
+              style="text-transform: uppercase;"
+            />
+            <span class="hint">IATA airline code (2-3 letters)</span>
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="email">Operator Email *</label>
+          <input
+            type="email"
+            id="email"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
+            name="email"
+            placeholder="operator@airline.com"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              [ngModel]="firstName()"
+              (ngModelChange)="firstName.set($event)"
+              name="firstName"
+              placeholder="Optional"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              [ngModel]="lastName()"
+              (ngModelChange)="lastName.set($event)"
+              name="lastName"
+              placeholder="Optional"
+            />
+          </div>
+        </div>
+
+        @if (!isEditMode) {
+          <p class="info-text">
+            A temporary password will be generated automatically. The operator will be required to change it on first login.
+          </p>
+        }
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="onCancel()">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary" [disabled]="isLoading()">
+            {{ isLoading() ? 'Sending...' : (isEditMode ? 'Save Changes' : 'Send Invitation') }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

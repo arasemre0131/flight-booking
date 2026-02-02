@@ -1,0 +1,119 @@
+<div class="payment-form">
+  <h3 class="form-title">Payment Information</h3>
+
+  <form [formGroup]="form">
+    <!-- Card Number -->
+    <div class="form-group">
+      <label for="cardNumber">Card Number</label>
+      <div class="input-with-icon">
+        <input
+          type="text"
+          id="cardNumber"
+          inputmode="numeric"
+          autocomplete="cc-number"
+          placeholder="1234 5678 9012 3456"
+          [value]="displayCardNumber()"
+          (input)="onCardNumberInput($event)"
+          (blur)="onCardNumberBlur()"
+          (focus)="onCardNumberFocus()"
+          [class.error]="shouldShowError('cardNumber')"
+        />
+        @if (cardType()) {
+          <span [class]="getCardTypeIcon()"></span>
+        }
+      </div>
+      @if (shouldShowError('cardNumber')) {
+        <span class="error-message">{{ getErrorMessage('cardNumber') }}</span>
+      }
+    </div>
+
+    <!-- Expiry and CVV Row -->
+    <div class="form-row">
+      <!-- Expiry Date -->
+      <div class="form-group form-group--half">
+        <label>Expiration Date</label>
+        <div class="expiry-inputs">
+          <input
+            type="text"
+            id="expiryMonth"
+            inputmode="numeric"
+            autocomplete="cc-exp-month"
+            placeholder="MM"
+            maxlength="2"
+            formControlName="expiryMonth"
+            (input)="onExpiryMonthInput($event)"
+            (blur)="markTouched('expiryMonth')"
+            [class.error]="shouldShowError('expiryMonth') || hasExpiryError()"
+          />
+          <span class="expiry-separator">/</span>
+          <input
+            type="text"
+            id="expiryYear"
+            inputmode="numeric"
+            autocomplete="cc-exp-year"
+            placeholder="YY"
+            maxlength="2"
+            formControlName="expiryYear"
+            (input)="onExpiryYearInput($event)"
+            (blur)="markTouched('expiryYear')"
+            [class.error]="shouldShowError('expiryYear') || hasExpiryError()"
+          />
+        </div>
+        @if (shouldShowError('expiryMonth') || shouldShowError('expiryYear')) {
+          <span class="error-message">{{ getErrorMessage('expiryMonth') || getErrorMessage('expiryYear') }}</span>
+        }
+        @if (hasExpiryError()) {
+          <span class="error-message">Card has expired</span>
+        }
+      </div>
+
+      <!-- CVV -->
+      <div class="form-group form-group--half">
+        <label for="cvv">CVV</label>
+        <input
+          type="text"
+          id="cvv"
+          inputmode="numeric"
+          autocomplete="cc-csc"
+          [placeholder]="cardType() === 'amex' ? '1234' : '123'"
+          [maxlength]="cardType() === 'amex' ? 4 : 3"
+          formControlName="cvv"
+          (input)="onCvvInput($event)"
+          (blur)="markTouched('cvv')"
+          [class.error]="shouldShowError('cvv')"
+        />
+        @if (shouldShowError('cvv')) {
+          <span class="error-message">{{ getErrorMessage('cvv') }}</span>
+        }
+      </div>
+    </div>
+
+    <!-- Cardholder Name -->
+    <div class="form-group">
+      <label for="cardholderName">Cardholder Name</label>
+      <input
+        type="text"
+        id="cardholderName"
+        autocomplete="cc-name"
+        placeholder="Name as it appears on card"
+        formControlName="cardholderName"
+        (input)="onCardholderNameInput()"
+        (blur)="markTouched('cardholderName')"
+        [class.error]="shouldShowError('cardholderName')"
+      />
+      @if (shouldShowError('cardholderName')) {
+        <span class="error-message">{{ getErrorMessage('cardholderName') }}</span>
+      }
+    </div>
+  </form>
+
+  <!-- Accepted Cards -->
+  <div class="accepted-cards">
+    <span class="accepted-cards__label">We accept:</span>
+    <div class="accepted-cards__icons">
+      <span class="card-icon card-icon--visa card-icon--small"></span>
+      <span class="card-icon card-icon--mastercard card-icon--small"></span>
+      <span class="card-icon card-icon--amex card-icon--small"></span>
+    </div>
+  </div>
+</div>

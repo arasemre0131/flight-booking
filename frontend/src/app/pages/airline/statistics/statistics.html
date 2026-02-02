@@ -1,0 +1,118 @@
+<div class="statistics-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Statistics</h1>
+      <p>View airline performance metrics</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="exportCSV()" [disabled]="!stats()">
+        Export CSV
+      </button>
+    </div>
+  </div>
+
+  <div class="date-range-selector">
+    <select [ngModel]="dateRangeOption()" (ngModelChange)="dateRangeOption.set($event); onDateRangeChange()">
+      <option value="week">Last 7 Days</option>
+      <option value="month">Last 30 Days</option>
+      <option value="year">Last Year</option>
+      <option value="custom">Custom Range</option>
+    </select>
+
+    @if (dateRangeOption() === 'custom') {
+      <div class="custom-range">
+        <input
+          type="date"
+          [ngModel]="customStart()"
+          (ngModelChange)="customStart.set($event)"
+        />
+        <span>to</span>
+        <input
+          type="date"
+          [ngModel]="customEnd()"
+          (ngModelChange)="customEnd.set($event)"
+        />
+        <button class="btn-apply" (click)="applyCustomRange()">Apply</button>
+      </div>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">Loading statistics...</div>
+  } @else if (stats()) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">{{ stats()!.summary.totalFlights }}</div>
+        <div class="stat-label">Total Flights</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats()!.summary.totalPassengers | number }}</div>
+        <div class="stat-label">Total Passengers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ formatCurrency(stats()!.summary.totalRevenue) }}</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats()!.summary.averageLoadFactor }}%</div>
+        <div class="stat-label">Avg. Load Factor</div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <canvas baseChart
+          [data]="barChartData()"
+          [options]="barChartOptions"
+          type="bar">
+        </canvas>
+      </div>
+
+      <div class="chart-card">
+        <canvas baseChart
+          [data]="lineChartData()"
+          [options]="lineChartOptions"
+          type="line">
+        </canvas>
+      </div>
+
+      <div class="chart-card small">
+        <canvas baseChart
+          [data]="pieChartData()"
+          [options]="pieChartOptions"
+          type="pie">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Top Routes</h2>
+      <div class="top-routes">
+        @for (route of stats()!.topRoutes; track route.routeId) {
+          <div class="route-item">
+            <span class="route-name">{{ route.origin }} → {{ route.destination }}</span>
+            <span class="route-stats">{{ route.passengerCount | number }} passengers</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Flight Status</h2>
+      <div class="status-breakdown">
+        <div class="status-item scheduled">
+          <span class="count">{{ stats()!.flightsByStatus.scheduled }}</span>
+          <span class="label">Scheduled</span>
+        </div>
+        <div class="status-item completed">
+          <span class="count">{{ stats()!.flightsByStatus.completed }}</span>
+          <span class="label">Completed</span>
+        </div>
+        <div class="status-item cancelled">
+          <span class="count">{{ stats()!.flightsByStatus.cancelled }}</span>
+          <span class="label">Cancelled</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

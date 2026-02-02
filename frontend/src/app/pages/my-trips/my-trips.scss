@@ -1,0 +1,153 @@
+.my-trips-page {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 2rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #1a1a2e;
+  margin-bottom: 2rem;
+}
+
+.loading, .error-message {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.error-message {
+  color: #dc3545;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+
+  p {
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+
+  .book-btn {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: #605dec;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+
+    &:hover {
+      background: #4a4ac4;
+    }
+  }
+}
+
+.trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.trip-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .flight-number {
+    font-weight: 600;
+    color: #605dec;
+  }
+
+  .status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: capitalize;
+
+    &.status-confirmed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    &.status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    &.status-cancelled {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  }
+}
+
+.trip-route {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 1rem;
+
+  .arrow {
+    margin: 0 0.5rem;
+    color: #999;
+  }
+}
+
+.trip-details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+
+  .detail {
+    .label {
+      display: block;
+      font-size: 0.75rem;
+      color: #999;
+      margin-bottom: 0.25rem;
+    }
+
+    .value {
+      font-weight: 500;
+      color: #333;
+    }
+  }
+}
+
+.trip-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+
+  .price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #605dec;
+  }
+}
+
+@media (max-width: 600px) {
+  .trip-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

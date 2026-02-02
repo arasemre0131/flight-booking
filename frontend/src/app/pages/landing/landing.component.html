@@ -1,0 +1,73 @@
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">It's more than just a trip</h1>
+      <app-search-form />
+    </div>
+  </div>
+</section>
+
+<section class="flight-deals">
+  <div class="container">
+    <h2 class="section-title">
+      Find your next adventure with these <span class="highlight">flight deals</span>
+    </h2>
+    <div class="card-grid">
+      @for (deal of flightDeals; track deal.id) {
+        <app-destination-card
+          [image]="deal.image"
+          [title]="deal.landmark"
+          [subtitle]="deal.city"
+          [price]="deal.price"
+          [tripType]="deal.tripType" />
+      }
+    </div>
+  </div>
+</section>
+
+<section class="featured-destination">
+  <div class="container">
+    <div class="featured-card">
+      <img [src]="featuredDestination.image" [alt]="featuredDestination.city + ', ' + featuredDestination.country" loading="lazy" />
+      <div class="featured-content">
+        <h2 class="featured-title">{{ featuredDestination.city }}, {{ featuredDestination.country }}</h2>
+        <p class="featured-description">{{ featuredDestination.description }}</p>
+        <p class="featured-price">${{ featuredDestination.price }} · Round trip</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="places-to-stay">
+  <div class="container">
+    <h2 class="section-title">
+      Explore unique <span class="highlight">places to stay</span>
+    </h2>
+    <div class="card-grid">
+      @for (place of placesToStay; track place.id) {
+        <app-destination-card
+          [image]="place.image"
+          [title]="place.title"
+          subtitle="" />
+      }
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="container">
+    <h2 class="section-title">
+      What <span class="highlight">SkyRoute users</span> are saying
+    </h2>
+    <div class="card-grid">
+      @for (testimonial of testimonials; track testimonial.id) {
+        <app-testimonial-card
+          [avatar]="testimonial.avatar"
+          [name]="testimonial.name"
+          [location]="testimonial.location"
+          [rating]="testimonial.rating"
+          [review]="testimonial.review" />
+      }
+    </div>
+  </div>
+</section>

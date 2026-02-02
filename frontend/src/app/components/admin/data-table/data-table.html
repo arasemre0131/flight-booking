@@ -1,0 +1,62 @@
+<div class="data-table-wrapper">
+  @if (loading) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+    </div>
+  }
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        @for (column of columns; track column.key) {
+          <th
+            [class.sortable]="column.sortable"
+            [style.width]="column.width"
+            (click)="onHeaderClick(column)"
+          >
+            <div class="th-content">
+              {{ column.label }}
+              @if (column.sortable) {
+                <span class="sort-icon" [class.active]="sortColumn() === column.key">
+                  @if (sortColumn() === column.key) {
+                    {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                  } @else {
+                    ↕
+                  }
+                </span>
+              }
+            </div>
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @if (data.length === 0 && !loading) {
+        <tr class="empty-row">
+          <td [attr.colspan]="columns.length">
+            <div class="empty-state">
+              <p class="empty-message">{{ emptyMessage }}</p>
+              <p class="empty-hint">{{ emptyHint }}</p>
+            </div>
+          </td>
+        </tr>
+      } @else {
+        @for (row of data; track row.id || $index) {
+          <tr (click)="onRowClick(row)" class="data-row">
+            @for (column of columns; track column.key) {
+              <td>
+                @if (column.type === 'status' || column.type === 'badge') {
+                  <span class="status-badge" [class]="getStatusClass(row[column.key])">
+                    {{ getCellValue(row, column) }}
+                  </span>
+                } @else {
+                  {{ getCellValue(row, column) }}
+                }
+              </td>
+            }
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

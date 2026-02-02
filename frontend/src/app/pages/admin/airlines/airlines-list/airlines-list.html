@@ -1,0 +1,82 @@
+<div class="airlines-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Airlines</h1>
+      <p>Manage airline partners ({{ totalAirlines() }} total)</p>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search by name or code..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+        (keyup.enter)="onSearch()"
+      />
+      <button class="btn-search" (click)="onSearch()">Search</button>
+    </div>
+
+    <div class="filter-group">
+      <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); onFilterChange()">
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="suspended">Suspended</option>
+      </select>
+    </div>
+  </div>
+
+  <app-data-table
+    [columns]="columns"
+    [data]="airlines()"
+    [loading]="isLoading()"
+    emptyMessage="No airlines found"
+    emptyHint="Try adjusting your search or filters"
+    (sort)="onSort($event)"
+    (rowClick)="onRowClick($event)"
+  />
+
+  @if (totalPages() > 1) {
+    <div class="pagination">
+      <button
+        class="page-btn"
+        [disabled]="currentPage() === 1"
+        (click)="onPageChange(currentPage() - 1)"
+      >
+        Previous
+      </button>
+
+      @for (page of getPageNumbers(); track page) {
+        <button
+          class="page-btn"
+          [class.active]="page === currentPage()"
+          (click)="onPageChange(page)"
+        >
+          {{ page }}
+        </button>
+      }
+
+      <button
+        class="page-btn"
+        [disabled]="currentPage() === totalPages()"
+        (click)="onPageChange(currentPage() + 1)"
+      >
+        Next
+      </button>
+    </div>
+  }
+</div>
+
+<!-- Suspend/Resume Confirmation -->
+<app-confirmation-modal
+  [isOpen]="showSuspendConfirm()"
+  [title]="getSuspendAction() === 'suspend' ? 'Suspend Airline' : 'Resume Airline'"
+  [message]="getSuspendAction() === 'suspend'
+    ? 'Suspending ' + (suspendAirline()?.name || '') + ' will prevent new bookings. Existing bookings remain valid. Are you sure?'
+    : 'Resuming ' + (suspendAirline()?.name || '') + ' will allow new bookings again. Are you sure?'"
+  [confirmText]="getSuspendAction() === 'suspend' ? 'Suspend' : 'Resume'"
+  [variant]="getSuspendAction() === 'suspend' ? 'warning' : 'default'"
+  (confirm)="confirmSuspend()"
+  (cancel)="cancelSuspend()"
+/>

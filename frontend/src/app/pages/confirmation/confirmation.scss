@@ -1,0 +1,434 @@
+$primary: #605DEC;
+$primary-dark: #4B48D9;
+$success: #10B981;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+$text-light: #7C8DB0;
+$border-color: #E9E8FC;
+$background-light: #FAFAFC;
+
+.confirmation-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+// Success Header
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: $success;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin: 0 auto 20px;
+
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.page-title {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: $text-dark;
+}
+
+.confirmation-number {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: $primary;
+  letter-spacing: 1px;
+}
+
+.success-message {
+  margin: 0;
+  font-size: 16px;
+  color: $text-gray;
+}
+
+// Email Notice
+.email-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: rgba($success, 0.1);
+  border-radius: 8px;
+  margin-bottom: 32px;
+  font-size: 14px;
+  color: $text-dark;
+
+  .email-icon {
+    font-size: 18px;
+  }
+
+  strong {
+    color: $primary;
+  }
+}
+
+// Sections
+.section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-dark;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $border-color;
+}
+
+// Flight Details
+.flight-card {
+  background: $background-light;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.flight-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: $primary;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.flight-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.flight-endpoint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .airport-code {
+    font-size: 24px;
+    font-weight: 700;
+    color: $text-dark;
+  }
+
+  .time {
+    font-size: 14px;
+    color: $text-gray;
+  }
+}
+
+.flight-arrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding: 0 20px;
+
+  .line {
+    flex: 1;
+    height: 1px;
+    background: $border-color;
+  }
+
+  .duration {
+    font-size: 12px;
+    color: $text-light;
+    white-space: nowrap;
+  }
+}
+
+.flight-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  color: $text-gray;
+
+  .airline {
+    font-weight: 500;
+    color: $text-dark;
+  }
+}
+
+// Passengers
+.passenger-list {
+  background: $background-light;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.passenger-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.passenger-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .passenger-number {
+    font-size: 14px;
+    color: $text-light;
+    min-width: 24px;
+  }
+
+  .passenger-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: $text-dark;
+  }
+}
+
+.seat-info {
+  .seat-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    font-size: 13px;
+    color: $text-gray;
+  }
+}
+
+// Payment Summary
+.price-breakdown {
+  background: $background-light;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 15px;
+
+  .label {
+    color: $text-gray;
+  }
+
+  .value {
+    color: $text-dark;
+    font-weight: 500;
+  }
+
+  &.total {
+    padding-top: 16px;
+    margin-top: 8px;
+    border-top: 1px solid $border-color;
+
+    .label,
+    .value {
+      font-size: 18px;
+      font-weight: 700;
+      color: $text-dark;
+    }
+
+    .value {
+      color: $primary;
+    }
+  }
+}
+
+.card-used {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: $text-gray;
+}
+
+// Actions
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid $border-color;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &--primary {
+    background: $primary;
+    color: white;
+
+    &:hover {
+      background: $primary-dark;
+    }
+  }
+
+  &--secondary {
+    background: white;
+    color: $text-dark;
+    border: 1px solid $border-color;
+
+    &:hover {
+      background: $background-light;
+    }
+  }
+
+  .btn-icon {
+    font-size: 18px;
+  }
+}
+
+// No Booking State
+.no-booking {
+  text-align: center;
+  padding: 80px 24px;
+
+  .no-booking-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    color: $text-dark;
+  }
+
+  p {
+    margin: 0 0 32px 0;
+    font-size: 16px;
+    color: $text-gray;
+  }
+}
+
+// Print Styles
+@media print {
+  .confirmation-page {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .actions,
+  .btn {
+    display: none !important;
+  }
+
+  .email-notice {
+    background: none;
+    border: 1px solid #ddd;
+  }
+
+  .flight-card,
+  .passenger-list,
+  .price-breakdown {
+    background: none;
+    border: 1px solid #ddd;
+  }
+
+  .success-icon {
+    background: #10B981 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .confirmation-page {
+    padding: 24px 16px;
+  }
+
+  .page-title {
+    font-size: 26px;
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .flight-route {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .flight-arrow {
+    order: 3;
+    width: 100%;
+    padding: 8px 0;
+  }
+
+  .flight-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .passenger-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .confirmation-number {
+    font-size: 16px;
+  }
+
+  .flight-endpoint .airport-code {
+    font-size: 20px;
+  }
+}

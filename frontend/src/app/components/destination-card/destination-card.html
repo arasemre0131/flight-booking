@@ -1,0 +1,23 @@
+@if (isCompactMode()) {
+  <!-- Compact mode for sidebar: image background with overlay -->
+  <div class="destination-card compact">
+    <img [src]="displayImage()" [alt]="displayCity()" loading="lazy" />
+    <div class="overlay">
+      <span class="city">{{ displayCity() }}</span>
+      <span class="price">${{ displayPrice() }}</span>
+    </div>
+  </div>
+} @else {
+  <!-- Landing page mode: full card with separate image and content -->
+  <div class="destination-card">
+    <div class="image-container">
+      <img [src]="image()" [alt]="title() + ', ' + subtitle()" loading="lazy" />
+    </div>
+    <div class="content">
+      <h3 class="title">{{ title() }}, {{ subtitle() }}</h3>
+      @if (price() !== null) {
+        <p class="price-text">${{ price() }} · {{ tripType() }}</p>
+      }
+    </div>
+  </div>
+}

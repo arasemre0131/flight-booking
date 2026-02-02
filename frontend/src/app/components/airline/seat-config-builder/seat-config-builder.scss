@@ -1,0 +1,144 @@
+.seat-config-builder {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+
+  &.disabled {
+    opacity: 0.6;
+  }
+}
+
+.config-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  .class-icon {
+    font-size: 1.25rem;
+  }
+
+  .class-label {
+    font-weight: 600;
+    color: #1a1a2e;
+    flex: 1;
+  }
+
+  .toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .toggle-label {
+      font-size: 0.85rem;
+      color: #666;
+    }
+  }
+}
+
+.config-inputs {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.input-group {
+  flex: 1;
+
+  label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: #605dec;
+    }
+  }
+}
+
+.total-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #605dec;
+  min-width: 80px;
+
+  .total-label {
+    font-size: 0.7rem;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .total-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #605dec;
+  }
+
+  .total-unit {
+    font-size: 0.7rem;
+    color: #666;
+  }
+}
+
+.seat-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+.preview-row {
+  display: flex;
+  gap: 4px;
+}
+
+.preview-seat {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: #ccc;
+
+  &.class-economy {
+    background: #60a5fa;
+  }
+
+  &.class-business {
+    background: #f59e0b;
+  }
+
+  &.class-first {
+    background: #a855f7;
+  }
+}
+
+.preview-ellipsis {
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 0.25rem;
+}

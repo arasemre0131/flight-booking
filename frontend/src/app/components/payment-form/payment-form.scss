@@ -1,0 +1,224 @@
+$primary: #605DEC;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+$border-color: #E9E8FC;
+$error-color: #EB5757;
+$background-light: #FAFAFC;
+
+.payment-form {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form-title {
+  margin: 0 0 24px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-dark;
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  &--half {
+    flex: 1;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $text-dark;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    color: $text-dark;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #A1A0B2;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.1);
+    }
+
+    &.error {
+      border-color: $error-color;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba($error-color, 0.1);
+      }
+    }
+  }
+}
+
+.input-with-icon {
+  position: relative;
+
+  input {
+    padding-right: 56px;
+  }
+
+  .card-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.expiry-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    width: 60px;
+    text-align: center;
+  }
+}
+
+.expiry-separator {
+  color: $text-gray;
+  font-size: 18px;
+}
+
+.error-message {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: $error-color;
+}
+
+// Card type icons
+.card-icon {
+  display: inline-block;
+  width: 36px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 4px;
+
+  &--small {
+    width: 32px;
+    height: 20px;
+  }
+
+  &--visa {
+    background: linear-gradient(135deg, #1A1F71 0%, #2E4AA6 100%);
+    position: relative;
+
+    &::after {
+      content: 'VISA';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 8px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &--mastercard {
+    background: linear-gradient(135deg, #EB001B 0%, #F79E1B 100%);
+    position: relative;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &::before {
+      background: #EB001B;
+      left: 8px;
+    }
+
+    &::after {
+      background: #F79E1B;
+      right: 8px;
+    }
+  }
+
+  &--amex {
+    background: linear-gradient(135deg, #006FCF 0%, #00A1E4 100%);
+    position: relative;
+
+    &::after {
+      content: 'AMEX';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 7px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.3px;
+    }
+  }
+}
+
+.accepted-cards {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid $border-color;
+
+  &__label {
+    font-size: 12px;
+    color: $text-gray;
+  }
+
+  &__icons {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .payment-form {
+    padding: 16px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-group--half {
+    flex: none;
+  }
+
+  .expiry-inputs input {
+    width: 50px;
+  }
+}

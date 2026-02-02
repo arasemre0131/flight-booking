@@ -1,0 +1,147 @@
+<div class="flights-list-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Flights</h1>
+      <p>View and manage scheduled flights</p>
+    </div>
+    <div class="header-actions">
+      <div class="view-toggle">
+        <button
+          class="toggle-btn"
+          [class.active]="viewMode() === 'list'"
+          (click)="viewMode.set('list')"
+        >
+          List
+        </button>
+        <button
+          class="toggle-btn"
+          [class.active]="viewMode() === 'calendar'"
+          (click)="viewMode.set('calendar')"
+        >
+          Calendar
+        </button>
+      </div>
+      <a routerLink="/airline/flights/new" class="btn-primary">
+        + Schedule Flight
+      </a>
+    </div>
+  </div>
+
+  @if (viewMode() === 'calendar') {
+    <div class="calendar-container">
+      <app-flights-calendar (dateSelected)="onDateSelected($event)" />
+    </div>
+  }
+
+  <div class="filters">
+    @if (selectedDate()) {
+      <div class="active-filter">
+        <span>Date: {{ selectedDate() | date:'mediumDate' }}</span>
+        <button class="clear-btn" (click)="clearDateFilter()">×</button>
+      </div>
+    }
+
+    <select [(ngModel)]="selectedRoute" class="filter-select">
+      <option value="">All Routes</option>
+      @for (route of routes(); track route.id) {
+        <option [value]="route.id">{{ route.originAirport }} → {{ route.destinationAirport }}</option>
+      }
+    </select>
+
+    <select [(ngModel)]="selectedStatus" class="filter-select">
+      <option value="">All Statuses</option>
+      @for (status of statuses; track status) {
+        <option [value]="status">{{ status | titlecase }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="flights-table-container">
+    @if (flights().length === 0) {
+      <div class="empty-state">
+        @if (selectedDate() || selectedRoute() || selectedStatus()) {
+          <p>No flights match your filters.</p>
+          <button class="btn-secondary" (click)="clearDateFilter(); selectedRoute.set(''); selectedStatus.set('')">
+            Clear Filters
+          </button>
+        } @else {
+          <p>No flights scheduled yet.</p>
+          <a routerLink="/airline/flights/new" class="btn-primary">Schedule your first flight</a>
+        }
+      </div>
+    } @else {
+      <table class="flights-table">
+        <thead>
+          <tr>
+            <th>Flight #</th>
+            <th>Route</th>
+            <th>Aircraft</th>
+            <th>Departure</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Seats</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (flight of flights(); track flight.id) {
+            <tr>
+              <td class="flight-number">{{ flight.flightNumber }}</td>
+              <td>{{ getRouteName(flight.routeId) }}</td>
+              <td class="aircraft">{{ getAircraftName(flight.aircraftId) }}</td>
+              <td>{{ formatDate(flight.departureTime) }}</td>
+              <td>{{ formatDuration(flight.durationMinutes) }}</td>
+              <td>
+                @if (canChangeStatus(flight)) {
+                  <div class="status-with-actions">
+                    <span class="status-badge" [class]="getStatusClass(flight.status)">
+                      {{ flight.status }}
+                    </span>
+                    @for (nextStatus of getNextStatuses(flight.status); track nextStatus) {
+                      <button
+                        class="status-change-btn"
+                        (click)="changeStatus(flight, nextStatus)"
+                        [title]="'Change to ' + nextStatus"
+                      >
+                        → {{ nextStatus | titlecase }}
+                      </button>
+                    }
+                  </div>
+                } @else {
+                  <span class="status-badge" [class]="getStatusClass(flight.status)">
+                    {{ flight.status }}
+                  </span>
+                }
+              </td>
+              <td class="seats">
+                <span class="seats-available">{{ getTotalSeats(flight.aircraftId) - flight.bookedSeats }}</span>
+                <span class="seats-total">/{{ getTotalSeats(flight.aircraftId) }}</span>
+              </td>
+              <td class="actions">
+                @if (flight.status === 'scheduled') {
+                  <a [routerLink]="['/airline/flights', flight.id, 'edit']" class="btn-icon" title="Edit">
+                    Edit
+                  </a>
+                  <button class="btn-icon cancel" (click)="openCancelModal(flight)" title="Cancel Flight">
+                    Cancel
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+@if (showCancelModal()) {
+  <app-confirmation-dialog
+    title="Cancel Flight"
+    [message]="'Are you sure you want to cancel flight ' + flightToCancel()?.flightNumber + '? This action cannot be undone.'"
+    confirmText="Cancel Flight"
+    cancelText="Keep Flight"
+    (confirm)="confirmCancel()"
+    (cancel)="closeCancelModal()"
+  />
+}

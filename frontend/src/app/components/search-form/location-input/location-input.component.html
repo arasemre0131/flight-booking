@@ -1,0 +1,47 @@
+<div class="location-input">
+  <label class="label">{{ label() }}</label>
+  <div class="input-wrapper">
+    <input
+      type="text"
+      class="input"
+      [placeholder]="placeholder()"
+      [value]="query()"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keydown)="onKeydown($event)"
+      autocomplete="off"
+      role="combobox"
+      aria-autocomplete="list"
+      [attr.aria-expanded]="isOpen()"
+      aria-haspopup="listbox" />
+
+    @if (query() && !isLoading()) {
+      <button type="button" class="clear-btn" (click)="clear()" aria-label="Clear">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    }
+
+    @if (isLoading()) {
+      <div class="loading-spinner"></div>
+    }
+  </div>
+
+  @if (isOpen() && suggestions().length > 0) {
+    <ul class="suggestions" role="listbox">
+      @for (airport of suggestions(); track airport.code; let i = $index) {
+        <li
+          class="suggestion-item"
+          [class.highlighted]="highlightedIndex() === i"
+          (click)="selectAirport(airport)"
+          role="option"
+          [attr.aria-selected]="highlightedIndex() === i">
+          <span class="city">{{ airport.city }} ({{ airport.code }})</span>
+          <span class="airport-name">{{ airport.name }}</span>
+        </li>
+      }
+    </ul>
+  }
+</div>

@@ -1,0 +1,81 @@
+<div class="seat-map-container">
+  <div class="aircraft-header">
+    <span class="aircraft-type">{{ seatMap().aircraftType }}</span>
+  </div>
+
+  <div class="seat-rows">
+    @for (row of seatMap().rows; track row.number; let i = $index) {
+      <!-- Section headers -->
+      @if (i === 0 || seatMap().rows[i - 1].type !== row.type) {
+        <div class="section-header" [class]="row.type">
+          @switch (row.type) {
+            @case ('first') {
+              <span class="section-label">First Class</span>
+              <span class="section-tag">Premium</span>
+            }
+            @case ('business') {
+              <span class="section-label">Business Class</span>
+            }
+            @case ('economy') {
+              <span class="section-label">Economy Class</span>
+            }
+            @case ('exit') {
+              <span class="section-label">Exit Row</span>
+              <span class="section-tag">Extra Legroom</span>
+            }
+          }
+        </div>
+        <!-- Column labels for this section -->
+        <div class="column-labels" [class.first-labels]="row.type === 'first'" [class.business-labels]="row.type === 'business'">
+          @if (row.type === 'first') {
+            <span class="column-label">A</span>
+            <span class="column-spacer"></span>
+            <span class="column-label">B</span>
+          } @else if (row.type === 'business') {
+            <span class="column-label">A</span>
+            <span class="column-label">B</span>
+            <span class="column-spacer"></span>
+            <span class="column-label">C</span>
+            <span class="column-label">D</span>
+          } @else {
+            <span class="column-label">A</span>
+            <span class="column-label">B</span>
+            <span class="column-label">C</span>
+            <span class="column-spacer"></span>
+            <span class="column-label">D</span>
+            <span class="column-label">E</span>
+            <span class="column-label">F</span>
+          }
+        </div>
+      }
+
+      <div class="seat-row"
+           [class.first]="row.type === 'first'"
+           [class.business]="row.type === 'business'"
+           [class.exit]="row.type === 'exit'">
+        <span class="row-number">{{ row.number }}</span>
+        <div class="seats"
+             [class.first-layout]="row.type === 'first'"
+             [class.business-layout]="row.type === 'business'">
+          @for (item of row.seats; track $index) {
+            @if (isSeat(item)) {
+              <button
+                type="button"
+                [class]="getSeatClasses(item)"
+                [disabled]="item.status === 'occupied'"
+                [title]="getAssignedPassenger(item) || item.id"
+                (click)="onSeatClick(item)">
+                <span class="seat-label">{{ item.letter }}</span>
+                @if (item.upgradePrice > 0 && getSeatStatus(item) !== 'selected') {
+                  <span class="seat-price">+${{ item.upgradePrice }}</span>
+                }
+              </button>
+            } @else {
+              <div class="aisle"></div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

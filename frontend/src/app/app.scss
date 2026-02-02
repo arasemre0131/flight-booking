@@ -1,0 +1,12 @@
+// App Root Styles
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 72px; // Header height for sticky header offset
+}

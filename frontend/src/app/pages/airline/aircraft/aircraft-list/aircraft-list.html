@@ -1,0 +1,84 @@
+<div class="aircraft-list-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Aircraft</h1>
+      <p>Manage your airline's aircraft fleet</p>
+    </div>
+    <a routerLink="/airline/aircraft/new" class="btn-primary">
+      + Add Aircraft
+    </a>
+  </div>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search by registration or model..."
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+      />
+    </div>
+  </div>
+
+  <div class="aircraft-table-container">
+    @if (filteredAircraft().length === 0) {
+      <div class="empty-state">
+        <p>No aircraft found.</p>
+        @if (searchTerm()) {
+          <button class="btn-secondary" (click)="searchTerm.set('')">Clear search</button>
+        } @else {
+          <a routerLink="/airline/aircraft/new" class="btn-primary">Register your first aircraft</a>
+        }
+      </div>
+    } @else {
+      <table class="aircraft-table">
+        <thead>
+          <tr>
+            <th>Registration</th>
+            <th>Model</th>
+            <th>Total Seats</th>
+            <th>Seat Breakdown</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (aircraft of filteredAircraft(); track aircraft.id) {
+            <tr [class.inactive]="!aircraft.isActive">
+              <td class="registration">{{ aircraft.registration }}</td>
+              <td>{{ aircraft.model }}</td>
+              <td class="seats">{{ aircraft.totalSeats }}</td>
+              <td class="breakdown">{{ getSeatBreakdown(aircraft) }}</td>
+              <td>
+                <span class="status-badge" [class.active]="aircraft.isActive" [class.inactive]="!aircraft.isActive">
+                  {{ aircraft.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="actions">
+                <a [routerLink]="['/airline/aircraft', aircraft.id, 'edit']" class="btn-icon" title="Edit">
+                  Edit
+                </a>
+                <button
+                  class="btn-icon"
+                  (click)="confirmToggleStatus(aircraft)"
+                  [title]="aircraft.isActive ? 'Deactivate' : 'Activate'"
+                >
+                  {{ aircraft.isActive ? 'Deactivate' : 'Activate' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+@if (showConfirmDialog()) {
+  <app-confirmation-dialog
+    title="Confirm Action"
+    [message]="getConfirmMessage()"
+    (confirm)="toggleStatus()"
+    (cancel)="cancelToggle()"
+  />
+}

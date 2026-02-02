@@ -1,0 +1,82 @@
+<div class="routes-list-page">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Routes</h1>
+      <p>Manage your airline's flight routes</p>
+    </div>
+    <a routerLink="/airline/routes/new" class="btn-primary">
+      + Add Route
+    </a>
+  </div>
+
+  <div class="filters-bar">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search by flight number or airport..."
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+      />
+    </div>
+  </div>
+
+  <div class="routes-table-container">
+    @if (filteredRoutes().length === 0) {
+      <div class="empty-state">
+        <p>No routes found.</p>
+        @if (searchTerm()) {
+          <button class="btn-secondary" (click)="searchTerm.set('')">Clear search</button>
+        } @else {
+          <a routerLink="/airline/routes/new" class="btn-primary">Create your first route</a>
+        }
+      </div>
+    } @else {
+      <table class="routes-table">
+        <thead>
+          <tr>
+            <th>Flight #</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (route of filteredRoutes(); track route.id) {
+            <tr [class.inactive]="!route.isActive">
+              <td class="flight-number">{{ route.flightNumberPrefix }}</td>
+              <td>{{ route.originAirport }}</td>
+              <td>{{ route.destinationAirport }}</td>
+              <td>
+                <span class="status-badge" [class.active]="route.isActive" [class.inactive]="!route.isActive">
+                  {{ route.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="actions">
+                <a [routerLink]="['/airline/routes', route.id, 'edit']" class="btn-icon" title="Edit">
+                  Edit
+                </a>
+                <button
+                  class="btn-icon"
+                  (click)="confirmToggleStatus(route)"
+                  [title]="route.isActive ? 'Deactivate' : 'Activate'"
+                >
+                  {{ route.isActive ? 'Deactivate' : 'Activate' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+@if (showConfirmDialog()) {
+  <app-confirmation-dialog
+    title="Confirm Action"
+    [message]="getConfirmMessage()"
+    (confirm)="toggleStatus()"
+    (cancel)="cancelToggle()"
+  />
+}

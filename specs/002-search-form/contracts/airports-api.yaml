@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Airports API
+  description: API for airport search autocomplete in flight booking
+  version: 1.0.0
+
+paths:
+  /api/airports:
+    get:
+      summary: Search airports by query
+      description: Returns airports matching the search query (min 2 characters)
+      operationId: searchAirports
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Search query (city name, airport name, or IATA code)
+          schema:
+            type: string
+            minLength: 2
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of results
+          schema:
+            type: integer
+            default: 10
+            maximum: 50
+      responses:
+        '200':
+          description: Successful response with matching airports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  airports:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Airport'
+              example:
+                airports:
+                  - code: "IST"
+                    name: "Istanbul Airport"
+                    city: "Istanbul"
+                    country: "Turkey"
+                  - code: "SAW"
+                    name: "Sabiha Gokcen International"
+                    city: "Istanbul"
+                    country: "Turkey"
+        '400':
+          description: Invalid request (query too short)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/airports/{code}:
+    get:
+      summary: Get airport by IATA code
+      operationId: getAirportByCode
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: IATA airport code
+          schema:
+            type: string
+            pattern: '^[A-Z]{3}$'
+      responses:
+        '200':
+          description: Airport details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Airport'
+        '404':
+          description: Airport not found
+
+components:
+  schemas:
+    Airport:
+      type: object
+      required:
+        - code
+        - name
+        - city
+        - country
+      properties:
+        code:
+          type: string
+          description: IATA airport code
+          example: "IST"
+          pattern: '^[A-Z]{3}$'
+        name:
+          type: string
+          description: Airport name
+          example: "Istanbul Airport"
+        city:
+          type: string
+          description: City name
+          example: "Istanbul"
+        country:
+          type: string
+          description: Country name
+          example: "Turkey"
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Query must be at least 2 characters"
+        code:
+          type: string
+          example: "INVALID_QUERY"

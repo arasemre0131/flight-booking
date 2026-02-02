@@ -1,0 +1,87 @@
+<div class="flight-summary">
+  <h3 class="summary-title">Flight Summary</h3>
+
+  <!-- Outbound Flight -->
+  <div class="flight-section">
+    <div class="flight-header">
+      <span class="flight-label">Departing</span>
+    </div>
+
+    <div class="flight-details">
+      <div class="airline-info">
+        @if (selectedFlight().airline.logo) {
+          <img [src]="selectedFlight().airline.logo" [alt]="selectedFlight().airline.name" class="airline-logo" />
+        }
+        <span class="airline-name">{{ selectedFlight().airline.name }}</span>
+      </div>
+
+      <div class="route-info">
+        <div class="route-airports">
+          <span class="airport-code">{{ selectedFlight().departureAirport }}</span>
+          <span class="route-arrow">→</span>
+          <span class="airport-code">{{ selectedFlight().arrivalAirport }}</span>
+        </div>
+        <div class="route-times">
+          <span class="time">{{ formatTime(selectedFlight().departureTime) }}</span>
+          <span class="duration">{{ selectedFlight().duration }}</span>
+          <span class="time">{{ formatTime(selectedFlight().arrivalTime) }}</span>
+        </div>
+        <div class="stops-info">{{ outboundStops() }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Return Flight (if round-trip) -->
+  @if (isRoundTrip() && returnFlight()) {
+    <div class="flight-section">
+      <div class="flight-header">
+        <span class="flight-label">Returning</span>
+      </div>
+
+      <div class="flight-details">
+        <div class="airline-info">
+          @if (returnFlight()!.airline.logo) {
+            <img [src]="returnFlight()!.airline.logo" [alt]="returnFlight()!.airline.name" class="airline-logo" />
+          }
+          <span class="airline-name">{{ returnFlight()!.airline.name }}</span>
+        </div>
+
+        <div class="route-info">
+          <div class="route-airports">
+            <span class="airport-code">{{ returnFlight()!.departureAirport }}</span>
+            <span class="route-arrow">→</span>
+            <span class="airport-code">{{ returnFlight()!.arrivalAirport }}</span>
+          </div>
+          <div class="route-times">
+            <span class="time">{{ formatTime(returnFlight()!.departureTime) }}</span>
+            <span class="duration">{{ returnFlight()!.duration }}</span>
+            <span class="time">{{ formatTime(returnFlight()!.arrivalTime) }}</span>
+          </div>
+          <div class="stops-info">{{ returnStops() }}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Price Breakdown -->
+  <div class="price-section">
+    <div class="price-row">
+      <span class="price-label">Passengers</span>
+      <span class="price-value">{{ passengerCount() }}</span>
+    </div>
+    <div class="price-row">
+      <span class="price-label">Price per person</span>
+      <span class="price-value">{{ formatPrice(pricePerPerson()) }}</span>
+    </div>
+    @if (seatFees() > 0) {
+      <div class="price-row seat-fees">
+        <span class="price-label">Seat upgrades</span>
+        <span class="price-value">{{ formatPrice(seatFees()) }}</span>
+      </div>
+    }
+    <div class="price-row price-total">
+      <span class="price-label">Total</span>
+      <span class="price-value">{{ formatPrice(grandTotal()) }}</span>
+    </div>
+  </div>
+</div>

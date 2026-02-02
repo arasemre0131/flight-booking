@@ -1,0 +1,32 @@
+<div class="user-menu">
+  <button class="user-button" (click)="toggle()">
+    <span class="avatar">{{ authService.getUserInitials() }}</span>
+    <span class="user-name">{{ authService.getUserDisplayName() }}</span>
+    <span class="chevron" [class.open]="isOpen()">&#9662;</span>
+  </button>
+
+  @if (isOpen()) {
+    <div class="dropdown">
+      <div class="dropdown-header">
+        <span class="avatar-large">{{ authService.getUserInitials() }}</span>
+        <div class="user-info">
+          <span class="name">{{ authService.getUserDisplayName() }}</span>
+          @if (authService.currentUser(); as user) {
+            <span class="email">{{ user.email }}</span>
+          }
+        </div>
+      </div>
+      <div class="dropdown-divider"></div>
+      <a routerLink="/my-trips" class="dropdown-item" (click)="isOpen.set(false)">
+        My Trips
+      </a>
+      <a routerLink="/settings" class="dropdown-item" (click)="isOpen.set(false)">
+        Settings
+      </a>
+      <div class="dropdown-divider"></div>
+      <button class="dropdown-item logout" (click)="logout()">
+        Sign out
+      </button>
+    </div>
+  }
+</div>

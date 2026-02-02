@@ -1,0 +1,19 @@
+<div class="testimonial-card">
+  <p class="review">"{{ review() }}"</p>
+
+  <div class="rating">
+    @for (star of stars; track $index) {
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 1L12.39 6.26L18 7.27L14 11.14L14.76 17L10 14.27L5.24 17L6 11.14L2 7.27L7.61 6.26L10 1Z" fill="#605DEC"/>
+      </svg>
+    }
+  </div>
+
+  <div class="author">
+    <img [src]="avatar()" [alt]="name()" class="avatar" loading="lazy" />
+    <div class="author-info">
+      <span class="name">{{ name() }}</span>
+      <span class="location">{{ location() }}</span>
+    </div>
+  </div>
+</div>

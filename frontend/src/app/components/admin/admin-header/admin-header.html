@@ -1,0 +1,15 @@
+<header class="admin-header">
+  <div class="header-title">
+    <h1>Admin Panel</h1>
+  </div>
+
+  <div class="header-actions">
+    <div class="user-info">
+      <div class="user-avatar">{{ userInitials }}</div>
+      <span class="user-name">{{ userName }}</span>
+    </div>
+    <button class="btn-logout" (click)="logout()">
+      Logout
+    </button>
+  </div>
+</header>

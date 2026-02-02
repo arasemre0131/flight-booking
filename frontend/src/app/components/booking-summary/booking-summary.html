@@ -1,0 +1,109 @@
+<div class="booking-summary">
+  <h3 class="summary-title">Booking Summary</h3>
+
+  <!-- Flight Details Section -->
+  <div class="summary-section">
+    <div class="section-header">
+      <h4 class="section-title">Flight Details</h4>
+    </div>
+
+    @if (selectedFlight(); as flight) {
+      <!-- Outbound Flight -->
+      <div class="flight-info">
+        <div class="flight-route">
+          <span class="airport-code">{{ flight.departureAirport }}</span>
+          <span class="route-arrow">→</span>
+          <span class="airport-code">{{ flight.arrivalAirport }}</span>
+        </div>
+        <div class="flight-details">
+          <span class="airline">{{ flight.airline.name }}</span>
+          <span class="separator">•</span>
+          <span class="time">{{ formatTime(flight.departureTime) }} - {{ formatTime(flight.arrivalTime) }}</span>
+        </div>
+        <div class="flight-meta">
+          <span class="duration">{{ formatDuration(flight.duration) }}</span>
+          <span class="stops">{{ outboundStops() }}</span>
+        </div>
+      </div>
+
+      <!-- Return Flight (if round trip) -->
+      @if (isRoundTrip() && returnFlight(); as rFlight) {
+        <div class="flight-info flight-info--return">
+          <div class="flight-route">
+            <span class="airport-code">{{ rFlight.departureAirport }}</span>
+            <span class="route-arrow">→</span>
+            <span class="airport-code">{{ rFlight.arrivalAirport }}</span>
+          </div>
+          <div class="flight-details">
+            <span class="airline">{{ rFlight.airline.name }}</span>
+            <span class="separator">•</span>
+            <span class="time">{{ formatTime(rFlight.departureTime) }} - {{ formatTime(rFlight.arrivalTime) }}</span>
+          </div>
+          <div class="flight-meta">
+            <span class="duration">{{ formatDuration(rFlight.duration) }}</span>
+            <span class="stops">{{ returnStops() }}</span>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Passengers Section -->
+  <div class="summary-section">
+    <div class="section-header">
+      <h4 class="section-title">Passengers ({{ passengers().length }})</h4>
+      <button class="edit-link" (click)="editPassengers()">Edit</button>
+    </div>
+
+    <div class="passenger-list">
+      @for (passenger of passengers(); track passenger.id) {
+        <div class="passenger-item">
+          <span class="passenger-name">{{ passenger.firstName }} {{ passenger.lastName }}</span>
+          <span class="passenger-seat">{{ getSeatForPassenger(passenger.id) }}</span>
+        </div>
+      }
+    </div>
+
+    @if (seatAssignments().length > 0) {
+      <button class="edit-link edit-link--inline" (click)="editSeats()">Change seats</button>
+    }
+  </div>
+
+  <!-- Price Breakdown Section -->
+  <div class="summary-section summary-section--pricing">
+    <h4 class="section-title">Price Breakdown</h4>
+
+    @if (priceSummary(); as price) {
+      <div class="price-lines">
+        <div class="price-line">
+          <span class="price-label">Base fare</span>
+          <span class="price-value">{{ formatPrice(price.baseFare) }}</span>
+        </div>
+
+        @if (price.seatFees > 0) {
+          <div class="price-line">
+            <span class="price-label">Seat fees</span>
+            <span class="price-value">{{ formatPrice(price.seatFees) }}</span>
+          </div>
+        }
+
+        @if (price.baggageFees && price.baggageFees > 0) {
+          <div class="price-line">
+            <span class="price-label">Extra baggage</span>
+            <span class="price-value">{{ formatPrice(price.baggageFees) }}</span>
+          </div>
+        }
+
+        <div class="price-line">
+          <span class="price-label">Taxes & fees</span>
+          <span class="price-value">{{ formatPrice(price.taxesAndFees) }}</span>
+        </div>
+
+        <div class="price-line price-line--total">
+          <span class="price-label">Total</span>
+          <span class="price-value">{{ formatPrice(price.total) }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="passenger-info-page">
+  <div class="container">
+    <div class="page-content">
+      <!-- Form Column -->
+      <div class="form-column">
+        <h1 class="page-title">Passenger Information</h1>
+        <p class="page-subtitle">Enter the required information for each traveler and be sure that it exactly matches the government-issued ID presented at the airport.</p>
+
+        <div class="passenger-forms">
+          @for (slot of passengerSlots(); track slot.index) {
+            <app-passenger-form
+              [passengerIndex]="slot.index"
+              [passengerType]="slot.type"
+              [isPrimary]="slot.isPrimary"
+              [initialData]="slot.data"
+              (passengerChange)="onPassengerChange(slot.index, $event)"
+              (validityChange)="onValidityChange(slot.index, $event)"
+            />
+          }
+        </div>
+
+        <!-- Emergency Contact Section -->
+        <app-emergency-contact-form
+          [initialData]="emergencyContactData()"
+          (contactChange)="onEmergencyContactChange($event)"
+        />
+
+        <div class="form-actions">
+          <button
+            class="btn-primary"
+            [disabled]="!isFormValid()"
+            (click)="onSubmit()"
+          >
+            Save and continue
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar Column -->
+      <aside class="sidebar-column">
+        @if (selectedFlight()) {
+          <app-flight-summary
+            [selectedFlight]="selectedFlight()!"
+            [returnFlight]="returnFlight()"
+            [totalPrice]="totalPrice()"
+            [passengers]="passengersCount()"
+          />
+        } @else {
+          <div class="sidebar-placeholder">
+            <p>Flight summary will appear here</p>
+          </div>
+        }
+      </aside>
+    </div>
+  </div>
+</div>

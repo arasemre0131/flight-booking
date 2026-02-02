@@ -1,0 +1,45 @@
+<div class="overview-page">
+  <div class="welcome-section">
+    <h1>Welcome, {{ userName() }}!</h1>
+    <p>Manage your airline operations from this dashboard.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-content">
+        <h3>Routes</h3>
+        <p class="stat-value">{{ activeRouteCount() }} <span class="stat-total">/ {{ routeCount() }}</span></p>
+        <p class="stat-label">Active routes</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <h3>Aircraft</h3>
+        <p class="stat-value">{{ activeAircraftCount() }} <span class="stat-total">/ {{ aircraftCount() }}</span></p>
+        <p class="stat-label">Active aircraft</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <h3>Flights</h3>
+        <p class="stat-value">{{ scheduledFlightCount() }} <span class="stat-total">/ {{ flightCount() }}</span></p>
+        <p class="stat-label">Upcoming flights</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-links-section">
+    <h2>Quick Actions</h2>
+    <div class="quick-links-grid">
+      @for (link of quickLinks; track link.path) {
+        <a [routerLink]="link.path" class="quick-link-card">
+          <span class="link-icon">{{ link.icon }}</span>
+          <h3>{{ link.label }}</h3>
+          <p>{{ link.description }}</p>
+        </a>
+      }
+    </div>
+  </div>
+</div>

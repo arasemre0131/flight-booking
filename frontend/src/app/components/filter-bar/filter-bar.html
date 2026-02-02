@@ -1,0 +1,107 @@
+<div class="filter-bar">
+  <!-- Max Price Filter -->
+  <div class="filter-dropdown" [class.active]="activeDropdown() === 'price'">
+    <button class="filter-btn" (click)="toggleDropdown('price')">
+      <span>Max price</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+    @if (activeDropdown() === 'price') {
+      <div class="dropdown-menu">
+        <button class="dropdown-item" [class.selected]="filters().maxPrice === null" (click)="setMaxPrice(null)">Any price</button>
+        <button class="dropdown-item" [class.selected]="filters().maxPrice === 500" (click)="setMaxPrice(500)">Under $500</button>
+        <button class="dropdown-item" [class.selected]="filters().maxPrice === 600" (click)="setMaxPrice(600)">Under $600</button>
+        <button class="dropdown-item" [class.selected]="filters().maxPrice === 700" (click)="setMaxPrice(700)">Under $700</button>
+        <button class="dropdown-item" [class.selected]="filters().maxPrice === 800" (click)="setMaxPrice(800)">Under $800</button>
+      </div>
+    }
+  </div>
+
+  <!-- Stops Filter -->
+  <div class="filter-dropdown" [class.active]="activeDropdown() === 'stops'">
+    <button class="filter-btn" (click)="toggleDropdown('stops')">
+      <span>Stops</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+    @if (activeDropdown() === 'stops') {
+      <div class="dropdown-menu">
+        @for (option of stopsOptions; track option.label) {
+          <button class="dropdown-item" [class.selected]="filters().stops === option.value" (click)="setStops(option.value)">
+            {{ option.label }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Times Filter -->
+  <div class="filter-dropdown" [class.active]="activeDropdown() === 'times'">
+    <button class="filter-btn" (click)="toggleDropdown('times')">
+      <span>Times</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+    @if (activeDropdown() === 'times') {
+      <div class="dropdown-menu">
+        <button class="dropdown-item" [class.selected]="filters().departureTimeRange === null" (click)="setTimeRange(null)">Any time</button>
+        @for (range of timeRanges; track range.label) {
+          <button class="dropdown-item" [class.selected]="filters().departureTimeRange?.label === range.label" (click)="setTimeRange(range)">
+            {{ range.label }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Airlines Filter -->
+  <div class="filter-dropdown" [class.active]="activeDropdown() === 'airlines'">
+    <button class="filter-btn" (click)="toggleDropdown('airlines')">
+      <span>Airlines</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+    @if (activeDropdown() === 'airlines') {
+      <div class="dropdown-menu">
+        <button class="dropdown-item" [class.selected]="filters().airlines.length === 0" (click)="clearAirlines()">All airlines</button>
+        @for (airline of airlines; track airline.code) {
+          <button class="dropdown-item" [class.selected]="filters().airlines.includes(airline.code)" (click)="toggleAirline(airline.code)">
+            {{ airline.name }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Seat Class Filter -->
+  <div class="filter-dropdown" [class.active]="activeDropdown() === 'class'">
+    <button class="filter-btn" (click)="toggleDropdown('class')">
+      <span>Seat class</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+    @if (activeDropdown() === 'class') {
+      <div class="dropdown-menu">
+        <button class="dropdown-item" [class.selected]="filters().seatClass === null" (click)="setSeatClass(null)">Any class</button>
+        <button class="dropdown-item" [class.selected]="filters().seatClass === 'economy'" (click)="setSeatClass('economy')">Economy</button>
+        <button class="dropdown-item" [class.selected]="filters().seatClass === 'business'" (click)="setSeatClass('business')">Business</button>
+        <button class="dropdown-item" [class.selected]="filters().seatClass === 'first'" (click)="setSeatClass('first')">First</button>
+      </div>
+    }
+  </div>
+
+  <!-- More Filter -->
+  <div class="filter-dropdown">
+    <button class="filter-btn" (click)="toggleDropdown('more')">
+      <span>More</span>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+$primary: #605DEC;
+$text-dark: #27273F;
+$text-gray: #6E7491;
+
+.seat-legend {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+// Seat Images Section
+.seat-images {
+  display: flex;
+  gap: 48px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #E9E8FC;
+  justify-content: center;
+}
+
+.seat-image-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.seat-img-row {
+  display: flex;
+  gap: 0;
+
+  &.first-row {
+    .seat-img {
+      margin-left: 0;
+    }
+  }
+
+  &.economy-row {
+    .seat-img {
+      margin-left: -35px; // Daha birleşik görünüm
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &.business-row {
+    gap: 8px; // Ayrık görünüm
+
+    .seat-img {
+      margin-left: 0;
+    }
+  }
+}
+
+.seat-img {
+  height: 120px;
+  width: auto;
+  object-fit: contain;
+
+  // First Class rengi için filtre (mor -> altin/gold)
+  &.first-color {
+    filter: hue-rotate(-60deg) saturate(1.5) brightness(1.1);
+  }
+
+  // Business rengi için filtre (mor -> turkuaz)
+  &.business-color {
+    filter: hue-rotate(140deg) saturate(0.8);
+  }
+}
+
+.seat-img-large {
+  height: 140px;
+  width: auto;
+  object-fit: contain;
+}
+
+.seat-type-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-dark;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Legend Section
+.legend-section {
+  margin-top: 4px;
+}
+
+.legend-title {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-gray;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seat-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px 6px 2px 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // First Class - gold/amber
+  &.first {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border: 2px solid #DAA520;
+    box-shadow: 0 1px 4px rgba(255, 193, 7, 0.4);
+  }
+
+  // Economy - purple/blue
+  &.economy {
+    background: linear-gradient(135deg, #7C7AE6 0%, #605DEC 100%);
+    border: 1px solid #4B48D9;
+  }
+
+  // Business - teal/green
+  &.business {
+    background: linear-gradient(135deg, #5FCFB5 0%, #3DBAA2 100%);
+    border: 1px solid #2DA38B;
+  }
+
+  // Exit row - purple with blue border
+  &.exit {
+    background: linear-gradient(135deg, #7C7AE6 0%, #605DEC 100%);
+    border: 2px solid #90CAF9;
+  }
+
+  // Occupied - light lavender
+  &.occupied {
+    background: #E9E8FC;
+    border: 1px solid #D4D3F0;
+  }
+
+  // Selected - coral/pink with checkmark
+  &.selected {
+    background: linear-gradient(135deg, #FF6B6B 0%, #EB5757 100%);
+    border: 1px solid #D94848;
+    color: white;
+  }
+
+  .check {
+    font-size: 12px;
+    font-weight: bold;
+  }
+}
+
+.legend-label {
+  font-size: 13px;
+  color: $text-dark;
+}
+
+.legend-price {
+  font-size: 12px;
+  color: $text-gray;
+  font-weight: 500;
+  background: #F6F6FE;
+  padding: 2px 6px;
+  border-radius: 4px;
+}

@@ -1,0 +1,72 @@
+<div class="dashboard-page">
+  <div class="page-header">
+    <h1>Dashboard</h1>
+    <p>Platform overview for the last 30 days</p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading">Loading dashboard...</div>
+  } @else if (stats()) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">{{ stats()!.totalUsers }}</div>
+        <div class="stat-label">Total Users</div>
+        <div class="stat-breakdown">
+          {{ stats()!.usersByRole.passenger }} passengers,
+          {{ stats()!.usersByRole.airline }} operators,
+          {{ stats()!.usersByRole.admin }} admins
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">{{ stats()!.totalAirlines }}</div>
+        <div class="stat-label">Active Airlines</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">{{ stats()!.totalBookings }}</div>
+        <div class="stat-label">Total Bookings</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-value">{{ formatCurrency(stats()!.totalRevenue) }}</div>
+        <div class="stat-label">Total Revenue</div>
+      </div>
+    </div>
+
+    <div class="quick-links">
+      <h2>Quick Actions</h2>
+      <div class="links-grid">
+        <a routerLink="/admin/users" class="quick-link">
+          <span class="link-text">Manage Users</span>
+        </a>
+        <a routerLink="/admin/airlines" class="quick-link">
+          <span class="link-text">Manage Airlines</span>
+        </a>
+        <a routerLink="/admin/bookings" class="quick-link">
+          <span class="link-text">View Bookings</span>
+        </a>
+        <a routerLink="/admin/statistics" class="quick-link">
+          <span class="link-text">View Statistics</span>
+        </a>
+      </div>
+    </div>
+
+    @if (stats()!.topAirlines.length > 0) {
+      <div class="section">
+        <h2>Top Airlines by Revenue</h2>
+        <div class="top-airlines">
+          @for (airline of stats()!.topAirlines; track airline.airlineId; let i = $index) {
+            <div class="airline-row">
+              <span class="rank">{{ i + 1 }}</span>
+              <span class="airline-name">{{ airline.name }}</span>
+              <span class="airline-stats">
+                {{ airline.bookingCount }} bookings · {{ formatCurrency(airline.revenue) }}
+              </span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

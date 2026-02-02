@@ -1,0 +1,30 @@
+<div class="passenger-seat-list">
+  <div class="list-header">
+    <h4 class="list-title">Seat Assignments</h4>
+    <span class="assignment-count" [class.complete]="allAssigned()">
+      {{ assignedCount() }}/{{ totalPassengers() }} assigned
+    </span>
+  </div>
+
+  <div class="assignments">
+    @for (assignment of seatAssignments(); track assignment.passengerId) {
+      <div class="assignment-row" [class.assigned]="assignment.seatId !== null">
+        <div class="passenger-info">
+          <span class="passenger-name">{{ assignment.passengerName }}</span>
+        </div>
+        <div class="seat-info">
+          <span class="seat-display" [class.unassigned]="!assignment.seatId">
+            {{ getSeatDisplay(assignment) }}
+          </span>
+          @if (getSeatFee(assignment) > 0) {
+            <span class="seat-fee">+${{ getSeatFee(assignment) }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (!allAssigned()) {
+    <p class="assignment-hint">Click on available seats to assign them to passengers</p>
+  }
+</div>

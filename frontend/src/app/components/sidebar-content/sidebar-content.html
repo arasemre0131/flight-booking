@@ -1,0 +1,21 @@
+<div class="sidebar-content">
+  <!-- Hotels Section -->
+  <section class="hotels-section">
+    <h3 class="section-title">Find places to stay in {{ destinationCity() }}</h3>
+    <div class="hotel-list">
+      @for (hotel of hotels; track hotel.id) {
+        <app-hotel-card [hotel]="hotel" />
+      }
+    </div>
+  </section>
+
+  <!-- Destinations Section -->
+  <section class="destinations-section">
+    <h3 class="section-title">People also search for</h3>
+    <div class="destination-list">
+      @for (destination of destinations; track destination.city) {
+        <app-destination-card [destination]="destination" />
+      }
+    </div>
+  </section>
+</div>
