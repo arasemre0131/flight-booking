@@ -40,9 +40,9 @@ export const ADMIN_ROUTES: Routes = [
 
 // Navigation items for sidebar
 export const ADMIN_NAV_ITEMS = [
-  { path: '/admin', label: 'Dashboard', icon: '📊' },
-  { path: '/admin/users', label: 'Users', icon: '👥' },
-  { path: '/admin/airlines', label: 'Airlines', icon: '✈️' },
-  { path: '/admin/bookings', label: 'Bookings', icon: '📋' },
-  { path: '/admin/statistics', label: 'Statistics', icon: '📈' }
+  { path: '/admin', label: 'Dashboard', icon: '' },
+  { path: '/admin/users', label: 'Users', icon: '' },
+  { path: '/admin/airlines', label: 'Airlines', icon: '' },
+  { path: '/admin/bookings', label: 'Bookings', icon: '' },
+  { path: '/admin/statistics', label: 'Statistics', icon: '' }
 ];

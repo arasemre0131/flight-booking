@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export type BookingStatus = 'pending' | 'confirmed' | 'cancelled';
-export type TicketClass = 'economy' | 'business';
+export type TicketClass = 'economy' | 'business' | 'first';
 
 export interface IPassenger {
   firstName: string;
@@ -64,7 +64,7 @@ const bookingSchema = new Schema<IBooking>(
     },
     ticketClass: {
       type: String,
-      enum: ['economy', 'business'],
+      enum: ['economy', 'business', 'first'],
       required: true,
     },
     extras: {

@@ -29,10 +29,10 @@ export class Overview {
   scheduledFlightCount = computed(() => this.airlineService.scheduledFlights().length);
 
   quickLinks = [
-    { label: 'Manage Routes', path: '/airline/routes', icon: '🛫', description: 'Create and edit flight routes' },
-    { label: 'Manage Aircraft', path: '/airline/aircraft', icon: '✈️', description: 'Register and configure aircraft' },
-    { label: 'Schedule Flights', path: '/airline/flights', icon: '📅', description: 'Create and manage flight schedules' },
-    { label: 'Set Pricing', path: '/airline/pricing', icon: '💰', description: 'Update ticket prices' },
-    { label: 'View Statistics', path: '/airline/statistics', icon: '📈', description: 'Analyze performance metrics' }
+    { label: 'Manage Routes', path: '/airline/routes', icon: '', description: 'Create and edit flight routes' },
+    { label: 'Manage Aircraft', path: '/airline/aircraft', icon: '', description: 'Register and configure aircraft' },
+    { label: 'Schedule Flights', path: '/airline/flights', icon: '', description: 'Create and manage flight schedules' },
+    { label: 'Set Pricing', path: '/airline/pricing', icon: '', description: 'Update ticket prices' },
+    { label: 'View Statistics', path: '/airline/statistics', icon: '', description: 'Analyze performance metrics' }
   ];
 }

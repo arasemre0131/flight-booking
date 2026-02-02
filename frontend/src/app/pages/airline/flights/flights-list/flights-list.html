@@ -11,14 +11,14 @@
           [class.active]="viewMode() === 'list'"
           (click)="viewMode.set('list')"
         >
-          📋 List
+          List
         </button>
         <button
           class="toggle-btn"
           [class.active]="viewMode() === 'calendar'"
           (click)="viewMode.set('calendar')"
         >
-          📅 Calendar
+          Calendar
         </button>
       </div>
       <a routerLink="/airline/flights/new" class="btn-primary">
@@ -120,10 +120,10 @@
               <td class="actions">
                 @if (flight.status === 'scheduled') {
                   <a [routerLink]="['/airline/flights', flight.id, 'edit']" class="btn-icon" title="Edit">
-                    ✏️
+                    Edit
                   </a>
                   <button class="btn-icon cancel" (click)="openCancelModal(flight)" title="Cancel Flight">
-                    ❌
+                    Cancel
                   </button>
                 }
               </td>

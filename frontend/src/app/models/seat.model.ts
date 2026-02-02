@@ -1,7 +1,8 @@
 // Seat Selection Models
 
 export type SeatStatus = 'available' | 'occupied' | 'selected';
-export type SeatType = 'economy' | 'business' | 'exit';
+export type SeatClass = 'first' | 'business' | 'economy';
+export type SeatType = 'first' | 'business' | 'economy' | 'exit';
 
 export interface Seat {
   id: string;
@@ -9,7 +10,9 @@ export interface Seat {
   letter: string;
   status: SeatStatus;
   type: SeatType;
+  seatClass: SeatClass;
   upgradePrice: number;
+  hasExtraLegroom: boolean;
 }
 
 export interface SeatRow {

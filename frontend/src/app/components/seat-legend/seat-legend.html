@@ -2,12 +2,10 @@
   <!-- Seat Type Images -->
   <div class="seat-images">
     <div class="seat-image-item">
-      <div class="seat-img-row economy-row">
-        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
-        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
-        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
+      <div class="seat-img-row first-row">
+        <img [src]="economySeatImage" alt="First Class Seat" class="seat-img seat-img-large first-color" />
       </div>
-      <span class="seat-type-label">Economy</span>
+      <span class="seat-type-label">First Class</span>
     </div>
     <div class="seat-image-item">
       <div class="seat-img-row business-row">
@@ -15,6 +13,14 @@
         <img [src]="economySeatImage" alt="Business Seat" class="seat-img business-color" />
       </div>
       <span class="seat-type-label">Business</span>
+    </div>
+    <div class="seat-image-item">
+      <div class="seat-img-row economy-row">
+        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
+        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
+        <img [src]="economySeatImage" alt="Economy Seat" class="seat-img" />
+      </div>
+      <span class="seat-type-label">Economy</span>
     </div>
   </div>
 

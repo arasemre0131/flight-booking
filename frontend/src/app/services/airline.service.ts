@@ -23,8 +23,9 @@ export interface BackendAircraft {
   aircraftModel: string;
   registration: string;
   seatConfiguration: {
-    economy: { rows: number; seatsPerRow: number };
+    firstClass: { rows: number; seatsPerRow: number };
     business: { rows: number; seatsPerRow: number };
+    economy: { rows: number; seatsPerRow: number };
   };
   totalSeats: number;
   createdAt: string;
@@ -38,7 +39,7 @@ export interface BackendFlight {
   aircraftId: string | { _id: string; aircraftModel: string; registration: string };
   departureTime: string;
   arrivalTime: string;
-  pricing: { economy: number; business: number };
+  pricing: { economy: number; business: number; firstClass: number };
   status: 'scheduled' | 'boarding' | 'departed' | 'arrived' | 'cancelled';
   createdAt: string;
   updatedAt: string;
@@ -63,7 +64,7 @@ export interface Aircraft {
   registration: string;
   economyConfig: { rows: number; seatsPerRow: number; totalSeats: number };
   businessConfig: { rows: number; seatsPerRow: number; totalSeats: number } | null;
-  firstClassConfig: null;
+  firstClassConfig: { rows: number; seatsPerRow: number; totalSeats: number } | null;
   totalSeats: number;
   isActive: boolean;
   createdAt: string;
@@ -248,10 +249,13 @@ export class AirlineService {
       aircraftModel: dto.model,
       registration: dto.registration,
       seatConfiguration: {
-        economy: { rows: dto.economyConfig.rows, seatsPerRow: dto.economyConfig.seatsPerRow },
+        firstClass: dto.firstClassConfig
+          ? { rows: dto.firstClassConfig.rows, seatsPerRow: dto.firstClassConfig.seatsPerRow }
+          : { rows: 0, seatsPerRow: 0 },
         business: dto.businessConfig
           ? { rows: dto.businessConfig.rows, seatsPerRow: dto.businessConfig.seatsPerRow }
-          : { rows: 0, seatsPerRow: 0 }
+          : { rows: 0, seatsPerRow: 0 },
+        economy: { rows: dto.economyConfig.rows, seatsPerRow: dto.economyConfig.seatsPerRow }
       }
     };
 
@@ -268,13 +272,16 @@ export class AirlineService {
     const backendUpdates: any = {};
     if (updates.model) backendUpdates.aircraftModel = updates.model;
     if (updates.registration) backendUpdates.registration = updates.registration;
-    if (updates.economyConfig || updates.businessConfig) {
+    if (updates.economyConfig || updates.businessConfig || updates.firstClassConfig) {
       backendUpdates.seatConfiguration = {
-        economy: updates.economyConfig
-          ? { rows: updates.economyConfig.rows, seatsPerRow: updates.economyConfig.seatsPerRow }
+        firstClass: updates.firstClassConfig
+          ? { rows: updates.firstClassConfig.rows, seatsPerRow: updates.firstClassConfig.seatsPerRow }
           : { rows: 0, seatsPerRow: 0 },
         business: updates.businessConfig
           ? { rows: updates.businessConfig.rows, seatsPerRow: updates.businessConfig.seatsPerRow }
+          : { rows: 0, seatsPerRow: 0 },
+        economy: updates.economyConfig
+          ? { rows: updates.economyConfig.rows, seatsPerRow: updates.economyConfig.seatsPerRow }
           : { rows: 0, seatsPerRow: 0 }
       };
     }
@@ -447,22 +454,30 @@ export class AirlineService {
   }
 
   private convertAircraft(a: BackendAircraft): Aircraft {
+    const firstClass = a.seatConfiguration.firstClass;
+    const business = a.seatConfiguration.business;
+    const economy = a.seatConfiguration.economy;
+
     return {
       id: a._id,
       airlineId: a.airlineId,
       model: a.aircraftModel,
       registration: a.registration,
       economyConfig: {
-        rows: a.seatConfiguration.economy.rows,
-        seatsPerRow: a.seatConfiguration.economy.seatsPerRow,
-        totalSeats: a.seatConfiguration.economy.rows * a.seatConfiguration.economy.seatsPerRow
+        rows: economy.rows,
+        seatsPerRow: economy.seatsPerRow,
+        totalSeats: economy.rows * economy.seatsPerRow
       },
-      businessConfig: a.seatConfiguration.business ? {
-        rows: a.seatConfiguration.business.rows,
-        seatsPerRow: a.seatConfiguration.business.seatsPerRow,
-        totalSeats: a.seatConfiguration.business.rows * a.seatConfiguration.business.seatsPerRow
+      businessConfig: business && business.rows > 0 ? {
+        rows: business.rows,
+        seatsPerRow: business.seatsPerRow,
+        totalSeats: business.rows * business.seatsPerRow
       } : null,
-      firstClassConfig: null,
+      firstClassConfig: firstClass && firstClass.rows > 0 ? {
+        rows: firstClass.rows,
+        seatsPerRow: firstClass.seatsPerRow,
+        totalSeats: firstClass.rows * firstClass.seatsPerRow
+      } : null,
       totalSeats: a.totalSeats,
       isActive: true,
       createdAt: a.createdAt,
@@ -492,7 +507,7 @@ export class AirlineService {
       pricing: {
         economy: f.pricing.economy,
         business: f.pricing.business,
-        firstClass: null
+        firstClass: f.pricing.firstClass || null
       },
       seatFees: { aisle: 0, window: 0, extraLegroom: 50 },
       bookedSeats: 0,

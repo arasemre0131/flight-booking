@@ -20,11 +20,63 @@ $text-gray: #6E7491;
   margin-bottom: 12px;
 }
 
+// Section headers for seat classes
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  margin: 16px 0 8px;
+  border-radius: 8px;
+  font-weight: 600;
+
+  &.first {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.15) 100%);
+    border: 1px solid rgba(218, 165, 32, 0.3);
+    color: #B8860B;
+  }
+
+  &.business {
+    background: linear-gradient(135deg, rgba(95, 207, 181, 0.15) 0%, rgba(61, 186, 162, 0.15) 100%);
+    border: 1px solid rgba(61, 186, 162, 0.3);
+    color: #2DA38B;
+  }
+
+  &.economy, &.exit {
+    background: linear-gradient(135deg, rgba(96, 93, 236, 0.1) 0%, rgba(124, 122, 230, 0.1) 100%);
+    border: 1px solid rgba(96, 93, 236, 0.2);
+    color: $primary;
+  }
+
+  .section-label {
+    font-size: 14px;
+  }
+
+  .section-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+  }
+}
+
 .column-labels {
   display: grid;
-  grid-template-columns: 40px repeat(3, 40px) 24px repeat(3, 40px);
+  grid-template-columns: repeat(3, 40px) 24px repeat(3, 40px);
   gap: 4px;
   margin-left: 40px;
+  margin-bottom: 8px;
+
+  &.first-labels {
+    grid-template-columns: 56px 32px 56px;
+    justify-content: center;
+    margin-left: 40px;
+  }
+
+  &.business-labels {
+    grid-template-columns: repeat(2, 48px) 24px repeat(2, 48px);
+  }
 }
 
 .column-label {
@@ -78,8 +130,23 @@ $text-gray: #6E7491;
   grid-template-columns: repeat(3, 40px) 24px repeat(3, 40px);
   gap: 4px;
 
+  &.first-layout {
+    grid-template-columns: 56px 32px 56px;
+    justify-content: center;
+
+    .seat {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
   &.business-layout {
     grid-template-columns: repeat(2, 48px) 24px repeat(2, 48px);
+
+    .seat {
+      width: 48px;
+      height: 48px;
+    }
   }
 }
 
@@ -105,6 +172,18 @@ $text-gray: #6E7491;
   &:focus {
     outline: 2px solid $primary;
     outline-offset: 2px;
+  }
+
+  // First Class available - gold/amber (Premium)
+  &.first.available {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border: 2px solid #DAA520;
+    color: #5D4E00;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+
+    .seat-label {
+      font-weight: 700;
+    }
   }
 
   // Economy available - purple/blue (Figma design)

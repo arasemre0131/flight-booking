@@ -9,7 +9,6 @@
   } @else if (stats()) {
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon">👥</div>
         <div class="stat-value">{{ stats()!.totalUsers }}</div>
         <div class="stat-label">Total Users</div>
         <div class="stat-breakdown">
@@ -20,19 +19,16 @@
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon">✈️</div>
         <div class="stat-value">{{ stats()!.totalAirlines }}</div>
         <div class="stat-label">Active Airlines</div>
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon">📋</div>
         <div class="stat-value">{{ stats()!.totalBookings }}</div>
         <div class="stat-label">Total Bookings</div>
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon">💰</div>
         <div class="stat-value">{{ formatCurrency(stats()!.totalRevenue) }}</div>
         <div class="stat-label">Total Revenue</div>
       </div>
@@ -42,19 +38,15 @@
       <h2>Quick Actions</h2>
       <div class="links-grid">
         <a routerLink="/admin/users" class="quick-link">
-          <span class="link-icon">👥</span>
           <span class="link-text">Manage Users</span>
         </a>
         <a routerLink="/admin/airlines" class="quick-link">
-          <span class="link-icon">✈️</span>
           <span class="link-text">Manage Airlines</span>
         </a>
         <a routerLink="/admin/bookings" class="quick-link">
-          <span class="link-icon">📋</span>
           <span class="link-text">View Bookings</span>
         </a>
         <a routerLink="/admin/statistics" class="quick-link">
-          <span class="link-icon">📈</span>
           <span class="link-text">View Statistics</span>
         </a>
       </div>

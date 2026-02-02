@@ -12,7 +12,7 @@
         <option value="all">All Time</option>
       </select>
       <button class="btn-export" (click)="exportCsv()">
-        📥 Export CSV
+        Export CSV
       </button>
     </div>
   </div>
@@ -23,7 +23,7 @@
     <!-- Key Metrics -->
     <div class="stats-grid">
       <app-stats-card
-        icon="👥"
+        icon=""
         [value]="stats()!.totalUsers"
         label="Total Users"
         [subtext]="stats()!.usersByRole.passenger + ' passengers, ' + stats()!.usersByRole.airline + ' airline staff'"
@@ -31,21 +31,21 @@
         variant="primary"
       />
       <app-stats-card
-        icon="✈️"
+        icon=""
         [value]="stats()!.totalAirlines"
         label="Airlines"
         [subtext]="stats()!.activeAirlines + ' active'"
         variant="success"
       />
       <app-stats-card
-        icon="📋"
+        icon=""
         [value]="stats()!.totalBookings"
         label="Total Bookings"
         [subtext]="stats()!.bookingsByStatus.confirmed + ' confirmed'"
         [trend]="8"
       />
       <app-stats-card
-        icon="💰"
+        icon=""
         [value]="stats()!.totalRevenue"
         label="Total Revenue"
         format="currency"
@@ -143,7 +143,6 @@
       <h3>User Distribution by Role</h3>
       <div class="user-distribution">
         <div class="role-item">
-          <div class="role-icon">🧑‍💼</div>
           <div class="role-info">
             <span class="role-name">Passengers</span>
             <span class="role-count">{{ stats()!.usersByRole.passenger }}</span>
@@ -153,7 +152,6 @@
           </div>
         </div>
         <div class="role-item">
-          <div class="role-icon">✈️</div>
           <div class="role-info">
             <span class="role-name">Airline Staff</span>
             <span class="role-count">{{ stats()!.usersByRole.airline }}</span>
@@ -163,7 +161,6 @@
           </div>
         </div>
         <div class="role-item">
-          <div class="role-icon">🛡️</div>
           <div class="role-info">
             <span class="role-name">Administrators</span>
             <span class="role-count">{{ stats()!.usersByRole.admin }}</span>

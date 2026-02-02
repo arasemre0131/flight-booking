@@ -16,9 +16,10 @@ interface LegendItem {
 })
 export class SeatLegend {
   legendItems: LegendItem[] = [
+    { label: 'First Class', cssClass: 'first', price: 'Premium' },
+    { label: 'Business', cssClass: 'business', price: 'Included' },
     { label: 'Economy', cssClass: 'economy', price: 'Included' },
-    { label: 'Business', cssClass: 'business', price: '+$100' },
-    { label: 'Exit Row', cssClass: 'exit', price: '+$30' },
+    { label: 'Exit Row', cssClass: 'exit', price: '+$50' },
     { label: 'Occupied', cssClass: 'occupied' },
     { label: 'Selected', cssClass: 'selected' }
   ];

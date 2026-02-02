@@ -40,8 +40,14 @@ export async function calculatePrice(
     throw new Error('Flight not found');
   }
 
-  const basePrice = flight.pricing[ticketClass] * passengerCount;
-  const baggageFee = (extras.additionalBaggage || 0) * BAGGAGE_FEE;
+  // Map ticket class to pricing field
+  const priceKey = ticketClass === 'first' ? 'firstClass' : ticketClass;
+  const basePrice = flight.pricing[priceKey] * passengerCount;
+
+  // First class includes 2 free bags, others pay for additional
+  const freeBags = ticketClass === 'first' ? 2 : (ticketClass === 'business' ? 1 : 0);
+  const chargeableBags = Math.max(0, (extras.additionalBaggage || 0) - freeBags);
+  const baggageFee = chargeableBags * BAGGAGE_FEE;
 
   return basePrice + baggageFee;
 }
@@ -117,18 +123,22 @@ export async function selectSeats(
   // Delete existing tickets for this booking
   await Ticket.deleteMany({ bookingId: booking._id });
 
-  // Calculate extra legroom fees
+  // Calculate extra legroom fees (first class gets it free)
   let legroomFee = 0;
+  const isFirstClass = booking.ticketClass === 'first';
 
   // Create tickets for each seat assignment
   for (const assignment of assignments) {
     const ticketNumber = await generateTicketNumber();
 
-    // Check if seat has extra legroom (simplified - first rows)
-    const row = parseInt(assignment.seatNumber.replace(/[A-Z]/g, ''));
-    const hasExtraLegroom = [1, 12, 13].includes(row);
-    if (hasExtraLegroom && booking.extras.extraLegroom) {
-      legroomFee += LEGROOM_FEE;
+    // Check if seat has extra legroom (first class always has it free)
+    if (!isFirstClass && booking.extras.extraLegroom) {
+      const row = parseInt(assignment.seatNumber.replace(/[A-Z]/g, ''));
+      // Extra legroom rows depend on class - exit rows for economy
+      const hasExtraLegroom = booking.ticketClass === 'economy' ? [1, 12, 13].includes(row) : row === 1;
+      if (hasExtraLegroom) {
+        legroomFee += LEGROOM_FEE;
+      }
     }
 
     const ticket = new Ticket({

@@ -15,7 +15,6 @@
     <!-- Email Notification -->
     @if (getPrimaryEmail()) {
       <div class="email-notice">
-        <span class="email-icon">✉</span>
         <span>Confirmation sent to <strong>{{ getPrimaryEmail() }}</strong></span>
       </div>
     }
@@ -137,7 +136,6 @@
     <!-- Actions -->
     <div class="actions">
       <button class="btn btn--secondary" (click)="printConfirmation()">
-        <span class="btn-icon">🖨</span>
         Print Confirmation
       </button>
       <button class="btn btn--primary" (click)="bookAnotherFlight()">
@@ -147,7 +145,6 @@
   } @else {
     <!-- No Booking State -->
     <div class="no-booking">
-      <div class="no-booking-icon">✈</div>
       <h2>No Booking Found</h2>
       <p>It looks like you haven't completed a booking yet.</p>
       <button class="btn btn--primary" routerLink="/">Search Flights</button>

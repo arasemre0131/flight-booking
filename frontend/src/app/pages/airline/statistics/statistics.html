@@ -6,7 +6,7 @@
     </div>
     <div class="header-actions">
       <button class="btn-secondary" (click)="exportCSV()" [disabled]="!stats()">
-        📥 Export CSV
+        Export CSV
       </button>
     </div>
   </div>
@@ -42,22 +42,18 @@
   } @else if (stats()) {
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon">✈️</div>
         <div class="stat-value">{{ stats()!.summary.totalFlights }}</div>
         <div class="stat-label">Total Flights</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">👥</div>
         <div class="stat-value">{{ stats()!.summary.totalPassengers | number }}</div>
         <div class="stat-label">Total Passengers</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">💰</div>
         <div class="stat-value">{{ formatCurrency(stats()!.summary.totalRevenue) }}</div>
         <div class="stat-label">Total Revenue</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">📊</div>
         <div class="stat-value">{{ stats()!.summary.averageLoadFactor }}%</div>
         <div class="stat-label">Avg. Load Factor</div>
       </div>

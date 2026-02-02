@@ -124,18 +124,20 @@ export async function seedTestData(): Promise<void> {
         aircraftModel: 'Airbus A330-200',
         registration: 'N380HA',
         seatConfiguration: {
-          economy: { rows: 30, seatsPerRow: 6 },
-          business: { rows: 4, seatsPerRow: 4 }
+          firstClass: { rows: 2, seatsPerRow: 2 },
+          business: { rows: 4, seatsPerRow: 4 },
+          economy: { rows: 30, seatsPerRow: 6 }
         },
-        totalSeats: 196
+        totalSeats: 200
       },
       {
         airlineId: hawaiianAirlines._id,
         aircraftModel: 'Boeing 717-200',
         registration: 'N488HA',
         seatConfiguration: {
-          economy: { rows: 20, seatsPerRow: 5 },
-          business: { rows: 2, seatsPerRow: 4 }
+          firstClass: { rows: 0, seatsPerRow: 0 },
+          business: { rows: 2, seatsPerRow: 4 },
+          economy: { rows: 20, seatsPerRow: 5 }
         },
         totalSeats: 108
       },
@@ -145,20 +147,22 @@ export async function seedTestData(): Promise<void> {
         aircraftModel: 'Boeing 737-800',
         registration: 'N3730B',
         seatConfiguration: {
-          economy: { rows: 25, seatsPerRow: 6 },
-          business: { rows: 3, seatsPerRow: 4 }
+          firstClass: { rows: 2, seatsPerRow: 2 },
+          business: { rows: 3, seatsPerRow: 4 },
+          economy: { rows: 25, seatsPerRow: 6 }
         },
-        totalSeats: 162
+        totalSeats: 166
       },
       {
         airlineId: deltaAirlines._id,
         aircraftModel: 'Airbus A321neo',
         registration: 'N501DA',
         seatConfiguration: {
-          economy: { rows: 28, seatsPerRow: 6 },
-          business: { rows: 4, seatsPerRow: 4 }
+          firstClass: { rows: 1, seatsPerRow: 2 },
+          business: { rows: 4, seatsPerRow: 4 },
+          economy: { rows: 28, seatsPerRow: 6 }
         },
-        totalSeats: 184
+        totalSeats: 186
       },
       // United aircraft
       {
@@ -166,10 +170,11 @@ export async function seedTestData(): Promise<void> {
         aircraftModel: 'Boeing 777-300ER',
         registration: 'N2135U',
         seatConfiguration: {
-          economy: { rows: 35, seatsPerRow: 6 },
-          business: { rows: 6, seatsPerRow: 4 }
+          firstClass: { rows: 3, seatsPerRow: 2 },
+          business: { rows: 6, seatsPerRow: 4 },
+          economy: { rows: 35, seatsPerRow: 6 }
         },
-        totalSeats: 234
+        totalSeats: 240
       },
     ];
 
@@ -202,7 +207,7 @@ export async function seedTestData(): Promise<void> {
           aircraftId: haAircraft1._id,
           departureTime: dep1,
           arrivalTime: arr1,
-          pricing: { economy: 299, business: 799 },
+          pricing: { economy: 299, business: 799, firstClass: 1499 },
           status: 'scheduled'
         });
       }
@@ -222,7 +227,7 @@ export async function seedTestData(): Promise<void> {
           aircraftId: dlAircraft1._id,
           departureTime: dep2,
           arrivalTime: arr2,
-          pricing: { economy: 249, business: 649 },
+          pricing: { economy: 249, business: 649, firstClass: 1299 },
           status: 'scheduled'
         });
       }
@@ -241,7 +246,7 @@ export async function seedTestData(): Promise<void> {
           aircraftId: dlAircraft2._id,
           departureTime: dep3,
           arrivalTime: arr3,
-          pricing: { economy: 149, business: 399 },
+          pricing: { economy: 149, business: 399, firstClass: 899 },
           status: 'scheduled'
         });
       }
@@ -261,7 +266,7 @@ export async function seedTestData(): Promise<void> {
           aircraftId: uaAircraft1._id,
           departureTime: dep4,
           arrivalTime: arr4,
-          pricing: { economy: 199, business: 549 },
+          pricing: { economy: 199, business: 549, firstClass: 1199 },
           status: 'scheduled'
         });
       }

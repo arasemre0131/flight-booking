@@ -12,6 +12,7 @@ export interface IFlight extends Document {
   pricing: {
     economy: number;
     business: number;
+    firstClass: number;
   };
   status: FlightStatus;
   createdAt: Date;
@@ -46,6 +47,7 @@ const flightSchema = new Schema<IFlight>(
     pricing: {
       economy: { type: Number, default: 0 },
       business: { type: Number, default: 0 },
+      firstClass: { type: Number, default: 0 },
     },
     status: {
       type: String,

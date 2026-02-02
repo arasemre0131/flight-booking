@@ -1,8 +1,14 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+export interface ISeatClassConfig {
+  rows: number;
+  seatsPerRow: number;
+}
+
 export interface ISeatConfiguration {
-  economy: { rows: number; seatsPerRow: number };
-  business: { rows: number; seatsPerRow: number };
+  firstClass: ISeatClassConfig;
+  business: ISeatClassConfig;
+  economy: ISeatClassConfig;
 }
 
 export interface IAircraft extends Document {
@@ -15,6 +21,11 @@ export interface IAircraft extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+const seatClassConfigSchema = {
+  rows: { type: Number, default: 0 },
+  seatsPerRow: { type: Number, default: 0 },
+};
 
 const aircraftSchema = new Schema<IAircraft>(
   {
@@ -36,11 +47,9 @@ const aircraftSchema = new Schema<IAircraft>(
       trim: true,
     },
     seatConfiguration: {
+      firstClass: seatClassConfigSchema,
+      business: seatClassConfigSchema,
       economy: {
-        rows: { type: Number, required: true },
-        seatsPerRow: { type: Number, required: true },
-      },
-      business: {
         rows: { type: Number, required: true },
         seatsPerRow: { type: Number, required: true },
       },
@@ -59,9 +68,10 @@ aircraftSchema.index({ airlineId: 1 });
 
 // Calculate total seats before saving
 aircraftSchema.pre('save', function (next) {
+  const firstClass = (this.seatConfiguration.firstClass?.rows || 0) * (this.seatConfiguration.firstClass?.seatsPerRow || 0);
+  const business = (this.seatConfiguration.business?.rows || 0) * (this.seatConfiguration.business?.seatsPerRow || 0);
   const economy = this.seatConfiguration.economy.rows * this.seatConfiguration.economy.seatsPerRow;
-  const business = this.seatConfiguration.business.rows * this.seatConfiguration.business.seatsPerRow;
-  this.totalSeats = economy + business;
+  this.totalSeats = firstClass + business + economy;
   next();
 });
 

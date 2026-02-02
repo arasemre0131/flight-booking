@@ -58,9 +58,9 @@ export class SeatConfigBuilder {
 
   get classIcon(): string {
     switch (this.classType) {
-      case 'economy': return '💺';
-      case 'business': return '🪑';
-      case 'first': return '👑';
+      case 'economy': return 'E';
+      case 'business': return 'B';
+      case 'first': return 'F';
     }
   }
 

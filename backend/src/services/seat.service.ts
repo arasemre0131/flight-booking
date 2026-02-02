@@ -2,15 +2,17 @@ import mongoose from 'mongoose';
 import { Aircraft, IAircraft } from '../models/aircraft.model';
 import { Flight } from '../models/flight.model';
 import { Ticket } from '../models/ticket.model';
-import { Booking } from '../models/booking.model';
+import { Booking, TicketClass } from '../models/booking.model';
 
 export interface SeatInfo {
   seatNumber: string;
   row: number;
   column: string;
-  class: 'economy' | 'business';
+  class: 'economy' | 'business' | 'first';
   isAvailable: boolean;
   hasExtraLegroom: boolean;
+  isWindow: boolean;
+  isAisle: boolean;
   price: number;
 }
 
@@ -18,45 +20,96 @@ export interface SeatMapResponse {
   flightId: string;
   aircraft: { model: string; seatConfig: string };
   seats: SeatInfo[];
+  seatClasses: {
+    first: { startRow: number; endRow: number; seatsPerRow: number };
+    business: { startRow: number; endRow: number; seatsPerRow: number };
+    economy: { startRow: number; endRow: number; seatsPerRow: number };
+  };
 }
 
-const SEAT_COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F'];
-const EXTRA_LEGROOM_ROWS = [1, 12, 13]; // First row and exit rows
+// First class: 2 seats (A, B) - very spacious
+const FIRST_CLASS_COLUMNS = ['A', 'B'];
+// Business: 4 seats (A, B, C, D)
+const BUSINESS_COLUMNS = ['A', 'B', 'C', 'D'];
+// Economy: 6 seats (A, B, C, D, E, F)
+const ECONOMY_COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-export function generateSeatMap(aircraft: IAircraft, ticketClass?: 'economy' | 'business'): Omit<SeatInfo, 'isAvailable'>[] {
+export function generateSeatMap(aircraft: IAircraft, ticketClass?: TicketClass): Omit<SeatInfo, 'isAvailable'>[] {
   const seats: Omit<SeatInfo, 'isAvailable'>[] = [];
   const config = aircraft.seatConfiguration;
 
-  // Business class seats
-  for (let row = 1; row <= config.business.rows; row++) {
-    for (let col = 0; col < config.business.seatsPerRow; col++) {
-      const seatNumber = `${row}${SEAT_COLUMNS[col]}`;
+  let currentRow = 1;
+
+  // First Class seats (at the very front)
+  const firstClassRows = config.firstClass?.rows || 0;
+  const firstClassSeatsPerRow = config.firstClass?.seatsPerRow || 2;
+  const firstClassColumns = FIRST_CLASS_COLUMNS.slice(0, firstClassSeatsPerRow);
+
+  for (let i = 0; i < firstClassRows; i++) {
+    for (let col = 0; col < firstClassSeatsPerRow; col++) {
+      const column = firstClassColumns[col];
+      const seatNumber = `${currentRow}${column}`;
       seats.push({
         seatNumber,
-        row,
-        column: SEAT_COLUMNS[col],
-        class: 'business',
-        hasExtraLegroom: row === 1,
-        price: 50, // Business extra legroom price
+        row: currentRow,
+        column,
+        class: 'first',
+        hasExtraLegroom: true, // First class always has extra legroom
+        isWindow: col === 0 || col === firstClassSeatsPerRow - 1,
+        isAisle: col === firstClassSeatsPerRow - 1 || col === 0, // In 2-seat config, both are aisle
+        price: 0, // Extra legroom included in first class
       });
     }
+    currentRow++;
   }
 
-  // Economy class seats (starting after business)
-  const economyStartRow = config.business.rows + 1;
-  for (let row = economyStartRow; row < economyStartRow + config.economy.rows; row++) {
-    for (let col = 0; col < config.economy.seatsPerRow; col++) {
-      const seatNumber = `${row}${SEAT_COLUMNS[col]}`;
-      const hasExtraLegroom = EXTRA_LEGROOM_ROWS.includes(row);
+  // Business class seats (after first class)
+  const businessRows = config.business?.rows || 0;
+  const businessSeatsPerRow = config.business?.seatsPerRow || 4;
+  const businessColumns = BUSINESS_COLUMNS.slice(0, businessSeatsPerRow);
+
+  for (let i = 0; i < businessRows; i++) {
+    for (let col = 0; col < businessSeatsPerRow; col++) {
+      const column = businessColumns[col];
+      const seatNumber = `${currentRow}${column}`;
+      const isFirstBusinessRow = i === 0;
       seats.push({
         seatNumber,
-        row,
-        column: SEAT_COLUMNS[col],
-        class: 'economy',
-        hasExtraLegroom,
-        price: hasExtraLegroom ? 50 : 0,
+        row: currentRow,
+        column,
+        class: 'business',
+        hasExtraLegroom: isFirstBusinessRow,
+        isWindow: col === 0 || col === businessSeatsPerRow - 1,
+        isAisle: col === 1 || col === businessSeatsPerRow - 2,
+        price: isFirstBusinessRow ? 50 : 0,
       });
     }
+    currentRow++;
+  }
+
+  // Economy class seats (at the back)
+  const economyRows = config.economy.rows;
+  const economySeatsPerRow = config.economy.seatsPerRow;
+  const economyColumns = ECONOMY_COLUMNS.slice(0, economySeatsPerRow);
+  const exitRowOffset = Math.floor(economyRows / 2); // Exit row in middle of economy
+
+  for (let i = 0; i < economyRows; i++) {
+    for (let col = 0; col < economySeatsPerRow; col++) {
+      const column = economyColumns[col];
+      const seatNumber = `${currentRow}${column}`;
+      const isExitRow = i === 0 || i === exitRowOffset; // First economy row and middle
+      seats.push({
+        seatNumber,
+        row: currentRow,
+        column,
+        class: 'economy',
+        hasExtraLegroom: isExitRow,
+        isWindow: col === 0 || col === economySeatsPerRow - 1,
+        isAisle: col === 2 || col === economySeatsPerRow - 3, // Middle aisle
+        price: isExitRow ? 50 : 0,
+      });
+    }
+    currentRow++;
   }
 
   // Filter by class if specified
@@ -121,7 +174,18 @@ export async function getAvailableSeats(flightId: string): Promise<SeatMapRespon
   }));
 
   const config = aircraft.seatConfiguration;
-  const seatConfig = `${config.business.seatsPerRow}-${config.economy.seatsPerRow}`;
+  const firstClassRows = config.firstClass?.rows || 0;
+  const businessRows = config.business?.rows || 0;
+  const economyRows = config.economy.rows;
+
+  // Calculate row ranges for each class
+  const firstClassEndRow = firstClassRows;
+  const businessStartRow = firstClassEndRow + 1;
+  const businessEndRow = firstClassEndRow + businessRows;
+  const economyStartRow = businessEndRow + 1;
+  const economyEndRow = businessEndRow + economyRows;
+
+  const seatConfig = `${config.firstClass?.seatsPerRow || 0}-${config.business?.seatsPerRow || 0}-${config.economy.seatsPerRow}`;
 
   return {
     flightId,
@@ -130,13 +194,30 @@ export async function getAvailableSeats(flightId: string): Promise<SeatMapRespon
       seatConfig,
     },
     seats: seatsWithAvailability,
+    seatClasses: {
+      first: {
+        startRow: 1,
+        endRow: firstClassEndRow,
+        seatsPerRow: config.firstClass?.seatsPerRow || 0,
+      },
+      business: {
+        startRow: businessStartRow,
+        endRow: businessEndRow,
+        seatsPerRow: config.business?.seatsPerRow || 0,
+      },
+      economy: {
+        startRow: economyStartRow,
+        endRow: economyEndRow,
+        seatsPerRow: config.economy.seatsPerRow,
+      },
+    },
   };
 }
 
 export async function validateSeatSelection(
   flightId: string,
   seatNumbers: string[],
-  ticketClass: 'economy' | 'business'
+  ticketClass: TicketClass
 ): Promise<{ valid: boolean; errors: string[] }> {
   const errors: string[] = [];
   const bookedSeats = await getBookedSeats(flightId);

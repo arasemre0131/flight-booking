@@ -49,7 +49,15 @@ export class LoginPage {
     this.isLoading.set(false);
 
     if (result.success) {
-      this.router.navigate(['/']);
+      // Redirect based on user role
+      const user = this.authService.currentUser();
+      if (user?.role === 'admin') {
+        this.router.navigate(['/admin']);
+      } else if (user?.role === 'airline') {
+        this.router.navigate(['/airline']);
+      } else {
+        this.router.navigate(['/']);
+      }
     } else {
       this.error.set(result.error || 'Login failed');
     }

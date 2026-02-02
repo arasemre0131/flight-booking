@@ -19,11 +19,11 @@ interface NavItem {
 })
 export class AirlineSidebar {
   navItems: NavItem[] = [
-    { label: 'Overview', path: '/airline/overview', icon: '📊' },
-    { label: 'Routes', path: '/airline/routes', icon: '🛫' },
-    { label: 'Aircraft', path: '/airline/aircraft', icon: '✈️' },
-    { label: 'Flights', path: '/airline/flights', icon: '📅' },
-    { label: 'Pricing', path: '/airline/pricing', icon: '💰' },
-    { label: 'Statistics', path: '/airline/statistics', icon: '📈' }
+    { label: 'Overview', path: '/airline/overview', icon: '' },
+    { label: 'Routes', path: '/airline/routes', icon: '' },
+    { label: 'Aircraft', path: '/airline/aircraft', icon: '' },
+    { label: 'Flights', path: '/airline/flights', icon: '' },
+    { label: 'Pricing', path: '/airline/pricing', icon: '' },
+    { label: 'Statistics', path: '/airline/statistics', icon: '' }
   ];
 }

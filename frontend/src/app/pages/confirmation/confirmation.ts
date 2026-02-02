@@ -45,10 +45,10 @@ export class ConfirmationPage {
     if (!payment) return '';
 
     switch (payment.cardType) {
-      case 'visa': return '💳 Visa';
-      case 'mastercard': return '💳 Mastercard';
-      case 'amex': return '💳 Amex';
-      default: return '💳';
+      case 'visa': return 'Visa';
+      case 'mastercard': return 'Mastercard';
+      case 'amex': return 'Amex';
+      default: return 'Card';
     }
   }
 

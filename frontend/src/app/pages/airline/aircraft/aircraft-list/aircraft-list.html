@@ -56,14 +56,14 @@
               </td>
               <td class="actions">
                 <a [routerLink]="['/airline/aircraft', aircraft.id, 'edit']" class="btn-icon" title="Edit">
-                  ✏️
+                  Edit
                 </a>
                 <button
                   class="btn-icon"
                   (click)="confirmToggleStatus(aircraft)"
                   [title]="aircraft.isActive ? 'Deactivate' : 'Activate'"
                 >
-                  {{ aircraft.isActive ? '🚫' : '✅' }}
+                  {{ aircraft.isActive ? 'Deactivate' : 'Activate' }}
                 </button>
               </td>
             </tr>
