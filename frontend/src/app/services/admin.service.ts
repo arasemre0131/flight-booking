@@ -242,43 +242,53 @@ export class AdminService {
   }
 
   // ============================================================================
-  // Airline Management (Mock - backend doesn't have these endpoints yet)
+  // Airline Management
   // ============================================================================
 
   async getAirlines(pagination: PaginationParams): Promise<PaginatedResult<AirlineSummary>> {
-    // Extract airlines from users
-    const airlineUsers = this._users().filter(u => u.role === 'airline');
-    const airlineIds = new Set(airlineUsers.map(u => u.airlineId).filter(Boolean));
+    try {
+      const response = await firstValueFrom(
+        this.http.get<any[]>(`${this.API_URL}/admin/airlines`)
+      );
 
-    const airlines: AirlineSummary[] = Array.from(airlineIds).map(id => {
-      const operatorCount = airlineUsers.filter(u => u.airlineId === id).length;
-      return {
-        id: id!,
-        name: `Airline ${id?.substring(0, 8)}`,
-        code: 'XX',
-        status: 'active' as const,
-        operatorCount,
-        activeOperators: operatorCount,
+      const airlines: AirlineSummary[] = response.map(a => ({
+        id: a._id,
+        name: a.name,
+        code: a.code,
+        status: a.status,
+        operatorCount: a.operatorCount || 0,
+        activeOperators: a.operatorCount || 0,
         routeCount: 0,
         aircraftCount: 0,
-        flightCount: 0,
-        totalFlights: 0,
+        flightCount: a.flightCount || 0,
+        totalFlights: a.flightCount || 0,
         totalBookings: 0,
         totalRevenue: 0
+      }));
+
+      this._airlines.set(airlines);
+
+      const total = airlines.length;
+      const start = (pagination.page - 1) * pagination.pageSize;
+      const items = airlines.slice(start, start + pagination.pageSize);
+
+      return {
+        items,
+        total,
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        totalPages: Math.ceil(total / pagination.pageSize)
       };
-    });
-
-    const total = airlines.length;
-    const start = (pagination.page - 1) * pagination.pageSize;
-    const items = airlines.slice(start, start + pagination.pageSize);
-
-    return {
-      items,
-      total,
-      page: pagination.page,
-      pageSize: pagination.pageSize,
-      totalPages: Math.ceil(total / pagination.pageSize)
-    };
+    } catch (error) {
+      console.error('Failed to fetch airlines:', error);
+      return {
+        items: [],
+        total: 0,
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        totalPages: 0
+      };
+    }
   }
 
   async getAirlineById(id: string): Promise<AirlineSummary | null> {
@@ -302,22 +312,72 @@ export class AdminService {
   }
 
   // ============================================================================
-  // Booking Overview (Mock - backend doesn't have admin booking endpoints)
+  // Booking Overview
   // ============================================================================
 
   async getBookings(filters: BookingFilters, pagination: PaginationParams): Promise<PaginatedResult<BookingSummary>> {
-    // Return empty for now - would need backend endpoint
-    return {
-      items: [],
-      total: 0,
-      page: pagination.page,
-      pageSize: pagination.pageSize,
-      totalPages: 0
-    };
+    try {
+      const response = await firstValueFrom(
+        this.http.get<any[]>(`${this.API_URL}/admin/bookings`)
+      );
+
+      let bookings: BookingSummary[] = response.map(b => ({
+        id: b._id,
+        confirmationCode: b._id.substring(0, 8).toUpperCase(),
+        passengerName: b.userId ? `${b.userId.firstName} ${b.userId.lastName}` : 'Unknown',
+        passengerEmail: b.userId?.email || 'Unknown',
+        flightNumber: b.flightId?.airlineId?.code ? `${b.flightId.airlineId.code}${b.flightId._id.substring(0, 4).toUpperCase()}` : 'N/A',
+        airlineId: b.flightId?.airlineId?._id || '',
+        airlineName: b.flightId?.airlineId?.name || 'Unknown',
+        departureDate: b.flightId?.departureTime || b.createdAt,
+        route: 'N/A',
+        amount: b.totalPrice || 0,
+        totalAmount: b.totalPrice || 0,
+        status: b.status,
+        paymentStatus: b.status === 'confirmed' ? 'paid' : 'pending',
+        createdAt: b.createdAt
+      }));
+
+      this._bookings.set(bookings);
+
+      // Apply filters
+      if (filters.status && filters.status !== 'all') {
+        bookings = bookings.filter(b => b.status === filters.status);
+      }
+      if (filters.search) {
+        const search = filters.search.toLowerCase();
+        bookings = bookings.filter(b =>
+          b.passengerName.toLowerCase().includes(search) ||
+          b.passengerEmail.toLowerCase().includes(search) ||
+          b.flightNumber.toLowerCase().includes(search)
+        );
+      }
+
+      const total = bookings.length;
+      const start = (pagination.page - 1) * pagination.pageSize;
+      const items = bookings.slice(start, start + pagination.pageSize);
+
+      return {
+        items,
+        total,
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        totalPages: Math.ceil(total / pagination.pageSize)
+      };
+    } catch (error) {
+      console.error('Failed to fetch bookings:', error);
+      return {
+        items: [],
+        total: 0,
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        totalPages: 0
+      };
+    }
   }
 
   async getBookingById(id: string): Promise<BookingSummary | null> {
-    return null;
+    return this._bookings().find(b => b.id === id) || null;
   }
 
   // ============================================================================
@@ -327,33 +387,51 @@ export class AdminService {
   async getStats(dateRange: 'week' | 'month' | 'year' | 'all'): Promise<PlatformStats> {
     await this.loadUsers();
 
+    // Load airlines and bookings
+    try {
+      await this.getAirlines({ page: 1, pageSize: 100 });
+      await this.getBookings({}, { page: 1, pageSize: 1000 });
+    } catch (e) {
+      console.error('Failed to load additional stats:', e);
+    }
+
     const users = this._users();
     const passengers = users.filter(u => u.role === 'passenger').length;
-    const airlines = users.filter(u => u.role === 'airline').length;
+    const airlineOperators = users.filter(u => u.role === 'airline').length;
     const admins = users.filter(u => u.role === 'admin').length;
-    const totalAirlines = new Set(users.filter(u => u.airlineId).map(u => u.airlineId)).size;
+
+    const airlines = this._airlines();
+    const bookings = this._bookings();
+
+    const totalRevenue = bookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0);
+    const bookingsByStatus = {
+      pending: bookings.filter(b => b.status === 'pending').length,
+      confirmed: bookings.filter(b => b.status === 'confirmed').length,
+      cancelled: bookings.filter(b => b.status === 'cancelled').length,
+      completed: 0
+    };
 
     const stats: PlatformStats = {
       totalUsers: users.length,
       usersByRole: {
         passenger: passengers,
-        airline: airlines,
+        airline: airlineOperators,
         admin: admins
       },
-      totalAirlines,
-      activeAirlines: totalAirlines,
-      totalBookings: 0,
-      totalRevenue: 0,
-      bookingsByStatus: {
-        pending: 0,
-        confirmed: 0,
-        cancelled: 0,
-        completed: 0
-      },
+      totalAirlines: airlines.length,
+      activeAirlines: airlines.filter(a => a.status === 'active').length,
+      totalBookings: bookings.length,
+      totalRevenue,
+      bookingsByStatus,
       userGrowth: [],
       bookingVolume: [],
       revenueOverTime: [],
-      topAirlines: []
+      topAirlines: airlines.slice(0, 5).map(a => ({
+        airlineId: a.id,
+        name: a.name,
+        bookingCount: a.totalBookings || 0,
+        revenue: a.totalRevenue || 0
+      }))
     };
 
     this._stats.set(stats);

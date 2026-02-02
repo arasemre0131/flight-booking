@@ -2,6 +2,10 @@ import { Router, Response } from 'express';
 import { requireAuth, AuthRequest } from '../middleware/auth.middleware';
 import { requireRole } from '../middleware/role.middleware';
 import { inviteAirline, listUsers, deleteUser } from '../services/user.service';
+import { Airline } from '../models/airline.model';
+import { Booking } from '../models/booking.model';
+import { Flight } from '../models/flight.model';
+import { User } from '../models/user.model';
 
 const router = Router();
 
@@ -51,6 +55,63 @@ router.delete('/users/:id', async (req: AuthRequest, res: Response) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Deletion failed';
     res.status(400).json({ error: message });
+  }
+});
+
+// GET /api/admin/airlines
+router.get('/airlines', async (req: AuthRequest, res: Response) => {
+  try {
+    const airlines = await Airline.find().sort({ name: 1 });
+
+    // Get operator count and flight stats for each airline
+    const airlinesWithStats = await Promise.all(
+      airlines.map(async (airline) => {
+        const operatorCount = await User.countDocuments({
+          airlineId: airline._id,
+          role: 'airline'
+        });
+        const flightCount = await Flight.countDocuments({
+          airlineId: airline._id
+        });
+
+        return {
+          _id: airline._id,
+          name: airline.name,
+          code: airline.code,
+          status: airline.status,
+          operatorCount,
+          flightCount,
+          createdAt: airline.createdAt,
+          updatedAt: airline.updatedAt
+        };
+      })
+    );
+
+    res.json(airlinesWithStats);
+  } catch (error) {
+    console.error('Failed to fetch airlines:', error);
+    res.status(500).json({ error: 'Failed to fetch airlines' });
+  }
+});
+
+// GET /api/admin/bookings
+router.get('/bookings', async (req: AuthRequest, res: Response) => {
+  try {
+    const bookings = await Booking.find()
+      .populate('userId', 'firstName lastName email')
+      .populate({
+        path: 'flightId',
+        populate: {
+          path: 'airlineId',
+          select: 'name code'
+        }
+      })
+      .sort({ createdAt: -1 });
+
+    res.json(bookings);
+  } catch (error) {
+    console.error('Failed to fetch bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch bookings' });
   }
 });
 
