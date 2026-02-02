@@ -126,11 +126,9 @@ export class SearchFormComponent implements OnInit {
       errors.sameLocation = 'Origin and destination must be different';
     }
 
-    if (!this.departureDate()) {
-      errors.departureDate = 'Please select departure date';
-    }
+    // Date is optional - if not selected, will default to today in search results
 
-    if (this.isRoundTrip() && !this.returnDate()) {
+    if (this.isRoundTrip() && this.departureDate() && !this.returnDate()) {
       errors.returnDate = 'Please select return date';
     }
 

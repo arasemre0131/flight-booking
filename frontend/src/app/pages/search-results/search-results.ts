@@ -135,8 +135,13 @@ export class SearchResults implements OnInit {
         this.searchCriteria.set(criteria);
 
         // Now search for flights using backend API
-        if (originCode && destinationCode && departureDate) {
-          this.searchFlightsFromBackend(originCode, destinationCode, departureDate, criteria);
+        if (originCode && destinationCode) {
+          // If no date selected, default to today
+          const searchDate = departureDate || new Date().toISOString().split('T')[0];
+          if (!departureDate) {
+            criteria.departureDate = new Date();
+          }
+          this.searchFlightsFromBackend(originCode, destinationCode, searchDate, criteria);
         } else {
           // If missing required params, show mock data as fallback
           this.allFlights.set(MOCK_FLIGHTS);
@@ -159,31 +164,15 @@ export class SearchResults implements OnInit {
 
     this.bookingService.searchFlights(origin, destination, date, totalPassengers).subscribe({
       next: (results) => {
-        if (results.length > 0) {
-          // Convert backend results to frontend Flight format
-          const flights = results.map(result => this.bookingService.convertBackendFlightToFrontend(result));
-          this.allFlights.set(flights);
-        } else {
-          // No flights in database - use mock data with correct airports for demo
-          const mockFlightsWithCorrectAirports = MOCK_FLIGHTS.map(flight => ({
-            ...flight,
-            departureAirport: origin,
-            arrivalAirport: destination
-          }));
-          this.allFlights.set(mockFlightsWithCorrectAirports);
-        }
+        // Convert backend results to frontend Flight format - show only real flights
+        const flights = results.map(result => this.bookingService.convertBackendFlightToFrontend(result));
+        this.allFlights.set(flights);
         this.isLoading.set(false);
       },
       error: (err) => {
         console.error('Flight search error:', err);
-        this.searchError.set('Unable to search flights. Using sample data.');
-        // Fallback to mock data with correct airports
-        const mockFlightsWithCorrectAirports = MOCK_FLIGHTS.map(flight => ({
-          ...flight,
-          departureAirport: origin,
-          arrivalAirport: destination
-        }));
-        this.allFlights.set(mockFlightsWithCorrectAirports);
+        this.searchError.set('Unable to search flights. Please try again.');
+        this.allFlights.set([]);
         this.isLoading.set(false);
       }
     });
