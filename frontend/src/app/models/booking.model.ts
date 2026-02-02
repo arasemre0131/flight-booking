@@ -11,6 +11,11 @@ export interface EmergencyContact {
   phone: string;
 }
 
+export interface BookingExtras {
+  additionalBaggage: number; // 0, 1, or 2 extra bags
+  baggagePrice: number;
+}
+
 export interface BookingDraft {
   id: string;
   selectedFlight: Flight;
@@ -21,6 +26,7 @@ export interface BookingDraft {
   searchCriteria: SearchCriteria;
   seatAssignments?: SeatAssignment[];
   seatFees?: number;
+  extras?: BookingExtras;
   // Payment fields (008-payment)
   paymentDetails?: PaymentDetails;
   billingAddress?: BillingAddress;

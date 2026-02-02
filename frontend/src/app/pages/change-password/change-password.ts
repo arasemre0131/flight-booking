@@ -1,17 +1,17 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './login.html',
-  styleUrl: './login.scss'
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './change-password.html',
+  styleUrl: './change-password.scss'
 })
-export class LoginPage {
+export class ChangePasswordPage {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -19,18 +19,18 @@ export class LoginPage {
   form: FormGroup;
   error = signal<string | null>(null);
   isLoading = signal(false);
-  showPassword = signal(false);
 
   constructor() {
-    this.form = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-      rememberMe: [false]
-    });
-  }
+    // Redirect if not logged in or doesn't need password change
+    const user = this.authService.currentUser();
+    if (!user || !user.mustChangePassword) {
+      this.router.navigate(['/']);
+    }
 
-  togglePassword(): void {
-    this.showPassword.update(v => !v);
+    this.form = this.fb.group({
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required]]
+    });
   }
 
   async onSubmit(): Promise<void> {
@@ -39,34 +39,32 @@ export class LoginPage {
       return;
     }
 
+    const { newPassword, confirmPassword } = this.form.value;
+
+    if (newPassword !== confirmPassword) {
+      this.error.set('Passwords do not match');
+      return;
+    }
+
     this.error.set(null);
     this.isLoading.set(true);
 
-    const { email, password, rememberMe } = this.form.value;
-
-    const result = await this.authService.login(email, password, rememberMe);
+    // First login - no current password needed
+    const result = await this.authService.changePassword('', newPassword);
 
     this.isLoading.set(false);
 
     if (result.success) {
       const user = this.authService.currentUser();
-
-      // Force password change for airlines on first login
-      if (result.mustChangePassword) {
-        this.router.navigate(['/change-password']);
-        return;
-      }
-
-      // Redirect based on user role
-      if (user?.role === 'admin') {
-        this.router.navigate(['/admin']);
-      } else if (user?.role === 'airline') {
+      if (user?.role === 'airline') {
         this.router.navigate(['/airline']);
+      } else if (user?.role === 'admin') {
+        this.router.navigate(['/admin']);
       } else {
         this.router.navigate(['/']);
       }
     } else {
-      this.error.set(result.error || 'Login failed');
+      this.error.set(result.error || 'Failed to change password');
     }
   }
 

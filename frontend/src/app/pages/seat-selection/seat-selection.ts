@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SeatMapComponent } from '../../components/seat-map/seat-map';
@@ -6,6 +6,7 @@ import { SeatLegend } from '../../components/seat-legend/seat-legend';
 import { PassengerSeatList } from '../../components/passenger-seat-list/passenger-seat-list';
 import { FlightSummary } from '../../components/flight-summary/flight-summary';
 import { BookingService } from '../../services/booking.service';
+import { SocketService } from '../../services/socket.service';
 import { MOCK_SEAT_MAP, getSeatById } from '../../mock-data/seat-map.data';
 import { Seat, SeatAssignment, SeatMap, calculateSeatFees } from '../../models/seat.model';
 
@@ -16,9 +17,20 @@ import { Seat, SeatAssignment, SeatMap, calculateSeatFees } from '../../models/s
   templateUrl: './seat-selection.html',
   styleUrl: './seat-selection.scss'
 })
-export class SeatSelection implements OnInit {
+export class SeatSelection implements OnInit, OnDestroy {
   private bookingService = inject(BookingService);
+  private socketService = inject(SocketService);
   private router = inject(Router);
+
+  constructor() {
+    // Listen for real-time seat updates
+    effect(() => {
+      const update = this.socketService.seatUpdates();
+      if (update) {
+        this.markSeatsAsOccupied(update.seats);
+      }
+    });
+  }
 
   // Seat map data
   seatMap = signal<SeatMap>(MOCK_SEAT_MAP);
@@ -53,6 +65,23 @@ export class SeatSelection implements OnInit {
     return assignments.length > 0 && assignments.every(a => a.seatId !== null);
   });
 
+  // Extra baggage
+  extraBaggage = signal(0);
+
+  increaseBaggage(): void {
+    if (this.extraBaggage() < 2) {
+      this.extraBaggage.update(v => v + 1);
+      this.bookingService.updateExtras(this.extraBaggage());
+    }
+  }
+
+  decreaseBaggage(): void {
+    if (this.extraBaggage() > 0) {
+      this.extraBaggage.update(v => v - 1);
+      this.bookingService.updateExtras(this.extraBaggage());
+    }
+  }
+
   ngOnInit(): void {
     // Check if booking exists
     if (!this.selectedFlight()) {
@@ -73,6 +102,51 @@ export class SeatSelection implements OnInit {
     const existingAssignments = this.bookingService.seatAssignments();
     if (existingAssignments.length > 0) {
       this.localAssignments.set([...existingAssignments]);
+    }
+
+    // Connect to socket and join flight room for real-time updates
+    this.socketService.connect();
+    const flightId = this.selectedFlight()?.id;
+    if (flightId) {
+      this.socketService.joinFlight(flightId);
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Leave flight room when leaving page
+    const flightId = this.selectedFlight()?.id;
+    if (flightId) {
+      this.socketService.leaveFlight(flightId);
+    }
+  }
+
+  // Mark seats as occupied when another user books them
+  private markSeatsAsOccupied(seatIds: string[]): void {
+    const currentMap = this.seatMap();
+    const updatedRows = currentMap.rows.map(row => ({
+      ...row,
+      seats: row.seats.map(seat => {
+        if (seat === 'aisle') return seat;
+        if (seatIds.includes(seat.id)) {
+          return { ...seat, status: 'occupied' as const };
+        }
+        return seat;
+      })
+    }));
+
+    this.seatMap.set({ ...currentMap, rows: updatedRows });
+
+    // Clear any local assignments for these seats
+    const assignments = this.localAssignments();
+    const needsUpdate = assignments.some(a => a.seatId && seatIds.includes(a.seatId));
+    if (needsUpdate) {
+      const updated = assignments.map(a => {
+        if (a.seatId && seatIds.includes(a.seatId)) {
+          return { ...a, seatId: null, seat: null };
+        }
+        return a;
+      });
+      this.localAssignments.set(updated);
     }
   }
 

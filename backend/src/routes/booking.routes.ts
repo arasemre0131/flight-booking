@@ -12,6 +12,7 @@ import {
   SeatAssignment,
   PaymentDetails,
 } from '../services/booking.service';
+import { io } from '../server';
 
 const router = Router();
 
@@ -169,6 +170,17 @@ router.post(
       };
 
       const { booking, tickets } = await confirmBooking(req.params.id, userId, payment);
+
+      // Emit real-time seat update to all clients watching this flight
+      const flightId = booking.flightId?.toString();
+      if (flightId) {
+        const bookedSeats = tickets.map((t: any) => t.seatNumber);
+        io.to(`flight:${flightId}`).emit('seatsBooked', {
+          flightId,
+          seats: bookedSeats
+        });
+      }
+
       res.json({
         message: 'Booking confirmed successfully',
         booking: {

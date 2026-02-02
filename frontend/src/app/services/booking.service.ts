@@ -380,6 +380,25 @@ export class BookingService {
     this.saveToStorage();
   }
 
+  // Update extras (baggage)
+  updateExtras(additionalBaggage: number): void {
+    const BAGGAGE_PRICE = 35; // $35 per extra bag
+    this._bookingDraft.update(draft => {
+      if (!draft) return null;
+      return {
+        ...draft,
+        extras: {
+          additionalBaggage,
+          baggagePrice: additionalBaggage * BAGGAGE_PRICE
+        }
+      };
+    });
+    this.saveToStorage();
+  }
+
+  // Get extras
+  readonly extras = computed(() => this._bookingDraft()?.extras ?? null);
+
   // Calculate price summary with taxes (008-payment)
   calculatePriceSummary(): PriceSummary {
     const draft = this._bookingDraft();
@@ -392,13 +411,15 @@ export class BookingService {
     const returnPrice = draft.returnFlight ? draft.returnFlight.price * passengerCount : 0;
     const baseFare = outbound + returnPrice;
     const seatFees = draft.seatFees ?? 0;
+    const baggageFees = draft.extras?.baggagePrice ?? 0;
     const taxesAndFees = Math.round(baseFare * 0.10); // 10% mock tax
 
     return {
       baseFare,
       seatFees,
+      baggageFees,
       taxesAndFees,
-      total: baseFare + seatFees + taxesAndFees
+      total: baseFare + seatFees + baggageFees + taxesAndFees
     };
   }
 

@@ -26,6 +26,20 @@
         <!-- Passenger Seat Assignments -->
         <app-passenger-seat-list [seatAssignments]="localAssignments()" />
 
+        <!-- Extra Baggage -->
+        <div class="extras-section">
+          <h3 class="extras-title">Extra Baggage</h3>
+          <p class="extras-desc">Add extra checked bags ($35 each)</p>
+          <div class="baggage-selector">
+            <button class="baggage-btn" [disabled]="extraBaggage() === 0" (click)="decreaseBaggage()">-</button>
+            <span class="baggage-count">{{ extraBaggage() }}</span>
+            <button class="baggage-btn" [disabled]="extraBaggage() === 2" (click)="increaseBaggage()">+</button>
+          </div>
+          @if (extraBaggage() > 0) {
+            <p class="baggage-price">+${{ extraBaggage() * 35 }}</p>
+          }
+        </div>
+
         <!-- Flight Summary -->
         @if (selectedFlight()) {
           <app-flight-summary

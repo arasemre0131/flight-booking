@@ -87,6 +87,13 @@
           </div>
         }
 
+        @if (price.baggageFees && price.baggageFees > 0) {
+          <div class="price-line">
+            <span class="price-label">Extra baggage</span>
+            <span class="price-value">{{ formatPrice(price.baggageFees) }}</span>
+          </div>
+        }
+
         <div class="price-line">
           <span class="price-label">Taxes & fees</span>
           <span class="price-value">{{ formatPrice(price.taxesAndFees) }}</span>

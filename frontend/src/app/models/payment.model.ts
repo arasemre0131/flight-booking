@@ -22,6 +22,7 @@ export interface BillingAddress {
 export interface PriceSummary {
   baseFare: number;
   seatFees: number;
+  baggageFees?: number;
   taxesAndFees: number;
   total: number;
 }
