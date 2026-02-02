@@ -39,6 +39,8 @@ export async function createFlight(input: CreateFlightInput): Promise<IFlight> {
     airlineId: new mongoose.Types.ObjectId(input.airlineId),
     routeId: new mongoose.Types.ObjectId(input.routeId),
     aircraftId: new mongoose.Types.ObjectId(input.aircraftId),
+    origin: route.originAirport,
+    destination: route.destinationAirport,
     departureTime: input.departureTime,
     arrivalTime: input.arrivalTime,
     status: 'scheduled',

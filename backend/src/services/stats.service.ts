@@ -77,6 +77,7 @@ export async function getAirlineStats(airlineId: string): Promise<AirlineStats> 
   const routeStats: Map<string, { flightCount: number; passengerCount: number; revenue: number }> = new Map();
 
   for (const flight of flights) {
+    if (!flight.routeId) continue;
     const routeId = flight.routeId.toString();
     const current = routeStats.get(routeId) || { flightCount: 0, passengerCount: 0, revenue: 0 };
     current.flightCount++;

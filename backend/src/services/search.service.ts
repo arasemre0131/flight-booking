@@ -194,19 +194,28 @@ export async function findDirectFlights(
   const nextDay = new Date(date);
   nextDay.setDate(nextDay.getDate() + 1);
 
-  // Find routes matching origin and destination
+  // Find flights directly by origin/destination OR by routeId
+  const flights = await Flight.find({
+    origin: origin.toUpperCase(),
+    destination: destination.toUpperCase(),
+    status: 'scheduled',
+    departureTime: {
+      $gte: searchDate,
+      $lt: nextDay,
+    },
+  });
+
+  // Also find routes matching origin and destination for legacy support
   const routes = await Route.find({
     originAirport: origin.toUpperCase(),
     destinationAirport: destination.toUpperCase(),
     isActive: true,
   });
 
-  if (routes.length === 0) return [];
-
   const routeIds = routes.map((r) => r._id);
 
-  // Find flights on the search date
-  const flights = await Flight.find({
+  // Find flights by routeId (legacy)
+  const routeFlights = await Flight.find({
     routeId: { $in: routeIds },
     status: 'scheduled',
     departureTime: {
@@ -215,11 +224,20 @@ export async function findDirectFlights(
     },
   });
 
+  // Combine both (avoid duplicates)
+  const allFlightIds = new Set<string>();
+  const allFlights = [...flights, ...routeFlights].filter(f => {
+    const id = f._id.toString();
+    if (allFlightIds.has(id)) return false;
+    allFlightIds.add(id);
+    return true;
+  });
+
   const results: SearchResult[] = [];
 
-  for (const flight of flights) {
-    const route = routes.find((r) => r._id.toString() === flight.routeId.toString());
-    if (!route) continue;
+  for (const flight of allFlights) {
+    // Skip flights without origin/destination
+    if (!flight.origin || !flight.destination) continue;
 
     const aircraft = await Aircraft.findById(flight.aircraftId);
     if (!aircraft) continue;
@@ -230,11 +248,40 @@ export async function findDirectFlights(
     const availableSeats = await getAvailableSeatCount(flight._id.toString(), aircraft);
     if (availableSeats[ticketClass] < passengers) continue;
 
-    const flightResult = await buildFlightResult(flight, route, aircraft, airline, ticketClass);
+    // Get price - support both basePrice and pricing object
+    const price = flight.pricing?.[ticketClass] || flight.basePrice || 0;
+
+    // Build flight result directly (no route dependency)
+    const flightResult: FlightResult = {
+      flightId: flight._id.toString(),
+      flightNumber: `${airline.code}${flight._id.toString().slice(-4).toUpperCase()}`,
+      airline: {
+        id: airline._id.toString(),
+        name: airline.name,
+        code: airline.code,
+      },
+      origin: {
+        code: flight.origin,
+        city: getCity(flight.origin),
+      },
+      destination: {
+        code: flight.destination,
+        city: getCity(flight.destination),
+      },
+      departureTime: flight.departureTime,
+      arrivalTime: flight.arrivalTime,
+      duration: calculateDuration(flight.departureTime, flight.arrivalTime),
+      price,
+      aircraft: {
+        model: aircraft.aircraftModel || 'Unknown',
+        seatConfig: getSeatConfig(aircraft),
+      },
+      availableSeats,
+    };
 
     results.push({
       type: 'direct',
-      pricePerPerson: flight.pricing[ticketClass],
+      pricePerPerson: price,
       totalDuration: flightResult.duration,
       stops: 0,
       flights: [flightResult],
@@ -329,11 +376,13 @@ export async function findConnectingFlights(
         // Layover must be between 2 and 8 hours (120-480 minutes)
         if (layoverMinutes < 120 || layoverMinutes > 480) continue;
 
+        if (!firstFlight.routeId || !secondFlight.routeId) continue;
+
         const firstRoute = firstRoutes.find(
-          (r) => r._id.toString() === firstFlight.routeId.toString()
+          (r) => r._id.toString() === firstFlight.routeId!.toString()
         );
         const secondRoute = secondRoutes.find(
-          (r) => r._id.toString() === secondFlight.routeId.toString()
+          (r) => r._id.toString() === secondFlight.routeId!.toString()
         );
 
         if (!firstRoute || !secondRoute) continue;

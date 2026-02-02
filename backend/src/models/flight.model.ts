@@ -5,10 +5,13 @@ export type FlightStatus = 'scheduled' | 'boarding' | 'departed' | 'arrived' | '
 export interface IFlight extends Document {
   _id: mongoose.Types.ObjectId;
   airlineId: mongoose.Types.ObjectId;
-  routeId: mongoose.Types.ObjectId;
+  routeId?: mongoose.Types.ObjectId;
   aircraftId: mongoose.Types.ObjectId;
+  origin?: string;
+  destination?: string;
   departureTime: Date;
   arrivalTime: Date;
+  basePrice?: number;
   pricing: {
     economy: number;
     business: number;
@@ -29,12 +32,20 @@ const flightSchema = new Schema<IFlight>(
     routeId: {
       type: Schema.Types.ObjectId,
       ref: 'Route',
-      required: true,
+      required: false,
     },
     aircraftId: {
       type: Schema.Types.ObjectId,
       ref: 'Aircraft',
       required: true,
+    },
+    origin: {
+      type: String,
+      required: false,
+    },
+    destination: {
+      type: String,
+      required: false,
     },
     departureTime: {
       type: Date,
@@ -43,6 +54,10 @@ const flightSchema = new Schema<IFlight>(
     arrivalTime: {
       type: Date,
       required: true,
+    },
+    basePrice: {
+      type: Number,
+      default: 0,
     },
     pricing: {
       economy: { type: Number, default: 0 },
@@ -62,6 +77,7 @@ const flightSchema = new Schema<IFlight>(
 
 flightSchema.index({ airlineId: 1 });
 flightSchema.index({ routeId: 1 });
+flightSchema.index({ origin: 1, destination: 1 });
 flightSchema.index({ departureTime: 1 });
 flightSchema.index({ status: 1 });
 

@@ -7,7 +7,6 @@ import { FilterBar } from '../../components/filter-bar/filter-bar';
 import { SidebarContent } from '../../components/sidebar-content/sidebar-content';
 import { Flight } from '../../models/flight.model';
 import { FilterState, DEFAULT_FILTER_STATE } from '../../models/filter.model';
-import { MOCK_FLIGHTS } from '../../mock-data/flights.data';
 import { AirportService } from '../../services/airport.service';
 import { BookingService } from '../../services/booking.service';
 import { SearchCriteria, DEFAULT_SEARCH_CRITERIA } from '../../models/search-criteria.model';
@@ -143,8 +142,8 @@ export class SearchResults implements OnInit {
           }
           this.searchFlightsFromBackend(originCode, destinationCode, searchDate, criteria);
         } else {
-          // If missing required params, show mock data as fallback
-          this.allFlights.set(MOCK_FLIGHTS);
+          // If missing required params, show no flights
+          this.allFlights.set([]);
           this.isLoading.set(false);
         }
       });
