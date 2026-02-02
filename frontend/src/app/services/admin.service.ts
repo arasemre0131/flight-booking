@@ -40,7 +40,7 @@ export interface InviteAirlineResponse {
     name: string;
     code: string;
   };
-  tempPassword: string;
+  temporaryPassword: string;
 }
 
 // Extended user for admin panel

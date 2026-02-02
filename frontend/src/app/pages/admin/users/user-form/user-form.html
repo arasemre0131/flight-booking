@@ -5,107 +5,122 @@
       <button class="close-btn" (click)="onCancel()">×</button>
     </div>
 
-    <form (ngSubmit)="onSubmit()">
-      @if (error()) {
-        <div class="error-message">{{ error() }}</div>
-      }
+    @if (successInfo()) {
+      <!-- Success State -->
+      <div class="success-state">
+        <div class="success-icon">✓</div>
+        <h3>Airline Invited Successfully!</h3>
+        <p>An operator account has been created. Share these credentials with the airline:</p>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="firstName">First Name *</label>
-          <input
-            type="text"
-            id="firstName"
-            [ngModel]="firstName()"
-            (ngModelChange)="firstName.set($event)"
-            name="firstName"
-            placeholder="Enter first name"
-          />
+        <div class="credentials-box">
+          <div class="credential">
+            <span class="label">Email:</span>
+            <span class="value">{{ email() }}</span>
+          </div>
+          <div class="credential">
+            <span class="label">Temporary Password:</span>
+            <span class="value password">{{ successInfo()?.tempPassword }}</span>
+            <button type="button" class="btn-copy" [class.copied]="copied()" (click)="copyPassword()">
+              {{ copied() ? 'Copied!' : 'Copy' }}
+            </button>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="lastName">Last Name *</label>
-          <input
-            type="text"
-            id="lastName"
-            [ngModel]="lastName()"
-            (ngModelChange)="lastName.set($event)"
-            name="lastName"
-            placeholder="Enter last name"
-          />
+        <p class="note">The operator will be prompted to change their password on first login.</p>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-primary" (click)="onDone()">Done</button>
         </div>
       </div>
+    } @else {
+      <!-- Form State -->
+      <form (ngSubmit)="onSubmit()">
+        @if (error()) {
+          <div class="error-message">{{ error() }}</div>
+        }
 
-      <div class="form-group">
-        <label for="email">Email *</label>
-        <input
-          type="email"
-          id="email"
-          [ngModel]="email()"
-          (ngModelChange)="email.set($event)"
-          name="email"
-          placeholder="Enter email address"
-        />
-      </div>
-
-      @if (!isEditMode) {
-        <div class="form-group">
-          <label for="role">Role *</label>
-          <select
-            id="role"
-            [ngModel]="role()"
-            (ngModelChange)="role.set($event)"
-            name="role"
-          >
-            <option value="airline">Airline Staff</option>
-            <option value="admin">Administrator</option>
-          </select>
-        </div>
-
-        @if (role() === 'airline') {
+        @if (!isEditMode) {
           <div class="form-group">
-            <label for="airlineId">Airline</label>
-            <select
-              id="airlineId"
-              [ngModel]="airlineId()"
-              (ngModelChange)="airlineId.set($event)"
-              name="airlineId"
-            >
-              <option value="">Select airline (optional)</option>
-              @for (airline of airlines(); track airline.id) {
-                <option [value]="airline.id">{{ airline.name }}</option>
-              }
-            </select>
+            <label for="companyName">Airline Name *</label>
+            <input
+              type="text"
+              id="companyName"
+              [ngModel]="companyName()"
+              (ngModelChange)="companyName.set($event)"
+              name="companyName"
+              placeholder="e.g. Turkish Airlines"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="airlineCode">Airline Code *</label>
+            <input
+              type="text"
+              id="airlineCode"
+              [ngModel]="airlineCode()"
+              (ngModelChange)="airlineCode.set($event)"
+              name="airlineCode"
+              placeholder="e.g. TK (2-3 characters)"
+              maxlength="3"
+              style="text-transform: uppercase;"
+            />
+            <span class="hint">IATA airline code (2-3 letters)</span>
           </div>
         }
 
         <div class="form-group">
-          <label for="tempPassword">Temporary Password *</label>
-          <div class="password-input">
+          <label for="email">Operator Email *</label>
+          <input
+            type="email"
+            id="email"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
+            name="email"
+            placeholder="operator@airline.com"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
             <input
               type="text"
-              id="tempPassword"
-              [ngModel]="tempPassword()"
-              (ngModelChange)="tempPassword.set($event)"
-              name="tempPassword"
-              placeholder="Enter temporary password"
+              id="firstName"
+              [ngModel]="firstName()"
+              (ngModelChange)="firstName.set($event)"
+              name="firstName"
+              placeholder="Optional"
             />
-            <button type="button" class="btn-generate" (click)="generatePassword()">
-              Generate
-            </button>
           </div>
-          <span class="hint">User will be prompted to change this on first login</span>
-        </div>
-      }
 
-      <div class="modal-footer">
-        <button type="button" class="btn-secondary" (click)="onCancel()">
-          Cancel
-        </button>
-        <button type="submit" class="btn-primary" [disabled]="isLoading()">
-          {{ isLoading() ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Create User') }}
-        </button>
-      </div>
-    </form>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              [ngModel]="lastName()"
+              (ngModelChange)="lastName.set($event)"
+              name="lastName"
+              placeholder="Optional"
+            />
+          </div>
+        </div>
+
+        @if (!isEditMode) {
+          <p class="info-text">
+            A temporary password will be generated automatically. The operator will be required to change it on first login.
+          </p>
+        }
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="onCancel()">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary" [disabled]="isLoading()">
+            {{ isLoading() ? 'Sending...' : (isEditMode ? 'Save Changes' : 'Send Invitation') }}
+          </button>
+        </div>
+      </form>
+    }
   </div>
 </div>

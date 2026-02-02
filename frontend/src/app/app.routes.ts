@@ -40,6 +40,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/confirmation/confirmation').then(m => m.ConfirmationPage)
   },
   {
+    path: 'my-trips',
+    loadComponent: () => import('./pages/my-trips/my-trips').then(m => m.MyTripsPage)
+  },
+  {
     path: 'airline',
     loadChildren: () => import('./pages/airline/airline.routes').then(m => m.AIRLINE_ROUTES),
     canActivate: [airlineGuard]

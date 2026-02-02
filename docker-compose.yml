@@ -29,6 +29,8 @@ services:
       - NODE_ENV=${NODE_ENV:-production}
       - MONGODB_URI=${MONGODB_URI:-mongodb://mongodb:27017/skyroute}
       - PORT=3000
+      - JWT_SECRET=${JWT_SECRET:-skyroute-super-secret-jwt-key-2024}
+      - SEED_TEST_DATA=${SEED_TEST_DATA:-false}
     depends_on:
       mongodb:
         condition: service_healthy

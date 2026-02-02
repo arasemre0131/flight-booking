@@ -1,0 +1,53 @@
+<div class="my-trips-page">
+  <div class="container">
+    <h1>My Trips</h1>
+
+    @if (isLoading()) {
+      <div class="loading">Loading your trips...</div>
+    } @else if (error()) {
+      <div class="error-message">{{ error() }}</div>
+    } @else if (trips().length === 0) {
+      <div class="empty-state">
+        <p>You haven't booked any trips yet.</p>
+        <a routerLink="/" class="book-btn">Book a Flight</a>
+      </div>
+    } @else {
+      <div class="trips-list">
+        @for (trip of trips(); track trip.id) {
+          <div class="trip-card">
+            <div class="trip-header">
+              <span class="flight-number">{{ trip.flightNumber }}</span>
+              <span class="status" [class]="getStatusClass(trip.status)">{{ trip.status }}</span>
+            </div>
+            <div class="trip-route">
+              <span class="origin">{{ trip.origin }}</span>
+              <span class="arrow">→</span>
+              <span class="destination">{{ trip.destination }}</span>
+            </div>
+            <div class="trip-details">
+              <div class="detail">
+                <span class="label">Date</span>
+                <span class="value">{{ formatDate(trip.departureTime) }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Time</span>
+                <span class="value">{{ formatTime(trip.departureTime) }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Passengers</span>
+                <span class="value">{{ trip.passengerCount }}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Class</span>
+                <span class="value">{{ trip.ticketClass }}</span>
+              </div>
+            </div>
+            <div class="trip-footer">
+              <span class="price">${{ trip.totalPrice }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

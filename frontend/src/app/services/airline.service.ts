@@ -91,7 +91,7 @@ export interface AirlineFlight {
 export interface CreateRouteDto {
   originAirport: string;
   destinationAirport: string;
-  flightNumber: string;
+  flightNumberPrefix: string;
 }
 
 export interface CreateAircraftDto {
@@ -206,7 +206,7 @@ export class AirlineService {
       this.http.post<BackendRoute>(`${this.API_URL}/routes`, {
         originAirport: dto.originAirport.toUpperCase(),
         destinationAirport: dto.destinationAirport.toUpperCase(),
-        flightNumber: dto.flightNumber.toUpperCase()
+        flightNumber: dto.flightNumberPrefix.toUpperCase()
       })
     );
     const route = this.convertRoute(response);

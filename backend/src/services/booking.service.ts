@@ -239,7 +239,12 @@ export async function getUserBookings(userId: string): Promise<IBooking[]> {
     userId: new mongoose.Types.ObjectId(userId),
   })
     .sort({ createdAt: -1 })
-    .populate('flightId');
+    .populate({
+      path: 'flightId',
+      populate: {
+        path: 'routeId'
+      }
+    });
 
   return bookings;
 }

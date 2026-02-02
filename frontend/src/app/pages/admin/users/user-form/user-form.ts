@@ -4,8 +4,7 @@ import { Component, Input, Output, EventEmitter, inject, OnInit, signal } from '
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../../services/admin.service';
-import { User, UserRole } from '../../../../models/auth.model';
-import { CreateUserData, UpdateUserData, AirlineSummary } from '../../../../models/admin.model';
+import { User } from '../../../../models/auth.model';
 
 @Component({
   selector: 'app-user-form',
@@ -25,76 +24,78 @@ export class UserForm implements OnInit {
   email = signal('');
   firstName = signal('');
   lastName = signal('');
-  role = signal<'airline' | 'admin'>('airline');
-  tempPassword = signal('');
-  airlineId = signal<string>('');
+  companyName = signal('');
+  airlineCode = signal('');
 
   // UI state
   isLoading = signal(false);
   error = signal<string | null>(null);
-  airlines = signal<AirlineSummary[]>([]);
+  successInfo = signal<{ tempPassword: string } | null>(null);
+  copied = signal(false);
 
   get isEditMode(): boolean {
     return !!this.user;
   }
 
   get formTitle(): string {
-    return this.isEditMode ? 'Edit User' : 'Create User';
+    return this.isEditMode ? 'Edit User' : 'Invite Airline Operator';
   }
 
   ngOnInit(): void {
-    this.airlines.set(this.adminService.getAllAirlines());
-
     if (this.user) {
       this.email.set(this.user.email);
       this.firstName.set(this.user.firstName);
       this.lastName.set(this.user.lastName);
-      this.role.set(this.user.role === 'passenger' ? 'airline' : this.user.role as 'airline' | 'admin');
-      this.airlineId.set((this.user as any).airlineId || '');
     }
   }
 
   async onSubmit(): Promise<void> {
     this.error.set(null);
+    this.successInfo.set(null);
 
-    if (!this.firstName() || !this.lastName() || !this.email()) {
-      this.error.set('Please fill in all required fields');
+    if (!this.email()) {
+      this.error.set('Email is required');
       return;
     }
 
-    if (!this.isEditMode && !this.tempPassword()) {
-      this.error.set('Please provide a temporary password');
-      return;
+    if (!this.isEditMode) {
+      if (!this.companyName()) {
+        this.error.set('Company name is required');
+        return;
+      }
+      if (!this.airlineCode() || this.airlineCode().length < 2 || this.airlineCode().length > 3) {
+        this.error.set('Airline code must be 2-3 characters');
+        return;
+      }
     }
 
     this.isLoading.set(true);
 
     try {
       if (this.isEditMode && this.user) {
-        const data: UpdateUserData = {
-          firstName: this.firstName(),
-          lastName: this.lastName(),
-          email: this.email()
-        };
-        await this.adminService.updateUser(this.user.id, data);
+        // Edit mode - not supported by backend yet
+        this.error.set('Edit functionality not available');
       } else {
-        const data: CreateUserData = {
+        // Create mode - invite airline
+        const response = await this.adminService.inviteAirline({
           email: this.email(),
-          firstName: this.firstName(),
-          lastName: this.lastName(),
-          role: this.role(),
-          tempPassword: this.tempPassword(),
-          airlineId: this.role() === 'airline' ? this.airlineId() : undefined
-        };
-        await this.adminService.createUser(data);
-      }
+          companyName: this.companyName(),
+          airlineCode: this.airlineCode().toUpperCase(),
+          firstName: this.firstName() || undefined,
+          lastName: this.lastName() || undefined
+        });
 
-      this.save.emit();
+        this.successInfo.set({ tempPassword: response.temporaryPassword });
+      }
     } catch (err: any) {
       this.error.set(err.message || 'An error occurred');
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  onDone(): void {
+    this.save.emit();
   }
 
   onCancel(): void {
@@ -107,12 +108,24 @@ export class UserForm implements OnInit {
     }
   }
 
-  generatePassword(): void {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-    let password = '';
-    for (let i = 0; i < 12; i++) {
-      password += chars.charAt(Math.floor(Math.random() * chars.length));
+  async copyPassword(): Promise<void> {
+    const pw = this.successInfo()?.tempPassword;
+    if (pw) {
+      try {
+        await navigator.clipboard.writeText(pw);
+        this.copied.set(true);
+        setTimeout(() => this.copied.set(false), 2000);
+      } catch {
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = pw;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        this.copied.set(true);
+        setTimeout(() => this.copied.set(false), 2000);
+      }
     }
-    this.tempPassword.set(password);
   }
 }
