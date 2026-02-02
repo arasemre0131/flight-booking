@@ -135,12 +135,8 @@ export class SearchResults implements OnInit {
 
         // Now search for flights using backend API
         if (originCode && destinationCode) {
-          // If no date selected, default to today
-          const searchDate = departureDate || new Date().toISOString().split('T')[0];
-          if (!departureDate) {
-            criteria.departureDate = new Date();
-          }
-          this.searchFlightsFromBackend(originCode, destinationCode, searchDate, criteria);
+          // Pass date if provided, otherwise undefined to get all flights
+          this.searchFlightsFromBackend(originCode, destinationCode, departureDate || undefined, criteria);
         } else {
           // If missing required params, show no flights
           this.allFlights.set([]);
@@ -153,7 +149,7 @@ export class SearchResults implements OnInit {
   private searchFlightsFromBackend(
     origin: string,
     destination: string,
-    date: string,
+    date: string | undefined,
     criteria: SearchCriteria
   ): void {
     this.isLoading.set(true);

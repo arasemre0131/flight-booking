@@ -24,8 +24,7 @@ const searchValidation = [
     .withMessage('destination must contain only letters')
     .toUpperCase(),
   query('date')
-    .notEmpty()
-    .withMessage('date is required')
+    .optional()
     .isISO8601({ strict: true, strictSeparator: true })
     .withMessage('date must be in YYYY-MM-DD format'),
   query('passengers')
@@ -58,7 +57,7 @@ router.get('/search', searchValidation, async (req: Request, res: Response) => {
     const params: SearchParams = {
       origin: (req.query.origin as string).toUpperCase(),
       destination: (req.query.destination as string).toUpperCase(),
-      date: req.query.date as string,
+      date: req.query.date as string | undefined,
       passengers: parseInt(req.query.passengers as string) || 1,
       class: (req.query.class as 'economy' | 'business') || 'economy',
       sortBy: (req.query.sortBy as 'price' | 'duration' | 'stops') || 'price',

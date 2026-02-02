@@ -66,7 +66,7 @@ const AIRPORT_CITIES: Record<string, string> = {
 export interface SearchParams {
   origin: string;
   destination: string;
-  date: string;
+  date?: string;
   passengers: number;
   class: 'economy' | 'business';
   sortBy: 'price' | 'duration' | 'stops';
@@ -186,23 +186,25 @@ async function buildFlightResult(
 export async function findDirectFlights(
   origin: string,
   destination: string,
-  date: string,
+  date: string | undefined,
   passengers: number,
   ticketClass: 'economy' | 'business'
 ): Promise<SearchResult[]> {
-  const searchDate = new Date(date);
-  const nextDay = new Date(date);
-  nextDay.setDate(nextDay.getDate() + 1);
+  // Build date filter - if no date, get all future flights
+  let dateFilter: any = { $gte: new Date() };
+  if (date) {
+    const searchDate = new Date(date);
+    const nextDay = new Date(date);
+    nextDay.setDate(nextDay.getDate() + 1);
+    dateFilter = { $gte: searchDate, $lt: nextDay };
+  }
 
   // Find flights directly by origin/destination OR by routeId
   const flights = await Flight.find({
     origin: origin.toUpperCase(),
     destination: destination.toUpperCase(),
     status: 'scheduled',
-    departureTime: {
-      $gte: searchDate,
-      $lt: nextDay,
-    },
+    departureTime: dateFilter,
   });
 
   // Also find routes matching origin and destination for legacy support
@@ -218,10 +220,7 @@ export async function findDirectFlights(
   const routeFlights = await Flight.find({
     routeId: { $in: routeIds },
     status: 'scheduled',
-    departureTime: {
-      $gte: searchDate,
-      $lt: nextDay,
-    },
+    departureTime: dateFilter,
   });
 
   // Combine both (avoid duplicates)
@@ -294,13 +293,18 @@ export async function findDirectFlights(
 export async function findConnectingFlights(
   origin: string,
   destination: string,
-  date: string,
+  date: string | undefined,
   passengers: number,
   ticketClass: 'economy' | 'business'
 ): Promise<SearchResult[]> {
-  const searchDate = new Date(date);
-  const dayAfter = new Date(date);
-  dayAfter.setDate(dayAfter.getDate() + 2);
+  // Build date filter
+  let dateFilter: any = { $gte: new Date() };
+  if (date) {
+    const searchDate = new Date(date);
+    const dayAfter = new Date(date);
+    dayAfter.setDate(dayAfter.getDate() + 2);
+    dateFilter = { $gte: searchDate, $lt: dayAfter };
+  }
 
   // Find all routes departing from origin
   const firstLegRoutes = await Route.find({
@@ -350,20 +354,14 @@ export async function findConnectingFlights(
     const firstFlights = await Flight.find({
       routeId: { $in: firstRouteIds },
       status: 'scheduled',
-      departureTime: {
-        $gte: searchDate,
-        $lt: dayAfter,
-      },
+      departureTime: dateFilter,
     });
 
     // Find second leg flights
     const secondFlights = await Flight.find({
       routeId: { $in: secondRouteIds },
       status: 'scheduled',
-      departureTime: {
-        $gte: searchDate,
-        $lt: dayAfter,
-      },
+      departureTime: dateFilter,
     });
 
     // Match flight pairs with valid layover (2-8 hours)

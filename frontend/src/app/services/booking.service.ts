@@ -117,17 +117,19 @@ export class BookingService {
   searchFlights(
     origin: string,
     destination: string,
-    date: string,
+    date: string | undefined,
     passengers: number = 1,
     ticketClass: 'economy' | 'business' = 'economy'
   ): Observable<FlightSearchResult[]> {
     const params = new URLSearchParams({
       origin,
       destination,
-      date,
       passengers: passengers.toString(),
       class: ticketClass
     });
+    if (date) {
+      params.set('date', date);
+    }
 
     return this.http.get<SearchResponse>(`${this.API_URL}/flights/search?${params}`).pipe(
       map(response => response.results),
