@@ -1,5 +1,6 @@
 import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, of } from 'rxjs';
 import { SearchFormComponent } from '../../components/search-form/search-form.component';
 import { FlightCard } from '../../components/flight-card/flight-card';
 import { FilterBar } from '../../components/filter-bar/filter-bar';
@@ -24,8 +25,8 @@ export class SearchResults implements OnInit {
   private airportService = inject(AirportService);
   private bookingService = inject(BookingService);
 
-  // All flights from mock data
-  private allFlights = signal<Flight[]>(MOCK_FLIGHTS);
+  // All flights - now loaded from backend API
+  private allFlights = signal<Flight[]>([]);
 
   // Search criteria from URL
   private searchCriteria = signal<SearchCriteria>(DEFAULT_SEARCH_CRITERIA);
@@ -36,6 +37,8 @@ export class SearchResults implements OnInit {
   // UI state
   showAllFlights = signal(false);
   selectedFlightId = signal<string | null>(null);
+  isLoading = signal(true);
+  searchError = signal<string | null>(null);
 
   // Destination city for sidebar
   destinationCity = signal<string>('your destination');
@@ -97,7 +100,11 @@ export class SearchResults implements OnInit {
     this.route.queryParams.subscribe(params => {
       console.log('Search params:', params);
 
-      // Build search criteria from params
+      const originCode = params['origin'];
+      const destinationCode = params['destination'];
+      const departureDate = params['departureDate'];
+
+      // Build base search criteria
       const criteria: SearchCriteria = {
         ...DEFAULT_SEARCH_CRITERIA,
         tripType: (params['tripType'] as 'round-trip' | 'one-way') || 'round-trip',
@@ -105,36 +112,80 @@ export class SearchResults implements OnInit {
           adults: parseInt(params['adults'] || '1', 10),
           children: parseInt(params['children'] || '0', 10)
         },
-        departureDate: params['departureDate'] ? new Date(params['departureDate']) : null,
+        departureDate: departureDate ? new Date(departureDate) : null,
         returnDate: params['returnDate'] ? new Date(params['returnDate']) : null,
         origin: null,
         destination: null
       };
 
-      // Extract destination city from airport code
-      const destinationCode = params['destination'];
-      if (destinationCode) {
-        this.airportService.getByCode(destinationCode).subscribe(airport => {
-          if (airport) {
-            this.destinationCity.set(airport.city);
-            criteria.destination = airport;
-            this.searchCriteria.set(criteria);
-          }
-        });
-      }
+      // Use forkJoin to wait for both airport lookups before proceeding
+      const origin$ = originCode ? this.airportService.getByCode(originCode) : of(null);
+      const destination$ = destinationCode ? this.airportService.getByCode(destinationCode) : of(null);
 
-      // Extract origin from airport code
-      const originCode = params['origin'];
-      if (originCode) {
-        this.airportService.getByCode(originCode).subscribe(airport => {
-          if (airport) {
-            criteria.origin = airport;
-            this.searchCriteria.set(criteria);
-          }
-        });
-      }
+      forkJoin([origin$, destination$]).subscribe(([originAirport, destAirport]) => {
+        if (originAirport) {
+          criteria.origin = originAirport;
+        }
+        if (destAirport) {
+          criteria.destination = destAirport;
+          this.destinationCity.set(destAirport.city);
+        }
 
-      this.searchCriteria.set(criteria);
+        // Set the complete criteria
+        this.searchCriteria.set(criteria);
+
+        // Now search for flights using backend API
+        if (originCode && destinationCode && departureDate) {
+          this.searchFlightsFromBackend(originCode, destinationCode, departureDate, criteria);
+        } else {
+          // If missing required params, show mock data as fallback
+          this.allFlights.set(MOCK_FLIGHTS);
+          this.isLoading.set(false);
+        }
+      });
+    });
+  }
+
+  private searchFlightsFromBackend(
+    origin: string,
+    destination: string,
+    date: string,
+    criteria: SearchCriteria
+  ): void {
+    this.isLoading.set(true);
+    this.searchError.set(null);
+
+    const totalPassengers = criteria.passengers.adults + criteria.passengers.children;
+
+    this.bookingService.searchFlights(origin, destination, date, totalPassengers).subscribe({
+      next: (results) => {
+        if (results.length > 0) {
+          // Convert backend results to frontend Flight format
+          const flights = results.map(result => this.bookingService.convertBackendFlightToFrontend(result));
+          this.allFlights.set(flights);
+        } else {
+          // No flights in database - use mock data with correct airports for demo
+          const mockFlightsWithCorrectAirports = MOCK_FLIGHTS.map(flight => ({
+            ...flight,
+            departureAirport: origin,
+            arrivalAirport: destination
+          }));
+          this.allFlights.set(mockFlightsWithCorrectAirports);
+        }
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Flight search error:', err);
+        this.searchError.set('Unable to search flights. Using sample data.');
+        // Fallback to mock data with correct airports
+        const mockFlightsWithCorrectAirports = MOCK_FLIGHTS.map(flight => ({
+          ...flight,
+          departureAirport: origin,
+          arrivalAirport: destination
+        }));
+        this.allFlights.set(mockFlightsWithCorrectAirports);
+        this.isLoading.set(false);
+      }
     });
   }
 

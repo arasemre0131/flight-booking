@@ -23,7 +23,18 @@
         <div class="flight-list">
           <h2 class="results-title">Choose a departing flight</h2>
 
-          @if (displayedFlights().length === 0) {
+          @if (searchError()) {
+            <div class="search-error">
+              <p>{{ searchError() }}</p>
+            </div>
+          }
+
+          @if (isLoading()) {
+            <div class="loading-state">
+              <div class="loading-spinner"></div>
+              <p>Searching for flights...</p>
+            </div>
+          } @else if (displayedFlights().length === 0) {
             <div class="empty-state">
               @if (hasActiveFilters()) {
                 <p>No flights match your filters</p>

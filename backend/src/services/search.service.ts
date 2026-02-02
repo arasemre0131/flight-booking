@@ -7,6 +7,7 @@ import { getBookedSeats, generateSeatMap } from './seat.service';
 
 // Airport code to city mapping
 const AIRPORT_CITIES: Record<string, string> = {
+  // US Airports
   JFK: 'New York',
   LAX: 'Los Angeles',
   ORD: 'Chicago',
@@ -37,6 +38,29 @@ const AIRPORT_CITIES: Record<string, string> = {
   AUS: 'Austin',
   MSY: 'New Orleans',
   RDU: 'Raleigh',
+  // European Airports
+  IST: 'Istanbul',
+  SAW: 'Istanbul',
+  LHR: 'London',
+  CDG: 'Paris',
+  FRA: 'Frankfurt',
+  AMS: 'Amsterdam',
+  FCO: 'Rome',
+  MAD: 'Madrid',
+  BCN: 'Barcelona',
+  MUC: 'Munich',
+  ZRH: 'Zurich',
+  VIE: 'Vienna',
+  // Asian Airports
+  NRT: 'Tokyo',
+  HND: 'Tokyo',
+  PEK: 'Beijing',
+  PVG: 'Shanghai',
+  HKG: 'Hong Kong',
+  SIN: 'Singapore',
+  ICN: 'Seoul',
+  BKK: 'Bangkok',
+  DXB: 'Dubai',
 };
 
 export interface SearchParams {

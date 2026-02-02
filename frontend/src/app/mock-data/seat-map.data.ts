@@ -11,9 +11,9 @@ const OCCUPIED_SEATS = new Set([
 
 // Seat pricing by type (upgrade prices)
 const SEAT_PRICES: Record<SeatType, number> = {
-  first: 0,      // First class - no extra upgrade, base price is already premium
-  business: 0,   // Business - no extra upgrade
-  economy: 0,    // Economy standard
+  first: 199,    // First class - premium upgrade
+  business: 99,  // Business class - comfort upgrade
+  economy: 0,    // Economy standard - no extra fee
   exit: 50       // Exit row - extra legroom fee
 };
 
@@ -32,7 +32,7 @@ function createSeat(row: number, letter: string, type: SeatType, hasExtraLegroom
     status: OCCUPIED_SEATS.has(id) ? 'occupied' : 'available',
     type,
     seatClass: getSeatClass(type),
-    upgradePrice: type === 'exit' ? SEAT_PRICES.exit : 0,
+    upgradePrice: SEAT_PRICES[type],
     hasExtraLegroom: type === 'first' || type === 'exit' || hasExtraLegroom
   };
 }

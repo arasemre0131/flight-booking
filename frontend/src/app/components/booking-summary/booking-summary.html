@@ -16,7 +16,7 @@
           <span class="airport-code">{{ flight.arrivalAirport }}</span>
         </div>
         <div class="flight-details">
-          <span class="airline">{{ flight.airline }}</span>
+          <span class="airline">{{ flight.airline.name }}</span>
           <span class="separator">•</span>
           <span class="time">{{ formatTime(flight.departureTime) }} - {{ formatTime(flight.arrivalTime) }}</span>
         </div>
@@ -35,7 +35,7 @@
             <span class="airport-code">{{ rFlight.arrivalAirport }}</span>
           </div>
           <div class="flight-details">
-            <span class="airline">{{ rFlight.airline }}</span>
+            <span class="airline">{{ rFlight.airline.name }}</span>
             <span class="separator">•</span>
             <span class="time">{{ formatTime(rFlight.departureTime) }} - {{ formatTime(rFlight.arrivalTime) }}</span>
           </div>
