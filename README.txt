@@ -17,7 +17,7 @@
 3. Start all services:
    docker-compose up --build
 
-4. Wait for all containers to be healthy (approximately 2 minutes)
+4. Wait for all containers to be healthy (approximately 2-3 minutes)
 
 5. Access the application:
    - Frontend: http://localhost:4200
@@ -26,17 +26,30 @@
 
 ## Test Accounts
 
-Admin:
-- Email: admin@skyroute.com
-- Password: admin123
+ADMIN:
+  admin@skyroute.com / admin123
 
-Passenger:
-- Email: test@example.com
-- Password: password123
+AIRLINE OPERATORS (password: operator123):
+  Turkish Airlines:  operator@turkishairlines.com
+  Emirates:          operator@emirates.com
+  Lufthansa:         operator@lufthansa.com
+  British Airways:   operator@ba.com
+  Delta:             operator@delta.com
+  United:            operator@united.com
 
-Airline (Hawaiian Airlines):
-- Email: hawaiian@airline.com
-- Password: airline123
+PASSENGERS (password: passenger123):
+  john.doe@gmail.com
+  jane.smith@gmail.com
+  alex.wilson@gmail.com
+  maria.garcia@gmail.com
+  david.brown@gmail.com
+  emma.johnson@gmail.com
+  oliver.taylor@gmail.com
+  sophia.anderson@gmail.com
+  lucas.martinez@gmail.com
+  mia.thomas@gmail.com
+  mehmet.ozturk@gmail.com
+  ayse.demir@gmail.com
 
 ## Common Commands
 
@@ -68,7 +81,9 @@ Then restart: docker-compose down && docker-compose up
 ## Project Structure
 
 flight-booking/
-├── frontend/          # Angular SPA
-├── backend/           # Node.js + Express API
-├── docker-compose.yml # Container orchestration
+├── frontend/          # Angular 17+ SPA
+├── backend/           # Node.js + Express + TypeScript API
+├── docker-compose.yml # Container orchestration (3 containers)
+├── REPORT.md          # Technical documentation
+├── INDIVIDUAL_REPORT.md # Individual student report
 └── .env.example       # Environment template
