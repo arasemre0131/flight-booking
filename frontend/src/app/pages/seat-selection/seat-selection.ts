@@ -5,10 +5,10 @@ import { SeatMapComponent } from '../../components/seat-map/seat-map';
 import { SeatLegend } from '../../components/seat-legend/seat-legend';
 import { PassengerSeatList } from '../../components/passenger-seat-list/passenger-seat-list';
 import { FlightSummary } from '../../components/flight-summary/flight-summary';
-import { BookingService } from '../../services/booking.service';
+import { BookingService, SeatInfo } from '../../services/booking.service';
 import { SocketService } from '../../services/socket.service';
 import { MOCK_SEAT_MAP, getSeatById } from '../../mock-data/seat-map.data';
-import { Seat, SeatAssignment, SeatMap, calculateSeatFees } from '../../models/seat.model';
+import { Seat, SeatAssignment, SeatMap, SeatType, SeatClass, calculateSeatFees } from '../../models/seat.model';
 
 @Component({
   selector: 'app-seat-selection',
@@ -109,7 +109,62 @@ export class SeatSelection implements OnInit, OnDestroy {
     const flightId = this.selectedFlight()?.id;
     if (flightId) {
       this.socketService.joinFlight(flightId);
+      // Fetch real seat availability from backend
+      this.loadSeatAvailability(flightId);
     }
+  }
+
+  // Load real seat availability from backend API
+  private loadSeatAvailability(flightId: string): void {
+    console.log('[SeatSelection] Loading seat availability for flight:', flightId);
+    this.bookingService.getFlightSeats(flightId).subscribe(response => {
+      console.log('[SeatSelection] Got seat response:', response ? response.seats?.length + ' seats' : 'null');
+      if (response && response.seats) {
+        // Merge backend availability into mock seat map
+        this.updateSeatMapWithBackendData(response.seats);
+      }
+    });
+  }
+
+  // Update mock seat map with real availability from backend
+  private updateSeatMapWithBackendData(backendSeats: SeatInfo[]): void {
+    const currentMap = this.seatMap();
+
+    // Create a map of seat number to availability
+    const availabilityMap = new Map<string, boolean>();
+    for (const seat of backendSeats) {
+      availabilityMap.set(seat.seatNumber, seat.isAvailable);
+    }
+
+    // Log seat 10A specifically
+    console.log('[SeatSelection] Seat 10A availability:', availabilityMap.get('10A'));
+
+    // Count unavailable seats
+    let unavailableCount = 0;
+    let updatedCount = 0;
+
+    // Update seat map with real availability
+    const updatedRows = currentMap.rows.map(row => ({
+      ...row,
+      seats: row.seats.map(seat => {
+        if (seat === 'aisle') return seat;
+        const isAvailable = availabilityMap.get(seat.id);
+        // If backend says seat is not available, mark as occupied
+        if (isAvailable === false) {
+          unavailableCount++;
+          if (seat.status !== 'occupied') updatedCount++;
+          return { ...seat, status: 'occupied' as const };
+        }
+        // If backend says available and mock said occupied, mark as available
+        if (isAvailable === true && seat.status === 'occupied') {
+          return { ...seat, status: 'available' as const };
+        }
+        return seat;
+      })
+    }));
+
+    console.log('[SeatSelection] Unavailable seats:', unavailableCount, 'Updated:', updatedCount);
+    this.seatMap.set({ ...currentMap, rows: updatedRows });
   }
 
   ngOnDestroy(): void {

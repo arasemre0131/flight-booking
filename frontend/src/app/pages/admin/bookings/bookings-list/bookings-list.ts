@@ -57,13 +57,17 @@ export class BookingsList implements OnInit {
   selectedBooking = signal<BookingSummary | null>(null);
 
   ngOnInit(): void {
-    this.loadAirlines();
-    this.loadBookings();
+    this.loadData();
   }
 
-  loadAirlines(): void {
-    const airlines = this.adminService.getAllAirlines();
-    this.airlines.set(airlines.map(a => ({ id: a.id, name: a.name })));
+  async loadData(): Promise<void> {
+    await this.loadAirlines();
+    await this.loadBookings();
+  }
+
+  async loadAirlines(): Promise<void> {
+    const result = await this.adminService.getAirlines({ page: 1, pageSize: 100 });
+    this.airlines.set(result.items.map(a => ({ id: a.id, name: a.name })));
   }
 
   async loadBookings(): Promise<void> {

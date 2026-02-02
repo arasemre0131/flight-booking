@@ -66,10 +66,9 @@ export class AirlinesList implements OnInit {
       sortOrder: this.sortOrder()
     };
 
-    // Get all airlines and apply client-side filtering for now
-    const allAirlines = this.adminService.getAllAirlines();
-
-    let filtered = [...allAirlines];
+    // Fetch airlines from API
+    const result = await this.adminService.getAirlines(pagination);
+    let filtered = [...result.items];
 
     // Apply search filter
     if (this.searchTerm()) {
@@ -95,13 +94,9 @@ export class AirlinesList implements OnInit {
       });
     }
 
-    // Apply pagination
-    const start = (this.currentPage() - 1) * this.pageSize;
-    const paginated = filtered.slice(start, start + this.pageSize);
-
-    this.airlines.set(paginated);
-    this.totalAirlines.set(filtered.length);
-    this.totalPages.set(Math.ceil(filtered.length / this.pageSize));
+    this.airlines.set(filtered);
+    this.totalAirlines.set(result.total);
+    this.totalPages.set(result.totalPages);
     this.isLoading.set(false);
   }
 
