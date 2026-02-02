@@ -1,9 +1,10 @@
 // Airline Dashboard Container - 011-airline-dashboard
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { AirlineService } from '../../services/airline.service';
 import { AirlineSidebar } from '../../components/airline/sidebar/sidebar';
 
 @Component({
@@ -13,11 +14,16 @@ import { AirlineSidebar } from '../../components/airline/sidebar/sidebar';
   templateUrl: './airline.html',
   styleUrl: './airline.scss'
 })
-export class AirlineDashboard {
+export class AirlineDashboard implements OnInit {
   private authService = inject(AuthService);
+  private airlineService = inject(AirlineService);
 
   get airlineName(): string {
     return this.authService.getUserDisplayName() || 'Airline';
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.airlineService.loadAllData();
   }
 
   logout(): void {

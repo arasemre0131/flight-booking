@@ -404,38 +404,74 @@ export class AirlineService {
   // ==================== STATISTICS ====================
 
   async getStatistics(dateRange?: DateRange): Promise<ModelAirlineStats> {
-    // Calculate stats from loaded data
-    const flights = this._flights();
-    const scheduled = flights.filter(f => f.status === 'scheduled').length;
-    const arrived = flights.filter(f => f.status === 'arrived').length;
-    const cancelled = flights.filter(f => f.status === 'cancelled').length;
+    try {
+      // Call backend stats API
+      const backendStats = await firstValueFrom(
+        this.http.get<{
+          totalFlights: number;
+          scheduledFlights: number;
+          completedFlights: number;
+          cancelledFlights: number;
+          totalPassengers: number;
+          totalRevenue: number;
+          occupancyRate: number;
+          topRoutes: Array<{
+            routeId: string;
+            origin: string;
+            destination: string;
+            flightCount: number;
+            passengerCount: number;
+            revenue: number;
+          }>;
+          revenueByClass: { economy: number; business: number };
+          flightsByMonth: Array<{ month: string; count: number; revenue: number }>;
+        }>(`${this.API_URL}/stats`)
+      );
 
-    const totalPassengers = flights.reduce((sum, f) => sum + f.bookedSeats, 0);
-    const totalRevenue = flights.reduce((sum, f) => sum + (f.bookedSeats * f.pricing.economy), 0);
+      const today = new Date();
+      const weekAgo = new Date(today);
+      weekAgo.setDate(weekAgo.getDate() - 7);
 
-    const today = new Date();
-    const weekAgo = new Date(today);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-
-    return {
-      dateRange: dateRange || {
-        start: weekAgo.toISOString().split('T')[0],
-        end: today.toISOString().split('T')[0]
-      },
-      summary: {
-        totalFlights: flights.length,
-        totalPassengers,
-        totalRevenue,
-        averageLoadFactor: 75
-      },
-      topRoutes: [],
-      revenueByDay: [],
-      flightsByStatus: {
-        scheduled,
-        completed: arrived,
-        cancelled
-      }
-    };
+      return {
+        dateRange: dateRange || {
+          start: weekAgo.toISOString().split('T')[0],
+          end: today.toISOString().split('T')[0]
+        },
+        summary: {
+          totalFlights: backendStats.totalFlights,
+          totalPassengers: backendStats.totalPassengers,
+          totalRevenue: backendStats.totalRevenue * 100, // Convert to cents for display
+          averageLoadFactor: Math.round(backendStats.occupancyRate * 100)
+        },
+        topRoutes: backendStats.topRoutes.map(r => ({
+          routeId: r.routeId,
+          origin: r.origin,
+          destination: r.destination,
+          passengerCount: r.passengerCount,
+          revenue: r.revenue * 100
+        })),
+        revenueByDay: backendStats.flightsByMonth.map(m => ({
+          date: m.month + '-01',
+          revenue: m.revenue * 100
+        })),
+        flightsByStatus: {
+          scheduled: backendStats.scheduledFlights,
+          completed: backendStats.completedFlights,
+          cancelled: backendStats.cancelledFlights
+        }
+      };
+    } catch (error) {
+      console.error('Failed to fetch statistics:', error);
+      // Return empty stats on error
+      const today = new Date();
+      return {
+        dateRange: dateRange || { start: today.toISOString().split('T')[0], end: today.toISOString().split('T')[0] },
+        summary: { totalFlights: 0, totalPassengers: 0, totalRevenue: 0, averageLoadFactor: 0 },
+        topRoutes: [],
+        revenueByDay: [],
+        flightsByStatus: { scheduled: 0, completed: 0, cancelled: 0 }
+      };
+    }
   }
 
   // ==================== CONVERTERS ====================
