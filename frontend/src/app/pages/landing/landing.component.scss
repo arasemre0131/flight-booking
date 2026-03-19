@@ -47,9 +47,22 @@ $mobile: 768px;
 
 // Hero Section
 .hero {
-  background: $bg-light;
+  background: url('/assets/images/landing/hero-bg.jpeg') center/cover no-repeat;
   padding: 80px 0 120px;
   min-height: 500px;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
 
   @media (max-width: $mobile) {
     padding: 40px 0 60px;
@@ -64,9 +77,10 @@ $mobile: 768px;
 .hero-title {
   font-size: 64px;
   font-weight: 700;
-  color: $primary;
+  color: $bg-white;
   line-height: 1.1;
   margin-bottom: 40px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 
   @media (max-width: $mobile) {
     font-size: 36px;
